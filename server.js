@@ -262,6 +262,119 @@ const POST_TEMPLATES = {
 - Ends with "Change my mind" or "Agree or disagree?"
 - Bold, confident tone
 - 150-250 words`
+    },
+    'actionable': {
+        name: 'Actionable How-To',
+        description: 'Step-by-step guide showing how to do something specific',
+        prompt: `Write an actionable how-to LinkedIn post that:
+- Opens with the problem or goal ("Want to win more government contracts?")
+- Provides 3-5 clear, numbered steps
+- Each step is concrete and implementable
+- Relates steps to agency pain points and opportunities
+- Includes mini-tips or warnings within steps
+- Uses action verbs (Start, Create, Build, Submit, etc.)
+- Ends with encouragement to take action
+- Helpful, empowering tone
+- 200-300 words`
+    },
+    'motivational': {
+        name: 'Motivational Story',
+        description: 'Inspire action through personal story or anecdote',
+        prompt: `Write a motivational LinkedIn post that:
+- Opens with a relatable challenge or setback
+- Tells a short story with a turning point
+- Connects to broader lesson about government contracting
+- Shows vulnerability and authenticity
+- Relates to agency challenges or opportunities
+- Builds to an inspiring conclusion
+- Ends with call to action or encouragement
+- Warm, authentic, uplifting tone
+- 250-300 words`
+    },
+    'analytical': {
+        name: 'Analytical Teardown',
+        description: 'Deep analysis of a company, trend, or strategy',
+        prompt: `Write an analytical teardown LinkedIn post that:
+- Opens with what you're analyzing (agency strategy, contract type, etc.)
+- Breaks down 3-4 key components or observations
+- Provides critical but fair analysis
+- Backs up analysis with data and examples
+- Explains what others can learn from it
+- Uses clear section structure or bullet points
+- Ends with key takeaway or lesson
+- Thoughtful, analytical, educational tone
+- 250-300 words`
+    },
+    'contrarian-v2': {
+        name: 'Contrarian Opinion',
+        description: 'Share unpopular opinion different from status quo',
+        prompt: `Write a contrarian opinion LinkedIn post that:
+- Opens with "Unpopular opinion:" or "Hot take:"
+- States a belief that goes against common wisdom
+- Explains why you think differently with evidence
+- Addresses counterarguments respectfully
+- Relates to government contracting challenges
+- Backs up with data or experience
+- Invites thoughtful debate
+- Confident but open-minded tone
+- 200-250 words`
+    },
+    'observation': {
+        name: 'Observation & Insight',
+        description: 'Share something interesting you\'ve noticed',
+        prompt: `Write an observation-based LinkedIn post that:
+- Opens with "I've noticed something interesting..."
+- Describes a trend, pattern, or phenomenon you've observed
+- Provides 2-3 specific examples
+- Explains why this matters for government contractors
+- Relates to agency behaviors or market trends
+- Connects to broader implications
+- Ends with question or food for thought
+- Observant, curious, insightful tone
+- 200-250 words`
+    },
+    'x-vs-y': {
+        name: 'X vs. Y Comparison',
+        description: 'Compare two situations for interesting insights',
+        prompt: `Write a comparison LinkedIn post that:
+- Opens by setting up the comparison (X vs. Y)
+- Uses side-by-side structure or clear sections
+- Compares 3-4 key differences or similarities
+- Provides unexpected insights from the comparison
+- Relates to agency contracting or business strategies
+- Uses specific examples for each side
+- Ends with which is better or key lesson
+- Analytical, balanced, insightful tone
+- 250-300 words`
+    },
+    'present-future': {
+        name: 'Present vs. Future',
+        description: 'Contrast current state with future predictions',
+        prompt: `Write a present vs. future LinkedIn post that:
+- Opens with "Here's how things work today..."
+- Describes current state of agency contracting/challenges
+- Transitions to "But here's where we're heading..."
+- Paints vision of future (next 1-3 years)
+- Explains forces driving the change
+- Includes implications for contractors
+- Ends with how to prepare or adapt
+- Forward-thinking, visionary tone
+- 250-300 words`
+    },
+    'listicle': {
+        name: 'Listicle (Use Sparingly)',
+        description: 'Curated list of resources, tools, or recommendations',
+        prompt: `Write a listicle LinkedIn post that:
+- Opens with context for the list
+- Provides 3-7 items in numbered format
+- Each item has brief but specific description
+- Items are genuinely valuable and relevant
+- Relates to government contracting resources
+- Avoids generic or overly promotional content
+- Ends with invitation to share others
+- Helpful, generous, curated tone
+- 200-250 words
+- NOTE: Use sparingly - these are often less engaging`
     }
 };
 
@@ -394,7 +507,7 @@ Output as JSON array with this structure:
             : '';
 
         // Determine which templates to use
-        let templatesToUse = templates.length > 0 ? templates : ['question-based', 'stat-heavy', 'story-driven'];
+        let templatesToUse = templates.length > 0 ? templates : ['actionable', 'observation', 'x-vs-y'];
 
         // If user wants more posts than templates, cycle through templates
         if (numPosts > templatesToUse.length) {
