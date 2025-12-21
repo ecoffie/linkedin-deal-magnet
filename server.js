@@ -150,6 +150,16 @@ app.get('/content-generator', (req, res) => {
     res.sendFile(path.join(__dirname, 'content-generator.html'));
 });
 
+// Get available post templates
+app.get('/api/content-generator/templates', (req, res) => {
+    const templatesList = Object.entries(POST_TEMPLATES).map(([key, template]) => ({
+        key: key,
+        name: template.name,
+        description: template.description
+    }));
+    res.json({ success: true, templates: templatesList });
+});
+
 // Legacy route redirect for backwards compatibility
 app.get('/contract-finder', (req, res) => {
     res.redirect(301, '/opportunity-scout');
@@ -158,10 +168,107 @@ app.get('/contract-finder', (req, res) => {
 // In-memory user data storage (for MVP - replace with database later)
 const usersData = new Map();
 
-// Content Generator API: 3-Step Prompt Chain
+// Post Template Definitions
+const POST_TEMPLATES = {
+    'story-driven': {
+        name: 'Story-Driven',
+        description: 'Personal narrative connecting your experience to agency challenges',
+        prompt: `Write a story-based LinkedIn post that:
+- Opens with a relatable scenario or personal anecdote
+- Connects to the agency pain point naturally
+- Shows empathy and understanding
+- Transitions to how your solution helps
+- Ends with a thought-provoking question or call-to-action
+- Uses conversational, authentic tone
+- 200-300 words`
+    },
+    'stat-heavy': {
+        name: 'Data-Driven',
+        description: 'Statistics-focused post with hard numbers and sources',
+        prompt: `Write a data-heavy LinkedIn post that:
+- Opens with a striking statistic
+- Lists 3-4 key data points with sources
+- Uses bullet points for scannability
+- Cites authoritative sources (GAO, agency reports)
+- Connects numbers to real-world impact
+- Ends with how your capabilities address the data
+- Professional, authoritative tone
+- 150-250 words`
+    },
+    'question-based': {
+        name: 'Question-Based',
+        description: 'Starts with provocative question (GEO optimized)',
+        prompt: `Write a question-based LinkedIn post that:
+- Opens with a thought-provoking question related to the pain point
+- Provides 2-3 insights that answer the question
+- Uses "What if..." or "Why do..." or "How can..." format
+- Optimized for AI search engines (clear Q&A structure)
+- Includes supporting statistics
+- Ends with a call to discuss or share thoughts
+- Engaging, conversational tone
+- 150-200 words`
+    },
+    'case-study': {
+        name: 'Case Study',
+        description: 'Problem → Solution → Result format',
+        prompt: `Write a case study-style LinkedIn post that:
+- Problem: Describe the agency's specific challenge
+- Solution: Explain your approach or capability
+- Result: Share expected outcomes or impact
+- Uses clear section headers or emojis (📌 Problem, ✅ Solution, 🎯 Impact)
+- Includes relevant statistics
+- Shows concrete value proposition
+- Professional, results-oriented tone
+- 200-250 words`
+    },
+    'thought-leadership': {
+        name: 'Thought Leadership',
+        description: 'Industry insight with forward-looking perspective',
+        prompt: `Write a thought leadership LinkedIn post that:
+- Provides unique industry perspective on the pain point
+- Discusses trends and future implications
+- Positions you as an expert/advisor
+- References current events or recent reports
+- Offers actionable insights
+- Avoids sales pitch, focuses on value
+- Ends with invitation to connect or discuss
+- Authoritative, visionary tone
+- 250-300 words`
+    },
+    'list-tips': {
+        name: 'List/Tips',
+        description: 'Numbered insights or actionable recommendations',
+        prompt: `Write a list-based LinkedIn post that:
+- Opens with context for why this matters
+- Provides 3-5 numbered tips or insights
+- Each point is actionable and specific
+- Relates to agency pain points and priorities
+- Includes mini-statistics within tips
+- Easy to scan and share
+- Ends with "Which resonates with you?" or similar
+- Clear, helpful tone
+- 200-250 words`
+    },
+    'contrarian': {
+        name: 'Contrarian Take',
+        description: 'Challenges common assumptions with fresh perspective',
+        prompt: `Write a contrarian LinkedIn post that:
+- Starts by challenging a common belief or approach
+- Uses "Everyone says X, but..." or "Unpopular opinion:" format
+- Backs up the contrarian view with data
+- Shows alternative perspective on agency challenges
+- Remains respectful and professional
+- Sparks discussion and engagement
+- Ends with "Change my mind" or "Agree or disagree?"
+- Bold, confident tone
+- 150-250 words`
+    }
+};
+
+// Content Generator API: 3-Step Prompt Chain with Template System
 app.post('/api/content-generator/generate', async (req, res) => {
     try {
-        const { userId, targetAgencies, numPosts = 3, geoBoost = true } = req.body;
+        const { userId, targetAgencies, numPosts = 3, geoBoost = true, templates = [] } = req.body;
 
         console.log(`[Content Generator] Request for user: ${userId}`);
 
@@ -278,16 +385,32 @@ Output as JSON array with this structure:
             }];
         }
 
-        // STEP 3: Write in user's voice
-        console.log('[Step 3] Writing in user\'s voice...');
+        // STEP 3: Write in user's voice with templates
+        console.log('[Step 3] Writing in user\'s voice with templates...');
 
         const userPosts = userData.linkedinData?.posts || [];
         const voiceAnalysis = userPosts.length > 0
             ? `ANALYZE THIS USER'S WRITING VOICE from their past posts:\n${userPosts.slice(0, 10).map(p => p.text || p).join('\n---\n')}\n\n`
             : '';
 
+        // Determine which templates to use
+        let templatesToUse = templates.length > 0 ? templates : ['question-based', 'stat-heavy', 'story-driven'];
+
+        // If user wants more posts than templates, cycle through templates
+        if (numPosts > templatesToUse.length) {
+            const originalTemplates = [...templatesToUse];
+            while (templatesToUse.length < numPosts) {
+                templatesToUse.push(...originalTemplates);
+            }
+        }
+        templatesToUse = templatesToUse.slice(0, numPosts);
+
         const posts = [];
-        for (const angle of angles.slice(0, numPosts)) {
+        for (let i = 0; i < angles.slice(0, numPosts).length; i++) {
+            const angle = angles[i];
+            const templateKey = templatesToUse[i] || 'question-based';
+            const template = POST_TEMPLATES[templateKey];
+
             const step3Prompt = `${voiceAnalysis}Write a LinkedIn post as ${userData.linkedinData?.name || 'a government contractor'}.
 
 CONTENT ANGLE:
@@ -295,17 +418,18 @@ Theme: ${angle.angle}
 Pain Point: ${angle.painPoint}
 Statistics: ${angle.stats.join('; ')}
 Solution: ${angle.solution}
-Format: ${angle.structure}
 
-REQUIREMENTS:
+TEMPLATE STYLE: ${template.name}
+${template.prompt}
+
+ADDITIONAL REQUIREMENTS:
 ${voiceAnalysis ? '- Match the writing style, tone, and voice from the sample posts above' : '- Use a professional, conversational tone'}
-- Keep it 150-250 words
-- Include specific statistics with sources
+- Include specific statistics with sources from the pain point data
 - Use line breaks for readability
-- Start with a hook that grabs attention
-${geoBoost ? '- Use a question in the first line (GEO optimization)' : ''}
-- End with a clear call-to-action
-- Include 3-5 relevant hashtags
+- Start with a compelling hook
+${geoBoost && templateKey !== 'question-based' ? '- Optimize for AI search with clear structure and authoritative sources' : ''}
+- End with a clear call-to-action or engagement prompt
+- Include 3-5 relevant hashtags at the end
 
 Output ONLY the post text, followed by hashtags on separate lines.`;
 
@@ -318,6 +442,8 @@ Output ONLY the post text, followed by hashtags on separate lines.`;
 
             posts.push({
                 angle: angle.angle,
+                template: template.name,
+                templateKey: templateKey,
                 content: postText,
                 hashtags: hashtags,
                 painPointAddressed: angle.painPoint,
