@@ -12,6 +12,7 @@ const OAuth2Strategy = require('passport-oauth2').Strategy;
 // Knowledge base path
 const KB_PATH = path.join(__dirname, 'bootcamp', 'agencies');
 const KB_INDEX_PATH = path.join(KB_PATH, 'index.json');
+const VIRAL_HOOKS_PATH = path.join(__dirname, 'bootcamp', 'viral-hooks.json');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -435,6 +436,7 @@ app.post('/api/content-generator/generate', async (req, res) => {
 
         // STEP 2: Inject stats/sources + GEO techniques
         console.log('[Step 2] Injecting stats and GEO optimization...');
+        const viralHooksFormatted = formatViralHooksForPrompt('general', 10);
 
         const step2Prompt = `You are a government contracting expert creating LinkedIn content.
 
@@ -456,6 +458,8 @@ USER CAPABILITIES:
 - Certifications: ${userData.company?.certifications?.join(', ')}
 - Capabilities: ${userData.company?.capabilitiesStatement?.substring(0, 500)}
 
+${viralHooksFormatted}
+
 TASK: Create content angles that:
 1. Connect the user's capabilities to specific agency pain points
 2. Include exact statistics and sources from the pain points
@@ -464,7 +468,7 @@ TASK: Create content angles that:
 ${geoBoost ? `5. Optimize for AI/search with clear questions and answers (GEO technique)` : ''}
 
 Generate ${numPosts} distinct content angles. For each angle, provide:
-- Main theme/hook
+- Main theme/hook (use viral hook patterns from above as inspiration - adapt them naturally to fit the pain point and capability)
 - Key pain point to address
 - 2-3 relevant statistics with sources
 - How the user's certification/capability solves this
@@ -524,6 +528,7 @@ Output as JSON array with this structure:
             const templateKey = templatesToUse[i] || 'question-based';
             const template = POST_TEMPLATES[templateKey];
 
+            const viralHooksForStep3 = formatViralHooksForPrompt('general', 8);
             const step3Prompt = `${voiceAnalysis}Write a LinkedIn post as ${userData.linkedinData?.name || 'a government contractor'}.
 
 CONTENT ANGLE:
@@ -535,11 +540,14 @@ Solution: ${angle.solution}
 TEMPLATE STYLE: ${template.name}
 ${template.prompt}
 
+${viralHooksForStep3}
+
 ADDITIONAL REQUIREMENTS:
 ${voiceAnalysis ? '- Match the writing style, tone, and voice from the sample posts above' : '- Use a professional, conversational tone'}
 - Include specific statistics with sources from the pain point data
 - Use line breaks for readability
-- Start with a compelling hook
+- Start with a COMPELLING HOOK that captures attention (use the viral hook patterns above as inspiration - adapt them naturally, don't use formulaically)
+- The hook should be the FIRST LINE and must be engaging and attention-grabbing
 ${geoBoost && templateKey !== 'question-based' ? '- Optimize for AI search with clear structure and authoritative sources' : ''}
 - End with a clear call-to-action or engagement prompt
 - Include 3-5 relevant hashtags at the end
@@ -936,6 +944,85 @@ function formatPainPointsForPrompt(painPoints, maxPoints = 10) {
     return sorted.map((pp, idx) => {
         return `${idx + 1}. ${pp.point} (Source: ${pp.source})`;
     }).join('\n');
+}
+
+// Load viral hooks from JSON file
+function loadViralHooks() {
+    try {
+        if (!fs.existsSync(VIRAL_HOOKS_PATH)) {
+            console.warn('Viral hooks file not found:', VIRAL_HOOKS_PATH);
+            return null;
+        }
+        const hooksData = JSON.parse(fs.readFileSync(VIRAL_HOOKS_PATH, 'utf8'));
+        return hooksData;
+    } catch (error) {
+        console.error('Error loading viral hooks:', error.message);
+        return null;
+    }
+}
+
+// Format viral hooks for prompt injection based on content type
+function formatViralHooksForPrompt(contentType = 'general', maxHooks = 12) {
+    const hooksData = loadViralHooks();
+    if (!hooksData || !hooksData.selectionStrategy) {
+        return '';
+    }
+
+    // Select hooks based on content type
+    let selectedHooks = [];
+    
+    // Collect hooks from relevant categories
+    const categories = Object.keys(hooksData).filter(key => key !== 'selectionStrategy');
+    
+    categories.forEach(category => {
+        if (hooksData[category] && Array.isArray(hooksData[category])) {
+            hooksData[category].forEach(hook => {
+                // Only include high or very high effectiveness hooks
+                if (hook.effectiveness === 'high' || hook.effectiveness === 'very high') {
+                    selectedHooks.push({
+                        category,
+                        hook: hook.hook,
+                        creator: hook.creator,
+                        examples: hook.examples || []
+                    });
+                }
+            });
+        }
+    });
+
+    // Limit to maxHooks and format for prompt
+    const hooksToUse = selectedHooks.slice(0, maxHooks);
+    
+    if (hooksToUse.length === 0) {
+        return '';
+    }
+
+    // Format hooks with examples
+    const formattedHooks = hooksToUse.map((h, idx) => {
+        const examples = h.examples.slice(0, 2).join('\n  - ');
+        return `${idx + 1}. "${h.hook}" (${h.creator})
+   Examples:
+   - ${examples}`;
+    }).join('\n\n');
+
+    const strategyInfo = `
+HOOK SELECTION STRATEGY:
+${hooksData.selectionStrategy.bestPerforming.map(item => `- ${item}`).join('\n')}
+
+HOOK STRUCTURE TEMPLATE:
+1. Hook Line - Capture attention (first line)
+2. Proof/Context - 1-2 sentences establishing credibility
+3. Value - 2-4 sentences providing actionable insights
+4. Connection - 1-2 sentences connecting to audience
+5. Call to Action - Question or engagement prompt`;
+
+    return `VIRAL LINKEDIN HOOKS (from top creators: Neal O'Grady, Jodie Cook, Alex Groberman, Logan Gott):
+
+PROVEN HOOK TEMPLATES:
+${formattedHooks}
+${strategyInfo}
+
+Use these hooks as inspiration for creating engaging opening lines. Adapt them to sound natural and authentic - never use them formulaically.`;
 }
 
 // Analyze profile with Grok
@@ -1337,6 +1424,7 @@ async function generateContentWithGrok(content, numPosts, contentStyle) {
     const mentionedAgencies = extractAgenciesFromText(content);
     const painPoints = loadAgencyPainPoints(mentionedAgencies);
     const painPointsFormatted = formatPainPointsForPrompt(painPoints, 12);
+    const viralHooksFormatted = formatViralHooksForPrompt('general', 12);
 
     const prompt = `You are a LinkedIn content strategist specializing in creating engaging posts for B2B companies and government contractors.
 
@@ -1368,6 +1456,10 @@ AGENCY PAIN POINTS (to inform content relevance):
 ${painPointsFormatted}
 
 Use these agency pain points to create content that addresses real government challenges and needs. Reference these pain points naturally in posts when relevant to show understanding of government priorities. This makes the content more valuable and credible for government contractor audiences.
+
+${viralHooksFormatted}
+
+IMPORTANT: Use the viral hooks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the company's voice while leveraging proven patterns from top LinkedIn creators. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility).
 
 Output in JSON format:
 {
@@ -1542,6 +1634,7 @@ app.post('/api/generate-content', async (req, res) => {
         const mentionedAgencies = extractAgenciesFromText(profileText);
         const painPoints = loadAgencyPainPoints(mentionedAgencies);
         const painPointsFormatted = formatPainPointsForPrompt(painPoints, 10);
+        const viralHooksFormatted = formatViralHooksForPrompt('general', 12);
 
         // Generate 4 LinkedIn posts using Grok
         const prompt = `You are a LinkedIn content strategist specializing in government contracting.
@@ -1571,6 +1664,10 @@ AGENCY PAIN POINTS (to inform content relevance):
 ${painPointsFormatted}
 
 Use these agency pain points to create content that addresses real government challenges and needs. Reference these pain points naturally in posts when relevant to show understanding of government priorities. This makes the content more valuable and credible for government contractor audiences.
+
+${viralHooksFormatted}
+
+IMPORTANT: Use the viral hooks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the professional's voice while leveraging proven patterns from top LinkedIn creators. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility).
 
 For each post, provide:
 - The full post text

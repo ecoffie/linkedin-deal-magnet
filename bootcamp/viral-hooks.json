@@ -1,0 +1,280 @@
+{
+  "curiosityDriven": [
+    {
+      "hook": "What nobody tells you about {topic}",
+      "creator": "Jodie Cook",
+      "effectiveness": "high",
+      "examples": [
+        "What nobody tells you about winning your first federal contract...",
+        "What nobody tells you about LinkedIn's algorithm...",
+        "What nobody tells you about the GAO high-risk list..."
+      ]
+    },
+    {
+      "hook": "The top {number} {topic}",
+      "creator": "Neal O'Grady",
+      "effectiveness": "high",
+      "examples": [
+        "The top 30 hooks on LinkedIn that generated $2M in leads",
+        "The top 5 agency pain points driving procurement in 2025",
+        "The top 10 mistakes contractors make on LinkedIn"
+      ]
+    },
+    {
+      "hook": "I {action} {timeframe}... Here's What Happened",
+      "creator": "Alex Groberman",
+      "effectiveness": "high",
+      "examples": [
+        "I created my LinkedIn 53 weeks ago... $200K in revenue generated",
+        "I analyzed 500 DHS forecasts... Here's what I found",
+        "I spent 30 days studying agency strategic plans... Here's the pattern"
+      ]
+    }
+  ],
+  "authorityCredibility": [
+    {
+      "hook": "I've {accomplishment}... Here's How",
+      "creator": "Logan Gott",
+      "effectiveness": "high",
+      "examples": [
+        "I've helped 50 contractors win $500M+ in contracts... Here's the framework",
+        "I've analyzed 1,000 GAO reports... Here's what agencies really need",
+        "I've attended 25 industry days... Here's what procurement officers say"
+      ]
+    },
+    {
+      "hook": "After {duration} of {activity}, I Learned",
+      "creator": "Multiple creators",
+      "effectiveness": "medium-high",
+      "examples": [
+        "After 10 years in government contracting, I learned these 7 truths",
+        "After analyzing 200 agency forecasts, I learned the pattern",
+        "After helping 100 contractors, I learned this is the #1 mistake"
+      ]
+    },
+    {
+      "hook": "{number} Lessons from {experience}",
+      "creator": "Neal O'Grady",
+      "effectiveness": "high",
+      "examples": [
+        "7 lessons from winning my first $10M contract",
+        "5 lessons from attending the APEX conference",
+        "10 lessons from analyzing DoD strategic plans"
+      ]
+    }
+  ],
+  "problemSolution": [
+    {
+      "hook": "Stop {bad behavior}... Do {good behavior} Instead",
+      "creator": "Jodie Cook",
+      "effectiveness": "high",
+      "examples": [
+        "Stop cold-calling procurement officers... Do this instead",
+        "Stop generic LinkedIn posts... Use these 5 hooks instead",
+        "Stop waiting for RFPs... Do proactive market research instead"
+      ]
+    },
+    {
+      "hook": "The {common mistake} That's Costing You {outcome}",
+      "creator": "Multiple creators",
+      "effectiveness": "high",
+      "examples": [
+        "The LinkedIn mistake that's costing you $50K in opportunities",
+        "The forecasting error that's costing you contract wins",
+        "The proposal mistake that's costing you millions"
+      ]
+    },
+    {
+      "hook": "If You {condition}, Read This",
+      "creator": "Logan Gott",
+      "effectiveness": "medium-high",
+      "examples": [
+        "If you're struggling to win federal contracts, read this",
+        "If you think LinkedIn doesn't work for contractors, read this",
+        "If you want to understand agency pain points, read this"
+      ]
+    }
+  ],
+  "patternTrend": [
+    {
+      "hook": "I Noticed a Pattern After {analysis}",
+      "creator": "Alex Groberman",
+      "effectiveness": "high",
+      "examples": [
+        "I noticed a pattern after analyzing 300 DHS forecasts...",
+        "I noticed a pattern after reviewing 50 GAO reports...",
+        "I noticed a pattern after attending 10 industry days..."
+      ]
+    },
+    {
+      "hook": "Here's What {group} Have in Common",
+      "creator": "Multiple creators",
+      "effectiveness": "medium-high",
+      "examples": [
+        "Here's what the top 5 agencies by contract volume have in common",
+        "Here's what all GAO high-risk areas have in common",
+        "Here's what successful contractors have in common"
+      ]
+    },
+    {
+      "hook": "The {year} {trend} That's Changing {industry}",
+      "creator": "Logan Gott",
+      "effectiveness": "high",
+      "examples": [
+        "The 2025 AI trend that's changing government contracting",
+        "The cybersecurity trend that's reshaping agency procurement",
+        "The small business trend that's disrupting federal contracting"
+      ]
+    }
+  ],
+  "socialProofMetrics": [
+    {
+      "hook": "I {achievement} in {timeframe}... Here's How",
+      "creator": "Alex Groberman",
+      "effectiveness": "very high",
+      "examples": [
+        "I generated $200K in revenue from LinkedIn in 53 weeks... Here's how",
+        "I helped 10 contractors win $100M in contracts this year... Here's the system",
+        "I increased my LinkedIn engagement by 500% in 3 months... Here's what worked"
+      ]
+    },
+    {
+      "hook": "{percentage}% of {group} Do This Wrong",
+      "creator": "Neal O'Grady",
+      "effectiveness": "high",
+      "examples": [
+        "90% of contractors do LinkedIn wrong... Here's the 10% way",
+        "95% of proposals miss this critical element",
+        "80% of contractors ignore this agency signal"
+      ]
+    },
+    {
+      "hook": "From {starting} to {ending} in {timeframe}",
+      "creator": "Logan Gott",
+      "effectiveness": "high",
+      "examples": [
+        "From 0 to $5M in contracts in 18 months... Here's my story",
+        "From 50 to 5,000 LinkedIn followers in 6 months... Here's how",
+        "From rejection to $10M contract win... Here's what changed"
+      ]
+    }
+  ],
+  "questionBased": [
+    {
+      "hook": "Why {common belief} Is Wrong",
+      "creator": "Jodie Cook",
+      "effectiveness": "high",
+      "examples": [
+        "Why 'government moves slow' is wrong",
+        "Why LinkedIn doesn't work for contractors (and why that's wrong)",
+        "Why you should ignore NAICS codes (and focus on this instead)"
+      ]
+    },
+    {
+      "hook": "How I {achievement} Without {requirement}",
+      "creator": "Alex Groberman",
+      "effectiveness": "high",
+      "examples": [
+        "How I won a $5M contract without past performance",
+        "How I grew my LinkedIn following without posting daily",
+        "How I identified opportunities without SAM.gov"
+      ]
+    },
+    {
+      "hook": "Are You Making This {common} Mistake?",
+      "creator": "Multiple creators",
+      "effectiveness": "medium-high",
+      "examples": [
+        "Are you making this LinkedIn mistake?",
+        "Are you making this proposal mistake?",
+        "Are you making this agency research mistake?"
+      ]
+    }
+  ],
+  "listFramework": [
+    {
+      "hook": "The {number}-Step Framework for {outcome}",
+      "creator": "Logan Gott",
+      "effectiveness": "high",
+      "examples": [
+        "The 5-step framework for winning federal contracts",
+        "The 3-step framework for LinkedIn content that converts",
+        "The 7-step framework for agency pain point research"
+      ]
+    },
+    {
+      "hook": "{number} Ways to {achieve outcome}",
+      "creator": "Neal O'Grady",
+      "effectiveness": "high",
+      "examples": [
+        "10 ways to stand out in your next proposal",
+        "5 ways to use LinkedIn for government contracting",
+        "7 ways to identify agency pain points before they're public"
+      ]
+    },
+    {
+      "hook": "The {number} Types of {category}",
+      "creator": "Multiple creators",
+      "effectiveness": "medium-high",
+      "examples": [
+        "The 3 types of government contractors (which are you?)",
+        "The 5 types of agency pain points",
+        "The 4 types of LinkedIn content that converts"
+      ]
+    }
+  ],
+  "controversialBold": [
+    {
+      "hook": "Unpopular Opinion: {statement}",
+      "creator": "Logan Gott",
+      "effectiveness": "high",
+      "examples": [
+        "Unpopular opinion: SAM.gov is overrated",
+        "Unpopular opinion: Certifications don't win contracts",
+        "Unpopular opinion: LinkedIn works better than BD events"
+      ]
+    },
+    {
+      "hook": "I'm Going to Say Something Uncomfortable",
+      "creator": "Multiple creators",
+      "effectiveness": "high",
+      "examples": [
+        "I'm going to say something uncomfortable about government contracting",
+        "I'm going to say something uncomfortable about LinkedIn",
+        "I'm going to say something uncomfortable about proposals"
+      ]
+    },
+    {
+      "hook": "Everyone's Wrong About {topic}",
+      "creator": "Alex Groberman",
+      "effectiveness": "high",
+      "examples": [
+        "Everyone's wrong about how to win federal contracts",
+        "Everyone's wrong about LinkedIn's algorithm",
+        "Everyone's wrong about agency pain points"
+      ]
+    }
+  ],
+  "selectionStrategy": {
+    "bestPerforming": [
+      "Proof-driven posts with specific metrics (I generated $X...)",
+      "Pattern/trend hooks (I noticed a pattern after analyzing...)",
+      "Problem/solution hooks (Stop doing X... Do Y instead)",
+      "Authority hooks (I've helped X contractors...)"
+    ],
+    "contextMatching": {
+      "painPointContent": ["pattern/trend hooks", "What nobody tells you about..."],
+      "successStories": ["proof-driven hooks with metrics"],
+      "educationalContent": ["list/framework hooks", "Top X formats"],
+      "thoughtLeadership": ["controversial/bold hooks", "Unpopular opinion"]
+    },
+    "hookStructure": {
+      "hookLine": "Capture attention (first line)",
+      "proofContext": "1-2 sentences establishing credibility or context",
+      "value": "2-4 sentences providing actionable insights, patterns, or data",
+      "connection": "1-2 sentences connecting to audience's situation",
+      "callToAction": "Question, engagement prompt, or next step"
+    }
+  }
+}
+

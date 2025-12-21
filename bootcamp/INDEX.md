@@ -139,7 +139,17 @@ This is the master index of all markdown documentation files in the bootcamp kno
   - Formatting for knowledge base
 - **Use When**: Synthesizing findings from multiple sources, identifying cross-agency patterns, validating primary source findings, understanding market context
 
-### 14. **PERIODIC_UPDATES.md** - Periodic Updates Setup Guide
+### 14. **VIRAL_HOOKS_KNOWLEDGE_BASE.md** - Viral LinkedIn Hooks Knowledge Base
+- **Purpose**: Comprehensive collection of proven viral hooks from top LinkedIn creators (Neal O'Grady, Jodie Cook, Alex Groberman, Logan Gott)
+- **Contents**:
+  - 8 categories of viral hooks (curiosity-driven, authority, problem/solution, pattern/trend, social proof, question-based, list/framework, controversial)
+  - Hook templates with examples for government contractors
+  - Selection strategy for different content types
+  - Hook structure template (hook line, proof/context, value, connection, CTA)
+  - Integration guidelines for content generation
+- **Use When**: Creating engaging LinkedIn content, training the content generator, understanding what makes posts go viral, selecting hooks based on content type
+
+### 15. **PERIODIC_UPDATES.md** - Periodic Updates Setup Guide
 - **Purpose**: Complete guide for setting up automated periodic scraping and updates
 - **Contents**:
   - Cron jobs setup (Unix/Linux/macOS)
@@ -150,7 +160,7 @@ This is the master index of all markdown documentation files in the bootcamp kno
   - Best practices
 - **Use When**: Setting up automated updates, configuring cron jobs or n8n workflows
 
-### 15. **QUICK_START_PERIODIC_UPDATES.md** - Quick Start for Periodic Updates
+### 16. **QUICK_START_PERIODIC_UPDATES.md** - Quick Start for Periodic Updates
 - **Purpose**: Fast 5-minute setup guide for periodic updates
 - **Contents**:
   - Quick installation steps
@@ -159,7 +169,7 @@ This is the master index of all markdown documentation files in the bootcamp kno
   - Basic monitoring commands
 - **Use When**: Quick setup of periodic updates, need fast reference
 
-### 16. **EXTRACTION_WORKFLOW.md** - Step-by-Step Extraction Process
+### 17. **EXTRACTION_WORKFLOW.md** - Step-by-Step Extraction Process
 - **Purpose**: Complete workflow for extracting pain points from sources
 - **Contents**:
   - Step-by-step extraction process
@@ -168,7 +178,7 @@ This is the master index of all markdown documentation files in the bootcamp kno
   - Quality checklist
 - **Use When**: Starting a new extraction, need process guidance
 
-### 17. **EXTRACTION_TEMPLATE.md** - Extraction Template
+### 18. **EXTRACTION_TEMPLATE.md** - Extraction Template
 - **Purpose**: Copy/paste template for documenting extracted pain points
 - **Contents**:
   - Structured template for pain points
@@ -176,7 +186,7 @@ This is the master index of all markdown documentation files in the bootcamp kno
   - Source documentation sections
 - **Use When**: Extracting pain points for an agency, need structured format
 
-### 18. **TIER_EXPLANATION.md** - Tier System Guide
+### 19. **TIER_EXPLANATION.md** - Tier System Guide
 - **Purpose**: Explains the Tier 1/2/3 priority system for agency expansion
 - **Contents**:
   - Tier definitions and characteristics
@@ -201,6 +211,8 @@ bootcamp/
 ├── GAO_TESTIMONIES_GUIDE.md            # GAO testimonies guide
 ├── GAO_2025_HIGH_RISK_SUMMARY.md       # GAO 2025 findings summary
 ├── GAO_2025_UPDATE_SUMMARY.md          # GAO 2025 updates applied
+├── VIRAL_HOOKS_KNOWLEDGE_BASE.md       # Viral hooks from top LinkedIn creators
+├── viral-hooks.json                    # Viral hooks JSON data (used by content generator)
 ├── INDEX.md                            # This file
 └── agencies/
     ├── index.json                      # Agency lookup index
