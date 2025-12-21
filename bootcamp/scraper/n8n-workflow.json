@@ -1,0 +1,305 @@
+{
+  "name": "Agency Forecast and GAO Periodic Updates",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtHour": 2,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "cron-forecasts",
+      "name": "Schedule: Weekly Forecast Updates",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtHour": 3,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "cron-gao",
+      "name": "Schedule: Weekly GAO Updates",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        250,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /path/to/bootcamp/scraper && node periodic-update.js --source=forecast",
+        "additionalFields": {
+          "env": {
+            "FIRECRAWL_API_KEY": "fc-e76ef9c64efa416a9e012e871a62db82"
+          }
+        }
+      },
+      "id": "execute-forecasts",
+      "name": "Execute Forecast Update",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /path/to/bootcamp/scraper && node periodic-update.js --source=gao",
+        "additionalFields": {
+          "env": {
+            "FIRECRAWL_API_KEY": "fc-e76ef9c64efa416a9e012e871a62db82"
+          }
+        }
+      },
+      "id": "execute-gao",
+      "name": "Execute GAO Update",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        450,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.success }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-forecast-success",
+      "name": "Check Forecast Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.updated }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "check-gao-success",
+      "name": "Check GAO Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        650,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "✅ Agency forecast update completed successfully"
+      },
+      "id": "notify-forecast-success",
+      "name": "Notify Forecast Success",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        850,
+        250
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "⚠️ Agency forecast update failed: {{ $json.error }}"
+      },
+      "id": "notify-forecast-error",
+      "name": "Notify Forecast Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        850,
+        350
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "✅ GAO updates checked: {{ $json.updated ? 'New content found' : 'No updates' }}"
+      },
+      "id": "notify-gao-success",
+      "name": "Notify GAO Success",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        850,
+        450
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "⚠️ GAO update check failed: {{ $json.error }}"
+      },
+      "id": "notify-gao-error",
+      "name": "Notify GAO Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        850,
+        550
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-credentials",
+          "name": "Telegram Bot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Weekly Forecast Updates": {
+      "main": [
+        [
+          {
+            "node": "Execute Forecast Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule: Weekly GAO Updates": {
+      "main": [
+        [
+          {
+            "node": "Execute GAO Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Forecast Update": {
+      "main": [
+        [
+          {
+            "node": "Check Forecast Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute GAO Update": {
+      "main": [
+        [
+          {
+            "node": "Check GAO Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Forecast Success": {
+      "main": [
+        [
+          {
+            "node": "Notify Forecast Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Forecast Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check GAO Success": {
+      "main": [
+        [
+          {
+            "node": "Notify GAO Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify GAO Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-21T00:00:00.000Z",
+  "versionId": "1"
+}
+

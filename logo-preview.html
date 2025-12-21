@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Deal Magnet - Logo Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .logo-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .logo-card h2 {
+            margin-bottom: 20px;
+            color: #0A66C2;
+            font-size: 1.25rem;
+        }
+        .logo-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .logo-display.dark {
+            background: #1a1a1a;
+        }
+        .logo-display img {
+            max-width: 100%;
+            height: auto;
+        }
+        .size-200 img { width: 200px; }
+        .size-128 img { width: 128px; }
+        .size-64 img { width: 64px; }
+        .size-32 img { width: 32px; }
+
+        .specs {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .specs p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 5px 0;
+        }
+        .specs strong {
+            color: #333;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #0A66C2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #084D92;
+        }
+        .info-box {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+        }
+        .info-box h2 {
+            color: #0A66C2;
+            margin-bottom: 20px;
+        }
+        .info-box ul {
+            margin-left: 20px;
+        }
+        .info-box li {
+            margin: 10px 0;
+            color: #333;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧲 LinkedIn Deal Magnet - Logo Preview</h1>
+
+        <div class="logo-grid">
+            <!-- Full Logo -->
+            <div class="logo-card">
+                <h2>Full Logo with Text</h2>
+                <div class="logo-display size-200">
+                    <img src="logo.svg" alt="LinkedIn Deal Magnet Logo">
+                </div>
+                <div class="specs">
+                    <p><strong>File:</strong> logo.svg</p>
+                    <p><strong>Best for:</strong> Website header, marketing materials</p>
+                    <p><strong>Format:</strong> SVG (scalable)</p>
+                </div>
+                <a href="logo.svg" download class="download-btn">Download SVG</a>
+            </div>
+
+            <!-- Icon Logo (Light) -->
+            <div class="logo-card">
+                <h2>App Icon (Light Background)</h2>
+                <div class="logo-display size-128">
+                    <img src="logo-icon.svg" alt="LinkedIn Deal Magnet Icon">
+                </div>
+                <div class="specs">
+                    <p><strong>File:</strong> logo-icon.svg</p>
+                    <p><strong>Best for:</strong> LinkedIn API application logo</p>
+                    <p><strong>Recommended size:</strong> 512x512px PNG</p>
+                </div>
+                <a href="logo-icon.svg" download class="download-btn">Download SVG</a>
+            </div>
+
+            <!-- Icon Logo (Dark) -->
+            <div class="logo-card">
+                <h2>App Icon (Dark Background)</h2>
+                <div class="logo-display dark size-128">
+                    <img src="logo-icon.svg" alt="LinkedIn Deal Magnet Icon">
+                </div>
+                <div class="specs">
+                    <p><strong>Note:</strong> Same icon on dark background</p>
+                    <p><strong>Shows:</strong> How it looks in different contexts</p>
+                </div>
+            </div>
+
+            <!-- Favicon -->
+            <div class="logo-card">
+                <h2>Favicon (32x32)</h2>
+                <div class="logo-display size-32">
+                    <img src="public/favicon.svg" alt="Favicon">
+                </div>
+                <div class="specs">
+                    <p><strong>File:</strong> public/favicon.svg</p>
+                    <p><strong>Best for:</strong> Browser tab icon</p>
+                    <p><strong>Size:</strong> 32x32px</p>
+                </div>
+                <a href="public/favicon.svg" download class="download-btn">Download SVG</a>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h2>📋 LinkedIn API Logo Requirements</h2>
+            <ul>
+                <li><strong>Format:</strong> PNG (transparent background recommended)</li>
+                <li><strong>Recommended Size:</strong> 512x512px or larger (square)</li>
+                <li><strong>File Size:</strong> Keep under 5MB</li>
+                <li><strong>Quality:</strong> High resolution for clarity</li>
+                <li><strong>Content:</strong> Should represent your company/application professionally</li>
+            </ul>
+            <h2 style="margin-top: 30px;">🎨 Logo Design Elements</h2>
+            <ul>
+                <li><strong>Magnet Icon:</strong> Represents attracting deals and opportunities</li>
+                <li><strong>Upward Arrow:</strong> Symbolizes growth and improvement</li>
+                <li><strong>LinkedIn Blue (#0A66C2):</strong> Professional color aligned with LinkedIn branding</li>
+                <li><strong>Red/Blue Magnet:</strong> Classic magnet colors for instant recognition</li>
+                <li><strong>Gold Arrow:</strong> Represents value and premium service</li>
+            </ul>
+            <h2 style="margin-top: 30px;">🔄 Next Steps</h2>
+            <ul>
+                <li>Use an online converter (like CloudConvert) to convert SVG to PNG at 512x512px</li>
+                <li>Upload the PNG version to LinkedIn Developer Portal when creating your app</li>
+                <li>Keep the SVG files for future use and scaling</li>
+                <li>Consider creating variations if needed for different use cases</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

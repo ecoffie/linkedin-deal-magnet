@@ -1,0 +1,377 @@
+{
+  "testProfiles": {
+    "good": {
+      "score": 85,
+      "currentHeadline": "Operations Manager at ABC Construction | Federal Contractor",
+      "aiHeadline": "Construction Operations Leader | Helping Government Contractors Streamline Operations | 15+ Years Driving Efficiency",
+      "profileData": {
+        "name": "John Davis",
+        "headline": "Operations Manager at ABC Construction | Federal Contractor",
+        "about": "I'm a construction operations professional with over 15 years of experience. When I'm not managing projects, I enjoy golf and spending time with my family. I specialize in helping government contractors optimize their operations and win more contracts. I've helped over 50 companies secure their first federal contracts.",
+        "experience": [
+          {
+            "title": "Operations Manager",
+            "company": "ABC Construction"
+          }
+        ],
+        "location": "Milwaukee, Wisconsin",
+        "connections": "500+"
+      },
+      "fixes": [
+        {
+          "title": "Banner Optimization",
+          "description": "Your banner could showcase more social proof. Add awards, contract values, or company logos.",
+          "priority": "medium",
+          "tips": "Include your branding colors, a tagline, and any awards or achievements."
+        },
+        {
+          "title": "About Section Enhancement",
+          "description": "Your about section is good but could include more metrics and specific accomplishments.",
+          "priority": "low",
+          "tips": "Add specific numbers - contracts won, revenue generated, clients helped."
+        },
+        {
+          "title": "Features Section",
+          "description": "Add a features section to showcase case studies or awards.",
+          "priority": "medium",
+          "tips": "Include case studies of contract wins, awards, or certifications."
+        }
+      ]
+    },
+    "average": {
+      "score": 55,
+      "currentHeadline": "Manager",
+      "aiHeadline": "Federal Business Development Strategist | Connecting Government Contractors with Opportunities | $50M+ in Contracts Secured",
+      "profileData": {
+        "name": "Sarah Martinez",
+        "headline": "Manager",
+        "about": "I work in business development.",
+        "experience": [
+          {
+            "title": "Manager",
+            "company": "XYZ Corp"
+          }
+        ],
+        "location": "Washington, DC",
+        "connections": "250"
+      },
+      "fixes": [
+        {
+          "title": "Headline Needs Work",
+          "description": "Your headline is too generic and doesn't communicate value. It needs to be catchy and specific.",
+          "priority": "high",
+          "tips": "Use ChatGPT to generate options. Include who you help and what problem you solve."
+        },
+        {
+          "title": "About Section Missing",
+          "description": "Your about section is missing or too short. It should blend personal and professional elements.",
+          "priority": "high",
+          "tips": "Start with who you are personally, then transition to what you do professionally. Include metrics."
+        },
+        {
+          "title": "No Banner",
+          "description": "You're using the default LinkedIn banner. Create a custom one with branding and value proposition.",
+          "priority": "high",
+          "tips": "Use your branding colors, include a tagline, and add logos of companies you work with."
+        },
+        {
+          "title": "Profile Picture",
+          "description": "Your profile picture may not be optimized. Ensure it's clear, professional, and uses branding colors in background.",
+          "priority": "high",
+          "tips": "Use shoulder-up framing, solid background (preferably branding colors), and make sure it looks like you."
+        },
+        {
+          "title": "Show Connections",
+          "description": "Your connections count should be visible to build trust.",
+          "priority": "medium",
+          "tips": "Go to Settings → Visibility → Connections and enable visibility."
+        },
+        {
+          "title": "Get Endorsements",
+          "description": "You have few or no endorsements. This reduces credibility.",
+          "priority": "medium",
+          "tips": "Endorse others in your network - it's reciprocal. When someone endorses you, thank them."
+        },
+        {
+          "title": "Request Recommendations",
+          "description": "You don't have recommendations. These add significant credibility.",
+          "priority": "high",
+          "tips": "Ask people you've worked with for recommendations. Give recommendations to others."
+        },
+        {
+          "title": "Add Website",
+          "description": "No website link in your profile. Make it easy for people to learn more.",
+          "priority": "medium",
+          "tips": "Add your website or landing page in the contact information section."
+        },
+        {
+          "title": "Enhance Experience",
+          "description": "Your experience section lacks detail. Add accomplishments and metrics.",
+          "priority": "high",
+          "tips": "Don't just list job titles - describe accomplishments, include metrics, highlight what makes each role unique."
+        },
+        {
+          "title": "Content Strategy",
+          "description": "You're not posting regularly. Content builds authority.",
+          "priority": "high",
+          "tips": "Post 3-5 times per week. Share industry news, contract wins, and educational content."
+        },
+        {
+          "title": "Engagement Strategy",
+          "description": "You're not engaging with others' content. This reduces visibility.",
+          "priority": "high",
+          "tips": "Spend 30 min - 1 hour daily commenting on posts from your target audience before posting your own."
+        },
+        {
+          "title": "Personal Connection",
+          "description": "Your profile lacks personal elements. People want to connect with YOU.",
+          "priority": "medium",
+          "tips": "Share hobbies, interests, or background. People want to connect with you, not just your business."
+        },
+        {
+          "title": "Call-to-Action",
+          "description": "No clear call-to-action in your profile.",
+          "priority": "high",
+          "tips": "Include a clear call-to-action in your about section - website, calendar link, or how to reach you."
+        },
+        {
+          "title": "Skills Section",
+          "description": "Your skills section needs work.",
+          "priority": "low",
+          "tips": "Add relevant skills and endorse others to get endorsed back."
+        },
+        {
+          "title": "Certifications",
+          "description": "Display relevant certifications to add credibility.",
+          "priority": "medium",
+          "tips": "Add certifications and licenses to add credibility."
+        },
+        {
+          "title": "Network Building",
+          "description": "You need to connect with more people in your target audience.",
+          "priority": "high",
+          "tips": "Connect with decision-makers, government officials, and other entrepreneurs in your industry."
+        },
+        {
+          "title": "Case Studies",
+          "description": "Share contract wins and success stories.",
+          "priority": "high",
+          "tips": "Post case studies showing results. You don't always need to name the client."
+        },
+        {
+          "title": "Engage with Own Posts",
+          "description": "Like and comment on your own posts to start engagement.",
+          "priority": "medium",
+          "tips": "Be the first to like your post and add a comment to start engagement."
+        },
+        {
+          "title": "Features Section",
+          "description": "Add a features section to showcase your work.",
+          "priority": "medium",
+          "tips": "Include case studies, awards, certifications, or your newsletter in the features section."
+        },
+        {
+          "title": "Newsletter",
+          "description": "Consider starting a newsletter to build your audience.",
+          "priority": "low",
+          "tips": "A newsletter helps you own your audience and provides value to your network."
+        }
+      ]
+    },
+    "poor": {
+      "score": 35,
+      "currentHeadline": "",
+      "aiHeadline": "Strategic Problem Solver | Transforming Complex Business Challenges into IT Solutions | 20+ Years Delivering Results",
+      "profileData": {
+        "name": "Mike Williams",
+        "headline": "",
+        "about": "",
+        "experience": [],
+        "location": "",
+        "connections": "50"
+      },
+      "fixes": [
+        {
+          "title": "No Headline",
+          "description": "Your headline is completely missing. This is critical for LinkedIn visibility.",
+          "priority": "high",
+          "tips": "Create a headline that clearly states your value proposition and who you help."
+        },
+        {
+          "title": "No About Section",
+          "description": "Your about section is empty. This is one of the most important parts of your profile.",
+          "priority": "high",
+          "tips": "Write a comprehensive about section that blends personal and professional elements."
+        },
+        {
+          "title": "Default Profile Picture",
+          "description": "You're using LinkedIn's default profile picture. This hurts your credibility.",
+          "priority": "high",
+          "tips": "Use a clear, professional photo with shoulder-up framing and a solid background."
+        },
+        {
+          "title": "No Banner",
+          "description": "You're using the default banner. Create a custom one.",
+          "priority": "high",
+          "tips": "Use your branding colors, include a tagline, and add social proof."
+        },
+        {
+          "title": "No Connections Visible",
+          "description": "Your connections count is hidden. This reduces trust.",
+          "priority": "high",
+          "tips": "Go to Settings → Visibility → Connections and enable visibility."
+        },
+        {
+          "title": "No Experience",
+          "description": "Your experience section is empty or incomplete.",
+          "priority": "high",
+          "tips": "Add your work experience with detailed accomplishments and metrics."
+        },
+        {
+          "title": "No Endorsements",
+          "description": "You have no endorsements. This significantly hurts credibility.",
+          "priority": "high",
+          "tips": "Endorse others in your network - it's reciprocal. People will endorse you back."
+        },
+        {
+          "title": "No Recommendations",
+          "description": "You have no recommendations. These are crucial for credibility.",
+          "priority": "high",
+          "tips": "Ask people you've worked with for recommendations. Give recommendations to others."
+        },
+        {
+          "title": "No Website",
+          "description": "No website link. Make it easy for people to learn more.",
+          "priority": "high",
+          "tips": "Add your website or landing page."
+        },
+        {
+          "title": "No Content",
+          "description": "You're not posting any content. This reduces visibility.",
+          "priority": "high",
+          "tips": "Start posting regularly - 3-5 times per week. Share industry news and insights."
+        },
+        {
+          "title": "No Engagement",
+          "description": "You're not engaging with others' content.",
+          "priority": "high",
+          "tips": "Spend time daily commenting on posts from your target audience."
+        },
+        {
+          "title": "Small Network",
+          "description": "You have very few connections. Build your network strategically.",
+          "priority": "high",
+          "tips": "Connect with decision-makers, government officials, and industry professionals."
+        },
+        {
+          "title": "No Skills",
+          "description": "Your skills section is empty.",
+          "priority": "medium",
+          "tips": "Add relevant skills to your profile."
+        },
+        {
+          "title": "No Certifications",
+          "description": "No certifications displayed.",
+          "priority": "medium",
+          "tips": "Add certifications and licenses to add credibility."
+        },
+        {
+          "title": "No Location",
+          "description": "Location not specified. This helps local connections find you.",
+          "priority": "low",
+          "tips": "Add your location to help local connections find you."
+        },
+        {
+          "title": "No Features",
+          "description": "No features section. Showcase your work.",
+          "priority": "medium",
+          "tips": "Add case studies, awards, or other achievements to your features section."
+        },
+        {
+          "title": "No Call-to-Action",
+          "description": "No clear way for people to contact or work with you.",
+          "priority": "high",
+          "tips": "Include a clear call-to-action in your about section."
+        },
+        {
+          "title": "Generic Profile",
+          "description": "Your profile is very generic and doesn't stand out.",
+          "priority": "high",
+          "tips": "Add personal elements, specific accomplishments, and make it unique to you."
+        },
+        {
+          "title": "No Authority Building",
+          "description": "You're not building authority in your niche.",
+          "priority": "high",
+          "tips": "Share expertise, insights, and position yourself as an expert in your field."
+        },
+        {
+          "title": "Complete Overhaul Needed",
+          "description": "Your profile needs a complete optimization overhaul.",
+          "priority": "high",
+          "tips": "Follow all the recommendations above systematically. Start with headline and about section."
+        }
+      ]
+    }
+  },
+  "apiTestCases": [
+    {
+      "name": "Health Check",
+      "endpoint": "GET /api/health",
+      "expectedResponse": {
+        "status": "ok",
+        "timestamp": "ISO string"
+      }
+    },
+    {
+      "name": "Audit Request",
+      "endpoint": "POST /api/audit",
+      "body": {
+        "url": "https://linkedin.com/in/test-profile"
+      },
+      "expectedResponse": {
+        "score": "number 0-100",
+        "currentHeadline": "string",
+        "aiHeadline": "string",
+        "fixes": "array of 20 objects"
+      }
+    }
+  ],
+  "designSpecs": {
+    "colors": {
+      "linkedinBlue": "#0077B5",
+      "linkedinDark": "#004182",
+      "success": "#16a34a",
+      "error": "#dc2626",
+      "warning": "#eab308",
+      "accent": "#9333ea"
+    },
+    "typography": {
+      "heading1": "text-5xl font-bold",
+      "heading2": "text-4xl font-bold",
+      "heading3": "text-3xl font-bold",
+      "body": "text-base",
+      "small": "text-sm"
+    },
+    "spacing": {
+      "section": "py-20",
+      "card": "p-6",
+      "button": "px-6 py-3"
+    },
+    "breakpoints": {
+      "mobile": "640px",
+      "tablet": "768px",
+      "desktop": "1024px"
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+

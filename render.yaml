@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: linkedin-deal-magnet
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GROK_API_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PRICE_FULL_FIX
+        sync: false
+      - key: STRIPE_PRICE_CONTENT_ENGINE
+        sync: false
+      - key: PORT
+        value: 10000
+
+
+
+
+
+
+
+
+
+

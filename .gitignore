@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+bootcamp/scraper/node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+server.log
+server_debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
+
+# Vercel
+.vercel/
+
+# Backup files
+*.backup
+*.backup-*

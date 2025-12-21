@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - LinkedIn Deal Magnet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .step-indicator {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .step-indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: white;
+            border: 3px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        .step-circle.active {
+            background: #0077B5;
+            border-color: #0077B5;
+            color: white;
+        }
+        .step-circle.completed {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        linkedin: {
+                            blue: '#0077B5',
+                            dark: '#004182',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <svg class="w-12 h-12 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <h1 class="text-4xl font-bold text-gray-900">LinkedIn Deal Magnet</h1>
+            </div>
+            <p class="text-lg text-gray-600">Let's set up your account in 3 quick steps</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mb-12">
+            <div class="flex justify-between items-center max-w-2xl mx-auto px-8">
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step-1-circle" class="step-circle active">1</div>
+                    <p class="text-sm font-medium mt-2 text-gray-700">Connect</p>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-1"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step-2-circle" class="step-circle">2</div>
+                    <p class="text-sm font-medium mt-2 text-gray-700">Company Info</p>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-2"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step-3-circle" class="step-circle">3</div>
+                    <p class="text-sm font-medium mt-2 text-gray-700">Find Opportunities</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: LinkedIn Connection -->
+        <div id="step-1" class="bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-linkedin-blue/10 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Connect Your LinkedIn Profile</h2>
+                <p class="text-gray-600 mb-6">
+                    We'll analyze your profile and past posts to understand your unique voice and style.
+                    This helps us generate content that sounds authentically like you.
+                </p>
+
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-left">
+                    <h3 class="font-semibold text-gray-900 mb-3">What we'll access:</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span>Your name, headline, and profile picture</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span>Your last 10 public posts (to learn your writing style)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-1">✓</span>
+                            <span>Your email address (for account creation)</span>
+                        </li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mt-4 italic">
+                        We never post without your permission. Your data is private and secure.
+                    </p>
+                </div>
+
+                <button onclick="connectLinkedIn()" class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-md">
+                    <span class="flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                        Connect with LinkedIn
+                    </span>
+                </button>
+
+                <p class="text-sm text-gray-500 mt-4">Takes less than 30 seconds</p>
+            </div>
+        </div>
+
+        <!-- Step 2: Company Information -->
+        <div id="step-2" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-8">
+                    <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <span class="text-4xl">🏢</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Tell Us About Your Business</h2>
+                    <p class="text-gray-600">
+                        This helps us match you with the right government agencies and create targeted content.
+                    </p>
+                </div>
+
+                <form id="company-info-form" class="space-y-6">
+                    <!-- NAICS Codes -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            NAICS Codes <span class="text-red-500">*</span>
+                        </label>
+                        <p class="text-sm text-gray-600 mb-3">
+                            Select up to 5 NAICS codes that describe your business (primary code first)
+                        </p>
+                        <div id="naics-container" class="space-y-2">
+                            <input type="text" class="naics-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="e.g., 541330 (Engineering Services)" required>
+                        </div>
+                        <button type="button" onclick="addNaicsField()" class="mt-2 text-linkedin-blue hover:text-linkedin-dark text-sm font-medium">
+                            + Add another NAICS code
+                        </button>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Certifications
+                        </label>
+                        <p class="text-sm text-gray-600 mb-3">Select all that apply</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
+                                <input type="checkbox" name="certifications" value="8a" class="w-5 h-5 text-linkedin-blue">
+                                <span class="font-medium">8(a)</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
+                                <input type="checkbox" name="certifications" value="wosb" class="w-5 h-5 text-linkedin-blue">
+                                <span class="font-medium">WOSB/EDWOSB</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
+                                <input type="checkbox" name="certifications" value="vosb" class="w-5 h-5 text-linkedin-blue">
+                                <span class="font-medium">VOSB/SDVOSB</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
+                                <input type="checkbox" name="certifications" value="hubzone" class="w-5 h-5 text-linkedin-blue">
+                                <span class="font-medium">HUBZone</span>
+                            </label>
+                        </div>
+                        <input type="text" id="other-certifications" class="mt-2 w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Other certifications (optional)">
+                    </div>
+
+                    <!-- Past Agencies -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Past Agencies (if any)
+                        </label>
+                        <p class="text-sm text-gray-600 mb-3">Which agencies have you worked with before?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="DoD" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">Department of Defense</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="VA" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">Veterans Affairs</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="DHS" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">Homeland Security</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="GSA" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">GSA</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="NASA" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">NASA</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="checkbox" name="agencies" value="DOE" class="w-4 h-4 text-linkedin-blue">
+                                <span class="text-sm">Energy</span>
+                            </label>
+                        </div>
+                        <input type="text" id="other-agencies" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Other agencies (comma-separated)">
+                    </div>
+
+                    <!-- Capabilities Statement -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Capabilities Statement <span class="text-red-500">*</span>
+                        </label>
+                        <p class="text-sm text-gray-600 mb-3">
+                            Upload your capabilities statement PDF or paste the text
+                        </p>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-linkedin-blue transition">
+                            <input type="file" id="capabilities-pdf" accept=".pdf" class="hidden" onchange="handleFileUpload(event)">
+                            <label for="capabilities-pdf" class="cursor-pointer">
+                                <div class="text-4xl mb-2">📄</div>
+                                <p class="text-linkedin-blue font-medium mb-1">Upload PDF</p>
+                                <p class="text-sm text-gray-500">or drag and drop here</p>
+                            </label>
+                        </div>
+                        <div class="mt-3 text-center text-gray-500">— OR —</div>
+                        <textarea id="capabilities-text" rows="6" class="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Paste your capabilities statement text here (500-2000 characters recommended)"></textarea>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex gap-4 pt-4">
+                        <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-6 py-3 rounded-lg transition">
+                            Back
+                        </button>
+                        <button type="submit" class="flex-1 bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
+                            Continue to Opportunities
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Step 3: Opportunity Scout (Embedded) -->
+        <div id="step-3" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
+            <div class="text-center mb-8">
+                <div class="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    <span class="text-4xl">🎯</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Discover Your Opportunities</h2>
+                <p class="text-gray-600">
+                    Based on your business profile, here are agencies actively awarding contracts in your space.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                <h3 class="font-semibold text-gray-900 mb-2">What's Next?</h3>
+                <p class="text-gray-700">
+                    After you explore opportunities, we'll help you create LinkedIn content that resonates with these agencies and their decision-makers.
+                </p>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                <a href="/opportunity-scout" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <div class="text-2xl mb-2">🎯</div>
+                    <div>Find Opportunities</div>
+                    <p class="text-xs text-blue-100 mt-1">Search for contracts</p>
+                </a>
+                <a href="/content-generator" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <div class="text-2xl mb-2">✍️</div>
+                    <div>Generate Content</div>
+                    <p class="text-xs text-purple-100 mt-1">Create LinkedIn posts</p>
+                </a>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <button onclick="completeOnboarding()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
+                    Complete Setup & Go to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentStep = 1;
+        let userData = {
+            linkedin: null,
+            company: null
+        };
+
+        // Step navigation
+        function goToStep(step) {
+            // Hide all steps
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.add('hidden');
+
+            // Show current step
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            document.getElementById(`step-${step}`).classList.add('fade-in');
+
+            // Update progress indicators
+            for (let i = 1; i <= 3; i++) {
+                const circle = document.getElementById(`step-${i}-circle`);
+                circle.classList.remove('active', 'completed');
+
+                if (i < step) {
+                    circle.classList.add('completed');
+                    circle.innerHTML = '✓';
+                } else if (i === step) {
+                    circle.classList.add('active');
+                    circle.innerHTML = i;
+                } else {
+                    circle.innerHTML = i;
+                }
+            }
+
+            // Update progress lines
+            if (step > 1) {
+                document.getElementById('progress-line-1').classList.add('bg-green-500');
+                document.getElementById('progress-line-1').classList.remove('bg-gray-300');
+            }
+            if (step > 2) {
+                document.getElementById('progress-line-2').classList.add('bg-green-500');
+                document.getElementById('progress-line-2').classList.remove('bg-gray-300');
+            }
+
+            currentStep = step;
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // LinkedIn OAuth Connection
+        function connectLinkedIn() {
+            // Redirect to LinkedIn OAuth
+            window.location.href = '/auth/linkedin';
+        }
+
+        // Check if LinkedIn connection was successful (from callback)
+        async function checkLinkedInConnection() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.get('linkedin_connected') === 'true') {
+                // Fetch LinkedIn profile data
+                try {
+                    const response = await fetch('/api/linkedin/profile');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        userData.linkedin = data.profile;
+
+                        // Show success message
+                        alert('LinkedIn connected successfully!');
+
+                        // Move to next step
+                        goToStep(2);
+
+                        // Clean up URL
+                        window.history.replaceState({}, document.title, '/onboarding');
+                    }
+                } catch (error) {
+                    console.error('Error fetching LinkedIn profile:', error);
+                    alert('Connected to LinkedIn, but failed to fetch profile data. Please try again.');
+                }
+            } else if (urlParams.get('error') === 'auth_failed') {
+                alert('LinkedIn authentication failed. Please try again.');
+                window.history.replaceState({}, document.title, '/onboarding');
+            }
+        }
+
+        // Add NAICS field
+        let naicsCount = 1;
+        function addNaicsField() {
+            if (naicsCount >= 5) {
+                alert('Maximum 5 NAICS codes allowed');
+                return;
+            }
+
+            const container = document.getElementById('naics-container');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'naics-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent';
+            input.placeholder = 'e.g., 541511 (Custom Computer Programming)';
+            container.appendChild(input);
+            naicsCount++;
+        }
+
+        // Handle file upload
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.querySelector('label[for="capabilities-pdf"] p.text-linkedin-blue').textContent = `Selected: ${file.name}`;
+                // TODO: Actually parse PDF using existing PDF parser
+            }
+        }
+
+        // Company info form submission
+        document.getElementById('company-info-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const naicsCodes = Array.from(document.querySelectorAll('.naics-input'))
+                .map(input => input.value.trim())
+                .filter(val => val);
+
+            const certifications = Array.from(document.querySelectorAll('input[name="certifications"]:checked'))
+                .map(cb => cb.value);
+
+            const agencies = Array.from(document.querySelectorAll('input[name="agencies"]:checked'))
+                .map(cb => cb.value);
+
+            const otherAgencies = document.getElementById('other-agencies').value
+                .split(',')
+                .map(a => a.trim())
+                .filter(a => a);
+
+            const capabilitiesText = document.getElementById('capabilities-text').value.trim();
+
+            // Validate
+            if (naicsCodes.length === 0) {
+                alert('Please enter at least one NAICS code');
+                return;
+            }
+
+            if (!capabilitiesText && !document.getElementById('capabilities-pdf').files[0]) {
+                alert('Please provide your capabilities statement');
+                return;
+            }
+
+            // Store data
+            userData.company = {
+                naicsCodes,
+                certifications,
+                agencies: [...agencies, ...otherAgencies],
+                capabilitiesStatement: capabilitiesText,
+                otherCertifications: document.getElementById('other-certifications').value.trim()
+            };
+
+            // Save to server (TODO: implement API endpoint)
+            saveUserData();
+
+            // Move to next step
+            goToStep(3);
+        });
+
+        // Save user data to server
+        async function saveUserData() {
+            try {
+                const response = await fetch('/api/onboarding/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to save user data');
+                }
+            } catch (error) {
+                console.error('Error saving user data:', error);
+            }
+        }
+
+        // Complete onboarding
+        function completeOnboarding() {
+            // Mark onboarding as complete
+            localStorage.setItem('onboarding_complete', 'true');
+            localStorage.setItem('user_data', JSON.stringify(userData));
+
+            // Redirect to main app/dashboard
+            window.location.href = '/';
+        }
+
+        // Check if returning user and LinkedIn connection status
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check LinkedIn connection on page load
+            checkLinkedInConnection();
+
+            // Check if returning user
+            const onboardingComplete = localStorage.getItem('onboarding_complete');
+            if (onboardingComplete === 'true') {
+                if (confirm('You\'ve already completed onboarding. Would you like to go to the dashboard?')) {
+                    window.location.href = '/';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

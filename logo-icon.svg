@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <!-- Circular background -->
+  <circle cx="50" cy="50" r="48" fill="#0A66C2"/>
+
+  <!-- Magnet icon (centered and scaled) -->
+  <g transform="translate(50, 50) scale(0.7)">
+    <!-- Left side of magnet (light color for contrast) -->
+    <path d="M -30 -40 L -30 20 C -30 35 -20 45 -5 45 L 0 45 L 0 -40 Z"
+          fill="#FF6B6B" stroke="#FFFFFF" stroke-width="2"/>
+
+    <!-- Right side of magnet (white) -->
+    <path d="M 0 -40 L 0 45 L 5 45 C 20 45 30 35 30 20 L 30 -40 Z"
+          fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2"/>
+
+    <!-- Magnet poles -->
+    <line x1="-25" y1="-40" x2="-25" y2="-50" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-15" y1="-40" x2="-15" y2="-50" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round"/>
+    <line x1="15" y1="-40" x2="15" y2="-50" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    <line x1="25" y1="-40" x2="25" y2="-50" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Upward growth arrow -->
+    <g transform="translate(0, 10)">
+      <path d="M 0 -15 L -8 -5 L -3 -5 L -3 10 L 3 10 L 3 -5 L 8 -5 Z"
+            fill="#FFD700" stroke="#FFFFFF" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

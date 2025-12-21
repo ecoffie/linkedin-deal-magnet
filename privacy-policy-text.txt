@@ -1,0 +1,130 @@
+Privacy Policy
+
+Last Updated: [DATE]
+
+LinkedIn Deal Magnet ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our LinkedIn profile optimization service (the "Service").
+
+1. Information We Collect
+
+1.1 Information You Provide
+
+We collect information you provide directly to us, including:
+
+• LinkedIn Profile Data: When you use our Service, you may provide your LinkedIn profile URL or authorize us to access your LinkedIn profile data through LinkedIn's API.
+
+• Profile Information: This may include your name, headline, about section, experience, skills, and other publicly available profile information.
+
+• Contact Information: If you contact us or sign up for our service, we may collect your email address and other contact information.
+
+• Payment Information: If you purchase our services, our payment processor (Stripe) collects payment information. We do not store your full payment card details.
+
+1.2 Automatically Collected Information
+
+We may automatically collect certain information when you use our Service, including:
+
+• IP address and browser type
+• Device information
+• Usage data and analytics
+• Cookies and similar tracking technologies
+
+2. How We Use Your Information
+
+We use the information we collect to:
+
+• Provide, maintain, and improve our Service
+• Analyze your LinkedIn profile and provide optimization recommendations
+• Process payments and deliver purchased services
+• Send you service-related communications
+• Respond to your inquiries and provide customer support
+• Monitor and analyze usage patterns and trends
+• Detect, prevent, and address technical issues
+
+3. Data Sharing and Disclosure
+
+We do not sell your personal information. We may share your information in the following circumstances:
+
+• Service Providers: We may share information with third-party service providers who perform services on our behalf, such as payment processing (Stripe), AI analysis services (xAI/Grok), and hosting providers.
+
+• Legal Requirements: We may disclose information if required by law or in response to valid legal requests.
+
+• Business Transfers: If we are involved in a merger, acquisition, or sale of assets, your information may be transferred.
+
+4. LinkedIn API Usage
+
+When you authorize us to access your LinkedIn profile through LinkedIn's API, we will:
+
+• Only access information you explicitly authorize
+• Use the information solely to provide our optimization services
+• Comply with LinkedIn's API Terms of Use and Privacy Policy
+• Not share your LinkedIn data with third parties except as described in this policy
+
+5. Data Security
+
+We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your information, we cannot guarantee absolute security.
+
+6. Data Retention
+
+We retain your information for as long as necessary to provide our Service and fulfill the purposes described in this Privacy Policy. You may request deletion of your data at any time by contacting us.
+
+7. Your Rights and Choices
+
+You have the right to:
+
+• Access your personal information
+• Correct inaccurate information
+• Request deletion of your information
+• Opt-out of certain data collection
+• Withdraw consent for LinkedIn API access
+
+To exercise these rights, please contact us using the information provided below.
+
+8. Cookies and Tracking Technologies
+
+We use cookies and similar technologies to collect and store information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.
+
+9. Third-Party Links
+
+Our Service may contain links to third-party websites. We are not responsible for the privacy practices of these third-party sites. We encourage you to read their privacy policies.
+
+10. Children's Privacy
+
+Our Service is not intended for individuals under the age of 18. We do not knowingly collect personal information from children. If you become aware that a child has provided us with personal information, please contact us immediately.
+
+11. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes.
+
+12. Contact Us
+
+LinkedIn Deal Magnet is based in Florida, United States. If you have any questions about this Privacy Policy, please contact us:
+
+Email: [YOUR_EMAIL@example.com]
+Website: [YOUR_WEBSITE_URL]
+Address: [YOUR_FLORIDA_ADDRESS - Optional but recommended]
+
+13. Florida Privacy Rights
+
+LinkedIn Deal Magnet is based in Florida. Florida residents have specific privacy rights under Florida law, including:
+
+• The right to know what personal information we collect
+• The right to access your personal information
+• The right to correct inaccurate information
+• The right to delete your personal information
+• The right to opt-out of the sale of personal information (we do not sell personal information)
+• The right to opt-out of targeted advertising
+• The right to opt-out of profiling
+
+To exercise these rights, please contact us using the information provided in Section 12.
+
+14. California Privacy Rights (CCPA)
+
+If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA), including the right to know what personal information we collect and the right to opt-out of the sale of personal information (we do not sell personal information).
+
+15. GDPR Compliance (EU Users)
+
+If you are located in the European Union, you have additional rights under the General Data Protection Regulation (GDPR), including the right to data portability and the right to object to processing. Our legal basis for processing your information is your consent and our legitimate interest in providing our Service.
+
+---
+
+© LinkedIn Deal Magnet - All rights reserved.
+

@@ -1,0 +1,29 @@
+# Logs
+logs/
+*.log
+
+# State files
+last-update-state.json
+
+# Node modules
+node_modules/
+
+# Scraped content (temporary)
+scraped/
+../extractions/scraped/
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Deal Magnet - Turn Your LinkedIn Into a Deal Magnet</title>
+    <meta name="description" content="Get found by primes, skip the RFP grind, and win more deals. Free LinkedIn profile audit powered by AI.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        linkedin: {
+                            blue: '#0077B5',
+                            dark: '#004182',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-b from-blue-50 via-white to-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="w-8 h-8 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-gray-900">Deal Magnet</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#features" class="text-gray-600 hover:text-linkedin-blue transition">Features</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-linkedin-blue transition">How It Works</a>
+                    <a href="#testimonials" class="text-gray-600 hover:text-linkedin-blue transition">Success Stories</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-20 pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
+                    Turn Your LinkedIn Into a
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-linkedin-blue to-purple-600">
+                        Deal Magnet
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
+                    Get found by primes, skip the RFP grind, and win more deals. 
+                    AI-powered LinkedIn optimization for government contractors.
+                </p>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">$127M+</div>
+                        <div class="text-gray-600">Contracts Won</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">3,200+</div>
+                        <div class="text-gray-600">Profiles Optimized</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">92%</div>
+                        <div class="text-gray-600">Say LinkedIn Drives Deals</div>
+                    </div>
+                </div>
+
+                <!-- CTA Form -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 max-w-2xl mx-auto border border-gray-200">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                        Get Your Free LinkedIn Audit
+                    </h2>
+                    <p class="text-gray-600 mb-6">
+                        See exactly what's holding you back and how to fix it. Takes 30 seconds.
+                    </p>
+                    <form id="audit-form" class="space-y-4">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input
+                                type="url"
+                                id="linkedin-url"
+                                placeholder="https://linkedin.com/in/yourprofile"
+                                required
+                                class="flex-1 px-6 py-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent text-lg"
+                            />
+                            <button
+                                type="submit"
+                                class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            >
+                                Run Free Audit
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500">
+                            ✓ No credit card required  ✓ Results in 60 seconds  ✓ 100% free
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative elements -->
+        <div class="absolute top-0 left-0 w-72 h-72 bg-linkedin-blue opacity-5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 opacity-5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Why LinkedIn Matters for Your Business
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Top performers know LinkedIn is where deals happen. Here's what you're missing.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Benefit 1 -->
+                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-lg border border-blue-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-linkedin-blue rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Get Found by Primes</h3>
+                    <p class="text-gray-600">
+                        Prime contractors actively search LinkedIn for subcontractors. Optimize your profile to show up when they're looking.
+                    </p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-lg border border-purple-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Skip the RFP Grind</h3>
+                    <p class="text-gray-600">
+                        Build relationships before RFPs drop. Decision-makers reach out directly when they know you from LinkedIn.
+                    </p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Win More Deals</h3>
+                    <p class="text-gray-600">
+                        Our users see 3x more inbound opportunities. When primes know you, you get invited to the table.
+                    </p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="bg-gradient-to-br from-yellow-50 to-white rounded-2xl p-8 shadow-lg border border-yellow-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-yellow-500 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Build Authority</h3>
+                    <p class="text-gray-600">
+                        Showcase your expertise, contracts won, and case studies. Become the go-to expert in your niche.
+                    </p>
+                </div>
+
+                <!-- Benefit 5 -->
+                <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg border border-red-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Save Time</h3>
+                    <p class="text-gray-600">
+                        No more guessing what works. Get AI-powered recommendations based on what actually drives results.
+                    </p>
+                </div>
+
+                <!-- Benefit 6 -->
+                <div class="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-lg border border-indigo-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Network Smarter</h3>
+                    <p class="text-gray-600">
+                        Connect with the right people at the right time. Get discovered by decision-makers actively searching.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    How It Works
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get a complete LinkedIn optimization in 3 simple steps
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-linkedin-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        1
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Paste Your LinkedIn URL</h3>
+                    <p class="text-gray-600">Share your LinkedIn profile. We'll analyze it in seconds.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-linkedin-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        2
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Get AI Analysis</h3>
+                    <p class="text-gray-600">Our AI reviews your profile and gives you a score plus 20+ personalized fixes.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-linkedin-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        3
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Optimize & Win</h3>
+                    <p class="text-gray-600">Apply the fixes and watch more opportunities come your way.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Real Results from Real Contractors
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-linkedin-blue rounded-full flex items-center justify-center text-white font-bold">
+                            JD
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">John Davis</div>
+                            <div class="text-sm text-gray-600">HVAC Contractor</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Got my first federal contract within 2 weeks of optimizing my profile. A prime found me on LinkedIn!"
+                    </p>
+                    <div class="text-linkedin-blue font-bold">$250K contract won</div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            SM
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">Sarah Martinez</div>
+                            <div class="text-sm text-gray-600">IT Services</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Went from zero inbound leads to 3-5 quality opportunities per month. LinkedIn is now my #1 lead source."
+                    </p>
+                    <div class="text-linkedin-blue font-bold">3x more opportunities</div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                            MW
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">Mike Williams</div>
+                            <div class="text-sm text-gray-600">Construction</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "The AI recommendations were spot-on. Fixed my headline and about section, and now primes are reaching out."
+                    </p>
+                    <div class="text-linkedin-blue font-bold">$1.2M in new deals</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 bg-gradient-to-r from-linkedin-blue to-linkedin-dark text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Ready to Turn Your LinkedIn Into a Deal Magnet?
+            </h2>
+            <p class="text-xl mb-8 text-blue-100">
+                Get your free audit and see exactly what's holding you back
+            </p>
+            <form id="audit-form-bottom" class="max-w-xl mx-auto">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input
+                        type="url"
+                        id="linkedin-url-bottom"
+                        placeholder="https://linkedin.com/in/yourprofile"
+                        required
+                        class="flex-1 px-6 py-4 border-2 border-white/20 bg-white/10 backdrop-blur rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-lg text-white placeholder-white/70"
+                    />
+                    <button
+                        type="submit"
+                        class="bg-white text-linkedin-blue font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:bg-gray-100"
+                    >
+                        Run Free Audit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-white">Deal Magnet</span>
+                </div>
+                <p class="mb-4">© 2024 LinkedIn Deal Magnet. All rights reserved.</p>
+                <div class="flex justify-center space-x-6 text-sm">
+                    <a href="#" class="hover:text-white transition">Privacy</a>
+                    <a href="#" class="hover:text-white transition">Terms</a>
+                    <a href="#" class="hover:text-white transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Audit Results Modal -->
+    <div id="audit-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div id="audit-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

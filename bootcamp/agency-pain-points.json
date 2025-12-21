@@ -1,0 +1,194 @@
+{
+  "agencies": {
+    "Department of Defense": {
+      "painPoints": [
+        "Cybersecurity modernization and zero-trust architecture implementation",
+        "Cloud migration and DevSecOps adoption",
+        "Supply chain security and resilience",
+        "AI/ML integration for decision support",
+        "5G and advanced communications infrastructure"
+      ]
+    },
+    "Department of the Navy": {
+      "painPoints": [
+        "Shipyard modernization and maintenance backlogs",
+        "Undersea warfare technology development",
+        "Cybersecurity for naval systems",
+        "Autonomous systems and unmanned vehicles",
+        "Port infrastructure resilience"
+      ]
+    },
+    "NAVFAC": {
+      "painPoints": [
+        "Infrastructure modernization and facility upgrades",
+        "Energy efficiency and renewable energy projects",
+        "Climate resilience and sea-level rise adaptation",
+        "Base realignment and closure (BRAC) support",
+        "Emergency response and disaster recovery"
+      ]
+    },
+    "NAVSEA": {
+      "painPoints": [
+        "Ship design and engineering modernization",
+        "Maintenance and repair optimization",
+        "Digital transformation of shipyard operations",
+        "Submarine and surface ship modernization",
+        "Supply chain management for ship components"
+      ]
+    },
+    "NAVWAR": {
+      "painPoints": [
+        "Cybersecurity and information warfare capabilities",
+        "Network modernization and 5G integration",
+        "Command and control systems",
+        "Electronic warfare systems",
+        "Data analytics and AI for naval operations"
+      ]
+    },
+    "NAVAIR": {
+      "painPoints": [
+        "Aircraft modernization and sustainment",
+        "Unmanned aerial systems (UAS) development",
+        "Avionics and sensor integration",
+        "Training systems and simulators",
+        "Aircraft carrier integration"
+      ]
+    },
+    "USACE": {
+      "painPoints": [
+        "Water resources management and flood control",
+        "Infrastructure resilience and climate adaptation",
+        "Environmental restoration and remediation",
+        "Military construction and base support",
+        "Emergency response and disaster recovery"
+      ]
+    },
+    "Department of the Army": {
+      "painPoints": [
+        "Soldier modernization and equipment",
+        "Network modernization and tactical communications",
+        "Base infrastructure and facilities",
+        "Training and simulation systems",
+        "Supply chain and logistics optimization"
+      ]
+    },
+    "Department of the Air Force": {
+      "painPoints": [
+        "Aircraft modernization and sustainment",
+        "Space systems and capabilities",
+        "Cybersecurity and IT modernization",
+        "Base infrastructure and facilities",
+        "Advanced training and simulation"
+      ]
+    },
+    "Air Force Materiel Command": {
+      "painPoints": [
+        "Weapon systems acquisition and sustainment",
+        "Research and development acceleration",
+        "Test and evaluation modernization",
+        "Supply chain optimization",
+        "Digital engineering and model-based systems"
+      ]
+    },
+    "Air Force Sustainment Center": {
+      "painPoints": [
+        "Aircraft maintenance and repair optimization",
+        "Supply chain management and logistics",
+        "Workforce development and training",
+        "Facility modernization",
+        "Process improvement and lean manufacturing"
+      ]
+    },
+    "Department of Veterans Affairs": {
+      "painPoints": [
+        "Electronic health records (EHR) modernization",
+        "Telehealth and virtual care expansion",
+        "Claims processing automation",
+        "IT infrastructure modernization",
+        "Veteran homelessness prevention"
+      ]
+    },
+    "Department of Homeland Security": {
+      "painPoints": [
+        "Border security technology and infrastructure",
+        "Cybersecurity for critical infrastructure",
+        "Emergency response and preparedness",
+        "Biometric identification systems",
+        "Counter-terrorism technology"
+      ]
+    },
+    "U.S. Customs and Border Protection": {
+      "painPoints": [
+        "Border surveillance and detection systems",
+        "Port of entry modernization",
+        "Biometric entry/exit systems",
+        "Cargo screening and inspection technology",
+        "Data analytics for threat detection"
+      ]
+    },
+    "General Services Administration": {
+      "painPoints": [
+        "Federal building modernization and sustainability",
+        "IT acquisition and cloud services",
+        "Fleet vehicle electrification",
+        "Workplace modernization and hybrid work support",
+        "Supply chain and procurement optimization"
+      ]
+    },
+    "NASA": {
+      "painPoints": [
+        "Space exploration technology development",
+        "Earth observation and climate monitoring",
+        "Aeronautics research and development",
+        "IT infrastructure and cybersecurity",
+        "Facility modernization and maintenance"
+      ]
+    },
+    "Department of Energy": {
+      "painPoints": [
+        "Clean energy technology development",
+        "Grid modernization and resilience",
+        "Nuclear security and non-proliferation",
+        "Cybersecurity for energy infrastructure",
+        "Environmental cleanup and remediation"
+      ]
+    },
+    "Department of Health and Human Services": {
+      "painPoints": [
+        "Public health data systems and analytics",
+        "Healthcare IT modernization",
+        "Biomedical research infrastructure",
+        "Emergency preparedness and response",
+        "Cybersecurity for health data"
+      ]
+    },
+    "Department of Commerce": {
+      "painPoints": [
+        "Weather forecasting and climate monitoring",
+        "Cybersecurity and IT modernization",
+        "Trade and economic data systems",
+        "Broadband infrastructure deployment",
+        "Intellectual property protection"
+      ]
+    },
+    "Department of Transportation": {
+      "painPoints": [
+        "Infrastructure modernization and repair",
+        "Transportation safety systems",
+        "Electric vehicle infrastructure",
+        "Aviation safety and modernization",
+        "Smart transportation technologies"
+      ]
+    },
+    "Defense Health Agency": {
+      "painPoints": [
+        "Electronic health records integration",
+        "Telehealth and virtual care",
+        "Medical readiness and training",
+        "Pharmacy and supply chain management",
+        "IT infrastructure modernization"
+      ]
+    }
+  }
+}
+

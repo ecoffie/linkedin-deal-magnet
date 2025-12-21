@@ -1,0 +1,114 @@
+{
+  "timestamp": "2025-12-21T08:11:56.233Z",
+  "results": [
+    {
+      "success": true,
+      "event": "FAI Industry Day Transcript",
+      "url": "https://www.fai.gov/content/transcript-industry-day-conferences",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_fai_gov_content_transcript-industry-day-conferences.md",
+      "contentLength": 1095
+    },
+    {
+      "success": true,
+      "event": "APEX Conference Presentations 2022",
+      "url": "https://www.theapex.org/news/2022-apex-conference-presentations/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_theapex_org_news_2022-apex-conference-presentations.md",
+      "contentLength": 240
+    },
+    {
+      "success": false,
+      "event": "APEX Conference Presentations PDF 2022",
+      "url": "https://www.theapex.org/wp-content/uploads/2023/04/Oct-2022-APEx-Conference-Presentations.pdf",
+      "error": "pdf is not a function"
+    },
+    {
+      "success": true,
+      "event": "DoD OSDBU Small Business Resources",
+      "url": "https://business.defense.gov/Resources/Small-Business-Resources/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/business_defense_gov_Resources_Small-Business-Resources.md",
+      "contentLength": 3479
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Small Business Resources",
+      "url": "https://www.va.gov/osdbu/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_va_gov_osdbu.md",
+      "contentLength": 18345
+    },
+    {
+      "success": true,
+      "event": "DHS OSDBU Small Business Resources",
+      "url": "https://www.dhs.gov/office-small-disadvantaged-business-utilization",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_dhs_gov_office-small-disadvantaged-business-utilization.md",
+      "contentLength": 1452
+    },
+    {
+      "success": true,
+      "event": "GSA OSDBU Small Business Resources",
+      "url": "https://www.gsa.gov/about-us/organization/office-of-small-and-disadvantaged-business-utilization-osdbu",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_gsa_gov_about-us_organization_office-of-small-and-disadvantaged-business-utilization-osdbu.md",
+      "contentLength": 25369
+    },
+    {
+      "success": true,
+      "event": "NASA OSDBU Small Business Resources",
+      "url": "https://www.nasa.gov/offices/osdbu/home/index.html",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_nasa_gov_offices_osdbu_home_index_html.md",
+      "contentLength": 21901
+    },
+    {
+      "success": true,
+      "event": "DOE OSDBU Small Business Resources",
+      "url": "https://www.energy.gov/osbp/office-small-and-disadvantaged-business-utilization",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_energy_gov_osbp_office-small-and-disadvantaged-business-utilization.md",
+      "contentLength": 813
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Events Calendar",
+      "url": "https://vetbiz.va.gov/tatassistance/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/vetbiz_va_gov_tatassistance.md",
+      "contentLength": 2442
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Events List",
+      "url": "https://vetbiz.va.gov/events/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/vetbiz_va_gov_events.md",
+      "contentLength": 6226
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Business Development Training",
+      "url": "https://vetbiz.va.gov/businessdevtraining/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/vetbiz_va_gov_businessdevtraining.md",
+      "contentLength": 2375
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Direct Access Program",
+      "url": "https://vetbiz.va.gov/dap/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/vetbiz_va_gov_dap.md",
+      "contentLength": 795
+    },
+    {
+      "success": true,
+      "event": "VA OSDBU Technical Assistance",
+      "url": "https://vetbiz.va.gov/technicalassistance/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/vetbiz_va_gov_technicalassistance.md",
+      "contentLength": 3326
+    },
+    {
+      "success": true,
+      "event": "2025 Southeast Regional Federal Construction, Infrastructure & Environment Summit",
+      "url": "https://www.ncmbc.us/event/2025-southeast-regional-federal-construction-infrastructure-environment-summit/",
+      "filepath": "/Users/ericcoffie/Linkedin App/bootcamp/extractions/scraped/industry-events/www_ncmbc_us_event_2025-southeast-regional-federal-construction-infrastructure-environment-summit.md",
+      "contentLength": 10832
+    }
+  ],
+  "stats": {
+    "total": 15,
+    "successful": 14,
+    "failed": 1
+  }
+}

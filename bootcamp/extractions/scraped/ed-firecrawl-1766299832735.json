@@ -1,0 +1,36 @@
+{
+  "agency": "Department of Education",
+  "abbreviation": "ED",
+  "scrapedAt": "2025-12-21T06:50:20.962Z",
+  "sources": {
+    "gsaGateway": null,
+    "GSA Acquisition Gateway": {
+      "url": "https://hallway.acquisition.gov/forecast?q=Department%20of%20Education",
+      "error": "Cannot read properties of undefined (reading 'markdown')",
+      "success": false
+    },
+    "Acquisition.gov Procurement Forecasts": {
+      "url": "https://www.acquisition.gov/procurement-forecasts?q=Department%20of%20Education",
+      "forecastsFound": 2,
+      "painPointsExtracted": 0,
+      "success": true
+    }
+  },
+  "painPoints": [],
+  "forecasts": [
+    {
+      "title": "[Skip to main content](https://www",
+      "description": "[Skip to main content](https://www.acquisition.gov/procurement-forecasts?q=Department%20of%20Education#main-content)",
+      "agency": "Department of Education",
+      "source": "Acquisition.gov Procurement Forecasts",
+      "sourceUrl": "https://www.acquisition.gov/procurement-forecasts?q=Department%20of%20Education"
+    },
+    {
+      "title": "| Agency Home | Agency Procurement Forecasts |",
+      "description": "| Agency Home | Agency Procurement Forecasts |\n| --- | --- |\n| [Agency for International Development(link is external)](http://www.usaid.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.usaid.gov/business-forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Agriculture(link is external)](http://www.usda.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.usda.gov/da/osdbu/forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Commerce(link is external)](http://www.doc.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.commerce.gov/oam/vendors/procurement-forecasts \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Defense(link is external)](http://dod.defense.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://business.defense.gov/Archived-Pages/Acquisition-Forecasts/ \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Education(link is external)](http://www.ed.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www2.ed.gov/fund/contract/find/forecast.html \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Energy(link is external)](http://energy.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.energy.gov/osdbu/acquisition-forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Health and Human Services(link is external)](http://www.dhhs.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://mysbcx.hhs.gov/#search-opportunities \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Homeland Security(link is external)](http://www.dhs.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://apfs-cloud.dhs.gov/ \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Housing and Urban Development(link is external)](http://www.hud.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.hud.gov/program_offices/sdb/4cast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Justice(link is external)](http://www.usdoj.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.justice.gov/osdbu/find-contracting-opportunities \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Labor(link is external)](http://www.dol.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.dol.gov/agencies/oasam/centers-offices/business-operations-center/osdbu/procurement-forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of State(link is external)](http://www.state.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.state.gov/Procurement-Forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of the Interior(link is external)](http://www.doi.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.doi.gov/pmb/osdbu/forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of the Treasury(link is external)](https://home.treasury.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://sbecs.treas.gov/Forecast \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Transportation(link is external)](http://www.dot.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.transportation.gov/osdbu/procurement-forecast/summary \"Agency Procurement Forecast (opens in a new window)\") |\n| [Department of Veterans Affairs(link is external)](http://www.va.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.va.gov/osdbu/acquisition/ \"Agency Procurement Forecast (opens in a new window)\") |\n| [**General Services Administration**(link is external)](https://www.gsa.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.gsa.gov/small-business/forecast-of-contracting-opportunities \"Agency Procurement Forecast (opens in a new window)\") |\n| [National Aeronautics & Space Administration(link is external)](http://www.nasa.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.hq.nasa.gov/office/procurement/forecast/ \"Agency Procurement Forecast (opens in a new window)\") |\n| [National Science Foundation(link is external)](https://www.nsf.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.nsf.gov/about/contracting/forecast.jsp \"Agency Procurement Forecast (opens in a new window)\") |\n| [Nuclear Regulatory Commission(link is external)](http://www.nrc.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.nrc.gov/about-nrc/contracting/small-business/forecast.html \"Agency Procurement Forecast (opens in a new window)\") |\n| [Office of Personnel Management(link is external)](https://www.opm.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.opm.gov/about-us/doing-business-with-opm/contracting-opportunities/#url=Business-Opportunities \"Agency Procurement Forecast (opens in a new window)\") |\n| [Social Security Administration(link is external)](https://www.ssa.gov/ \"(opens in a new window)\") | [Agency Procurement Forecast(link is external)](https://www.ssa.gov/osdbu/contract-forecast-intro.html \"Agency Procurement Forecast (opens in a new window)\") |",
+      "agency": "Department of Education",
+      "source": "Acquisition.gov Procurement Forecasts",
+      "sourceUrl": "https://www.acquisition.gov/procurement-forecasts?q=Department%20of%20Education"
+    }
+  ]
+}

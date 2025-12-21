@@ -1,0 +1,97 @@
+<!-- 
+Framer Code Component - Privacy Policy
+Copy this entire code block into a Framer Code Component
+-->
+
+<div style="max-width: 800px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333;">
+    
+    <h1 style="color: #0077B5; border-bottom: 3px solid #0077B5; padding-bottom: 10px; font-size: 2.5em; margin-bottom: 10px;">Privacy Policy</h1>
+    <p style="color: #666; font-style: italic; margin-bottom: 30px;">Last Updated: [REPLACE WITH DATE]</p>
+
+    <p>LinkedIn Deal Magnet ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our LinkedIn profile optimization service (the "Service").</p>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">1. Information We Collect</h2>
+    
+    <h3 style="margin-top: 20px; font-size: 1.3em; margin-bottom: 10px;">1.1 Information You Provide</h3>
+    <p>We collect information you provide directly to us, including:</p>
+    <ul style="margin-left: 20px; margin-bottom: 20px;">
+        <li style="margin-bottom: 10px;"><strong>LinkedIn Profile Data:</strong> When you use our Service, you may provide your LinkedIn profile URL or authorize us to access your LinkedIn profile data through LinkedIn's API.</li>
+        <li style="margin-bottom: 10px;"><strong>Profile Information:</strong> This may include your name, headline, about section, experience, skills, and other publicly available profile information.</li>
+        <li style="margin-bottom: 10px;"><strong>Contact Information:</strong> If you contact us or sign up for our service, we may collect your email address and other contact information.</li>
+        <li style="margin-bottom: 10px;"><strong>Payment Information:</strong> If you purchase our services, our payment processor (Stripe) collects payment information. We do not store your full payment card details.</li>
+    </ul>
+
+    <h3 style="margin-top: 20px; font-size: 1.3em; margin-bottom: 10px;">1.2 Automatically Collected Information</h3>
+    <p>We may automatically collect certain information when you use our Service, including:</p>
+    <ul style="margin-left: 20px; margin-bottom: 30px;">
+        <li style="margin-bottom: 5px;">IP address and browser type</li>
+        <li style="margin-bottom: 5px;">Device information</li>
+        <li style="margin-bottom: 5px;">Usage data and analytics</li>
+        <li style="margin-bottom: 5px;">Cookies and similar tracking technologies</li>
+    </ul>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">2. How We Use Your Information</h2>
+    <p>We use the information we collect to:</p>
+    <ul style="margin-left: 20px; margin-bottom: 30px;">
+        <li style="margin-bottom: 5px;">Provide, maintain, and improve our Service</li>
+        <li style="margin-bottom: 5px;">Analyze your LinkedIn profile and provide optimization recommendations</li>
+        <li style="margin-bottom: 5px;">Process payments and deliver purchased services</li>
+        <li style="margin-bottom: 5px;">Send you service-related communications</li>
+        <li style="margin-bottom: 5px;">Respond to your inquiries and provide customer support</li>
+        <li style="margin-bottom: 5px;">Monitor and analyze usage patterns and trends</li>
+        <li style="margin-bottom: 5px;">Detect, prevent, and address technical issues</li>
+    </ul>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">3. Data Sharing and Disclosure</h2>
+    <p>We do not sell your personal information. We may share your information in the following circumstances:</p>
+    <ul style="margin-left: 20px; margin-bottom: 30px;">
+        <li style="margin-bottom: 10px;"><strong>Service Providers:</strong> We may share information with third-party service providers who perform services on our behalf, such as payment processing (Stripe), AI analysis services (xAI/Grok), and hosting providers.</li>
+        <li style="margin-bottom: 10px;"><strong>Legal Requirements:</strong> We may disclose information if required by law or in response to valid legal requests.</li>
+        <li style="margin-bottom: 10px;"><strong>Business Transfers:</strong> If we are involved in a merger, acquisition, or sale of assets, your information may be transferred.</li>
+    </ul>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">4. LinkedIn API Usage</h2>
+    <p>When you authorize us to access your LinkedIn profile through LinkedIn's API, we will:</p>
+    <ul style="margin-left: 20px; margin-bottom: 30px;">
+        <li style="margin-bottom: 5px;">Only access information you explicitly authorize</li>
+        <li style="margin-bottom: 5px;">Use the information solely to provide our optimization services</li>
+        <li style="margin-bottom: 5px;">Comply with LinkedIn's API Terms of Use and Privacy Policy</li>
+        <li style="margin-bottom: 5px;">Not share your LinkedIn data with third parties except as described in this policy</li>
+    </ul>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">5. Data Security</h2>
+    <p style="margin-bottom: 30px;">We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your information, we cannot guarantee absolute security.</p>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">6. Your Rights and Choices</h2>
+    <p>You have the right to:</p>
+    <ul style="margin-left: 20px; margin-bottom: 20px;">
+        <li style="margin-bottom: 5px;">Access your personal information</li>
+        <li style="margin-bottom: 5px;">Correct inaccurate information</li>
+        <li style="margin-bottom: 5px;">Request deletion of your information</li>
+        <li style="margin-bottom: 5px;">Opt-out of certain data collection</li>
+        <li style="margin-bottom: 5px;">Withdraw consent for LinkedIn API access</li>
+    </ul>
+    <p style="margin-bottom: 30px;">To exercise these rights, please contact us using the information provided below.</p>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">7. Contact Us</h2>
+    <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin-top: 20px; margin-bottom: 30px;">
+        <p style="margin-bottom: 10px;">If you have any questions about this Privacy Policy, please contact us:</p>
+        <p style="margin: 0;">
+            <strong>Email:</strong> [REPLACE WITH YOUR EMAIL]<br>
+            <strong>Website:</strong> [REPLACE WITH YOUR WEBSITE URL]
+        </p>
+    </div>
+
+    <h2 style="color: #004182; margin-top: 40px; font-size: 1.8em; margin-bottom: 15px;">8. Changes to This Privacy Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+
+</div>
+
+
+
+
+
+
+
+
+

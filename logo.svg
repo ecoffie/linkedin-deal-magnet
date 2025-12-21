@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#0A66C2" opacity="0.1"/>
+
+  <!-- Magnet shape -->
+  <g transform="translate(100, 100)">
+    <!-- Left side of magnet (red) -->
+    <path d="M -30 -40 L -30 20 C -30 35 -20 45 -5 45 L 0 45 L 0 -40 Z"
+          fill="#E02B20" stroke="#C02818" stroke-width="2"/>
+
+    <!-- Right side of magnet (blue) -->
+    <path d="M 0 -40 L 0 45 L 5 45 C 20 45 30 35 30 20 L 30 -40 Z"
+          fill="#0A66C2" stroke="#084D92" stroke-width="2"/>
+
+    <!-- Magnet poles -->
+    <line x1="-25" y1="-40" x2="-25" y2="-50" stroke="#E02B20" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-15" y1="-40" x2="-15" y2="-50" stroke="#E02B20" stroke-width="3" stroke-linecap="round"/>
+    <line x1="15" y1="-40" x2="15" y2="-50" stroke="#0A66C2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="25" y1="-40" x2="25" y2="-50" stroke="#0A66C2" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Upward arrow/growth indicator -->
+    <g transform="translate(0, 10)">
+      <path d="M 0 -15 L -8 -5 L -3 -5 L -3 10 L 3 10 L 3 -5 L 8 -5 Z"
+            fill="#FFFFFF" opacity="0.9"/>
+    </g>
+  </g>
+
+  <!-- Company name -->
+  <text x="100" y="175" font-family="Arial, sans-serif" font-size="16" font-weight="bold"
+        text-anchor="middle" fill="#0A66C2">DEAL MAGNET</text>
+</svg>
