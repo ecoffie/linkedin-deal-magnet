@@ -717,7 +717,10 @@ app.put('/api/onboarding/user/:userId', (req, res) => {
 });
 
 // Grok API configuration
-const GROK_API_KEY = process.env.GROK_API_KEY || 'xai-aQUAgUbj6jKHy5eBPk4E07iFdK8O8ALwEHIf6hTjCI53oUuBpSy8OoVv3LTDl0h3EhIb3YoWR124FzGr';
+const GROK_API_KEY = process.env.GROK_API_KEY;
+if (!GROK_API_KEY) {
+    console.warn('Warning: GROK_API_KEY environment variable not set');
+}
 const GROK_API_URL = 'https://api.x.ai/v1/chat/completions';
 const GROK_MODEL = process.env.GROK_MODEL || 'grok-2-1212'; // Use grok-4-latest if available
 
