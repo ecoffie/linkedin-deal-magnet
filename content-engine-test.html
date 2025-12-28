@@ -60,7 +60,7 @@
                     <div class="loading border-white border-t-transparent"></div>
                     <div>
                         <p class="font-semibold">Scouting Opportunities...</p>
-                        <p class="text-sm opacity-90" id="loading-status">Analyzing 5,000 contracts from FPDS</p>
+                        <p class="text-sm opacity-90" id="loading-status">Connecting to USAspending API...</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -255,7 +255,7 @@
             
             // Add priority filter to query string if set
             // Use full URL to work with file:// protocol when testing locally
-            let apiUrl = 'http://localhost:3000/api/government-contracts/search';
+            let apiUrl = '/api/government-contracts/search';
             if (priorityFilterValue) {
                 apiUrl += `?priority=${encodeURIComponent(priorityFilterValue)}`;
             }
@@ -266,8 +266,8 @@
                 const progressBar = document.getElementById('progress-bar');
                 const progressPercent = document.getElementById('progress-percent');
                 const loadingMessages = [
-                    'Connecting to FPDS database...',
-                    'Fetching 5,000 contracts...',
+                    'Connecting to USAspending API...',
+                    'Fetching contract data...',
                     'Analyzing set-aside types...',
                     'Matching NAICS codes...',
                     'Ranking agencies by spending...',
@@ -321,10 +321,10 @@
                 loadingState.classList.add('hidden');
                 errorState.classList.remove('hidden');
 
-                // Handle FPDS unavailable error
+                // Handle API unavailable error
                 let errorMessage = error.message || 'Failed to search government contracts. Please try again.';
                 if (error.message && error.message.includes('temporarily unavailable')) {
-                    errorMessage = '🚨 The federal contract database (FPDS) is temporarily down. Please try again in a few minutes.';
+                    errorMessage = '🚨 The USAspending API is temporarily unavailable. Please try again in a few minutes.';
                 }
 
                 document.getElementById('error-message').textContent = errorMessage;
@@ -517,7 +517,7 @@
                                     }
 
                                     // Display the sub-agency code as the Agency ID
-                                    // This code is used in FPDS and can be cross-referenced on SAM.gov
+                                    // This code can be searched on SAM.gov to find active opportunities
                                     let displayAgencyId = agency.searchableOfficeCode || agency.subAgencyCode || agency.agencyCode || agencyIdStr;
                                     
                                     // Create SAM.gov search URL using the contracting office name for better matching
@@ -1226,11 +1226,12 @@
             }
             
             modalOfficeName.textContent = displayOfficeName || agency.agencyName || 'Contracting Office';
-            
+
             // Store agency info for pain points loading
             window.currentModalAgency = {
                 officeName: displayOfficeName || agency.agencyName,
-                parentAgency: agency.parentAgency
+                parentAgency: agency.parentAgency,
+                location: agency.location || agency.city || ''
             };
             
             modalContent.innerHTML = `
@@ -1255,7 +1256,7 @@
                         <div class="bg-purple-50 rounded-lg p-4">
                             <div class="text-sm text-gray-600 mb-1">Agency ID</div>
                             <div class="text-xl font-bold text-purple-600">${agency.searchableOfficeCode || agency.subAgencyCode || agency.agencyCode || 'N/A'}</div>
-                            <div class="text-xs text-gray-500 mt-1">FPDS Code</div>
+                            <div class="text-xs text-gray-500 mt-1">Agency ID</div>
                         </div>
                     </div>
                     
@@ -1348,29 +1349,115 @@
                 // Try multiple search strategies
                 const searchStrategies = [
                     officeName,  // Try office name first
-                    parentAgency, // Then parent agency
+                    // Extract DHS component agencies
+                    officeName?.match(/U\.S\. Coast Guard|Coast Guard/i) ? 'U.S. Coast Guard' : null,
+                    officeName?.match(/U\.S\. Customs and Border Protection|Customs and Border Protection|CBP/i) ? 'U.S. Customs and Border Protection' : null,
+                    officeName?.match(/CISA|Cybersecurity and Infrastructure Security Agency/i) ? 'CISA' : null,
+                    officeName?.match(/FEMA|Federal Emergency Management Agency/i) ? 'FEMA' : null,
+                    officeName?.match(/ICE|Immigration and Customs Enforcement/i) ? 'ICE' : null,
+                    officeName?.match(/TSA|Transportation Security Administration/i) ? 'TSA' : null,
+                    // Extract DoD Army components
+                    officeName?.match(/Army Materiel Command|AMC/i) && !officeName?.match(/AFMC/i) ? 'Army Materiel Command' : null,
+                    officeName?.match(/Army Contracting Command|ACC-/i) && !officeName?.match(/Air|AFMC/i) ? 'Army Contracting Command' : null,
+                    officeName?.match(/U\.S\. Army Corps of Engineers|USACE/i) ? extractUSACEComponent(officeName) : null,
+                    // Extract DoD Navy/Marine components
+                    officeName?.match(/Marine Corps Systems Command|MCSC|MARCORSYSCOM/i) ? 'Marine Corps Systems Command' : null,
+                    // Extract DoD Air Force/Space Force components
+                    officeName?.match(/Air Force Materiel Command|AFMC/i) ? 'Air Force Materiel Command' : null,
+                    officeName?.match(/Air Force Sustainment Center|AFSC/i) && !officeName?.match(/AFMC/i) ? 'Air Force Sustainment Center' : null,
+                    officeName?.match(/Space Systems Command|SSC/i) && officeName?.match(/Space|Force/i) ? 'Space Systems Command' : null,
+                    // Extract HHS components
+                    officeName?.match(/National Institutes of Health|\bNIH\b/i) ? 'NIH' : null,
+                    officeName?.match(/Centers for Disease Control|\bCDC\b/i) ? 'CDC' : null,
+                    officeName?.match(/Food and Drug Administration|\bFDA\b/i) ? 'FDA' : null,
+                    officeName?.match(/Centers for Medicare|Medicaid Services|\bCMS\b/i) ? 'CMS' : null,
+                    // Extract DOE components
+                    officeName?.match(/National Nuclear Security|\bNNSA\b|Los Alamos|Livermore|Sandia/i) ? 'NNSA' : null,
+                    officeName?.match(/Office of Science|Argonne|Oak Ridge|Brookhaven|Fermilab|Berkeley Lab|PNNL|Princeton Plasma|SLAC|Ames Laboratory|Jefferson Lab/i) && !officeName?.match(/NNSA/i) ? 'DOE Office of Science' : null,
+                    officeName?.match(/Idaho National Laboratory|\bINL\b/i) ? 'DOE Nuclear Energy' : null,
+                    officeName?.match(/National Energy Technology Laboratory|\bNETL\b/i) ? 'DOE Fossil Energy' : null,
+                    // Extract DOT components
+                    officeName?.match(/Federal Aviation Administration|\bFAA\b|NextGen/i) && !officeName?.match(/FHWA|FTA|FRA/i) ? 'FAA' : null,
+                    officeName?.match(/Federal Highway Administration|\bFHWA\b/i) ? 'FHWA' : null,
+                    officeName?.match(/Federal Transit Administration|\bFTA\b/i) ? 'FTA' : null,
+                    officeName?.match(/Federal Railroad Administration|\bFRA\b/i) ? 'FRA' : null,
+                    // Extract DOC components
+                    officeName?.match(/National Oceanic|Atmospheric Administration|\bNOAA\b/i) ? 'NOAA' : null,
+                    officeName?.match(/National Institute of Standards|\bNIST\b/i) ? 'NIST' : null,
+                    officeName?.match(/Census Bureau|\bCensus\b/i) && !officeName?.match(/NIST/i) ? 'Census Bureau' : null,
+                    // Extract Defense-Wide Agencies
+                    officeName?.match(/Defense Logistics Agency|\bDLA\b/i) ? 'Defense Logistics Agency' : null,
+                    officeName?.match(/Missile Defense Agency|\bMDA\b/i) ? 'Missile Defense Agency' : null,
+                    officeName?.match(/Defense Information Systems Agency|\bDISA\b/i) ? 'Defense Information Systems Agency' : null,
+                    officeName?.match(/Defense Contract Management Agency|\bDCMA\b/i) ? 'Defense Contract Management Agency' : null,
+                    officeName?.match(/Defense Contract Audit Agency|\bDCAA\b/i) ? 'Defense Contract Audit Agency' : null,
+                    officeName?.match(/Defense Advanced Research Projects Agency|\bDARPA\b/i) ? 'DARPA' : null,
+                    parentAgency, // Then parent agency as fallback
                     // Extract known agency abbreviations from office name
-                    officeName?.match(/USACE|NAVFAC|NAVSEA|NAVWAR|NAVAIR|DoD|VA|DHS|GSA|NASA|DOE|HHS|EPA/i)?.[0],
+                    officeName?.match(/NAVFAC|NAVSEA|NAVWAR|NAVAIR|DoD|VA|DHS|GSA|NASA|DOE|HHS|EPA/i)?.[0],
                     // If it contains "Department of", try with and without
                     parentAgency?.replace('Department of the ', '').replace('Department of ', '')
                 ].filter(Boolean);
 
+                // Helper function to extract USACE component (now uses API for mission-specific detection)
+                function extractUSACEComponent(name) {
+                    // Signal that this is USACE and needs mission-area detection
+                    return 'USACE';
+                }
+
                 let result = null;
                 let searchName = '';
 
-                // Try each strategy until we find data
-                for (const name of searchStrategies) {
-                    if (!name) continue;
+                // SPECIAL HANDLING FOR USACE - Use mission-specific API
+                if (searchStrategies.includes('USACE')) {
+                    console.log(`🔍 USACE detected - using mission-specific pain points API`);
 
-                    console.log(`🔍 Trying to load pain points for: ${name}`);
-                    const response = await fetch(`http://localhost:3000/api/agency-knowledge-base/${encodeURIComponent(name)}`);
-                    const data = await response.json();
+                    // Get current modal agency info for location
+                    const currentAgency = window.currentModalAgency;
+                    const location = currentAgency?.location || '';
 
-                    if (data.success && data.data) {
-                        result = data;
-                        searchName = name;
-                        console.log(`✅ Found pain points for: ${name}`);
-                        break;
+                    try {
+                        const usaceResponse = await fetch(`/api/usace-mission-pain-points?officeName=${encodeURIComponent(officeName)}&location=${encodeURIComponent(location)}`);
+                        const usaceData = await usaceResponse.json();
+
+                        if (usaceData.success && usaceData.painPoints) {
+                            console.log(`✅ USACE Mission Detected: ${usaceData.missionArea} (${usaceData.matchMethod})`);
+
+                            // Format as agency data
+                            result = {
+                                success: true,
+                                data: {
+                                    name: `USACE - ${usaceData.missionArea.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
+                                    abbreviation: 'USACE',
+                                    description: usaceData.description,
+                                    painPoints: usaceData.painPoints.map(pp => ({
+                                        point: pp,
+                                        priority: 'high'
+                                    }))
+                                }
+                            };
+                            searchName = `USACE (${usaceData.missionArea})`;
+                        }
+                    } catch (error) {
+                        console.warn('⚠️ USACE mission API failed, falling back to standard search:', error);
+                    }
+                }
+
+                // Try standard search strategies if USACE API didn't work or for non-USACE agencies
+                if (!result) {
+                    for (const name of searchStrategies) {
+                        if (!name) continue;
+
+                        console.log(`🔍 Trying to load pain points for: ${name}`);
+                        const response = await fetch(`/api/agency-knowledge-base/${encodeURIComponent(name)}`);
+                        const data = await response.json();
+
+                        if (data.success && data.data) {
+                            result = data;
+                            searchName = name;
+                            console.log(`✅ Found pain points for: ${name}`);
+                            break;
+                        }
                     }
                 }
 

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Market Report - LinkedIn Deal Magnet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loading {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #0077B5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        linkedin: {
+                            blue: '#0077B5',
+                            dark: '#004182',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">🎯 Target Market Report</h1>
+            <p class="text-gray-600">Comprehensive market analysis based on your Opportunity Scout results</p>
+        </div>
+
+        <!-- Input Section -->
+        <div id="input-section" class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Generate Your Report</h2>
+            <p class="text-gray-600 mb-6">Enter your business information to generate a comprehensive target market report with agency pain points, opportunities, and strategic recommendations.</p>
+            
+            <form id="report-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Business Type -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Business Type</label>
+                        <select id="business-formation" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select type</option>
+                            <option value="women-owned">Women Owned</option>
+                            <option value="hubzone">HUBZone</option>
+                            <option value="8a">8(a) Certified</option>
+                            <option value="small-business">Small Business</option>
+                            <option value="dot-certified">DOT Certified</option>
+                        </select>
+                    </div>
+
+                    <!-- NAICS Code -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">NAICS Code</label>
+                        <input type="text" id="naics-code" placeholder="e.g., 541330" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Zip Code (Optional)</label>
+                        <input type="text" id="zip-code" placeholder="e.g., 10001" maxlength="5" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+
+                    <!-- Veteran Status -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Veteran Status</label>
+                        <select id="veteran-status" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select status</option>
+                            <option value="veteran-owned">Veteran Owned</option>
+                            <option value="service-disabled-veteran">Service Disabled Vet</option>
+                            <option value="not-applicable">Not Applicable</option>
+                        </select>
+                    </div>
+
+                    <!-- Goods or Services -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Goods or Services?</label>
+                        <select id="goods-or-services" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select one</option>
+                            <option value="goods">Goods</option>
+                            <option value="services">Services</option>
+                            <option value="both">Both</option>
+                        </select>
+                    </div>
+
+                    <!-- Company Name (Optional) -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Company Name (Optional)</label>
+                        <input type="text" id="company-name" placeholder="Your Company Name" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+                </div>
+
+                <button type="submit" id="generate-btn" class="w-full bg-linkedin-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-linkedin-dark transition shadow-md hover:shadow-lg">
+                    📊 Generate Target Market Report
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="hidden bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-2xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="loading border-white border-t-transparent"></div>
+                    <div>
+                        <p class="font-semibold">Generating Your Report...</p>
+                        <p class="text-sm opacity-90" id="loading-status">Analyzing market opportunities</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold" id="progress-percent">0%</p>
+                    <p class="text-xs opacity-75">Complete</p>
+                </div>
+            </div>
+            <div class="mt-3 bg-white bg-opacity-20 rounded-full h-2 overflow-hidden">
+                <div id="progress-bar" class="bg-white h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Report Display -->
+        <div id="report-section" class="hidden">
+            <!-- Report Header with Export -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6 no-print">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Your Target Market Report</h2>
+                        <p class="text-gray-600" id="report-date"></p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="window.print()" class="bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-700 transition">
+                            🖨️ Print / Save PDF
+                        </button>
+                        <button onclick="exportReport()" class="bg-linkedin-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-linkedin-dark transition">
+                            📥 Export Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Content -->
+            <div id="report-content" class="bg-white rounded-xl shadow-lg p-8 space-y-8">
+                <!-- Report will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="hidden bg-red-50 border-2 border-red-200 rounded-xl p-6">
+            <h2 class="text-xl font-bold text-red-900 mb-2">Error</h2>
+            <p id="error-message" class="text-red-800"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentReportData = null;
+
+        document.getElementById('report-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                businessFormation: document.getElementById('business-formation').value,
+                naicsCode: document.getElementById('naics-code').value,
+                zipCode: document.getElementById('zip-code').value,
+                veteranStatus: document.getElementById('veteran-status').value,
+                goodsOrServices: document.getElementById('goods-or-services').value,
+                companyName: document.getElementById('company-name').value || 'Your Company'
+            };
+
+            // Validate required fields
+            if (!formData.businessFormation || !formData.naicsCode) {
+                showError('Please fill in Business Type and NAICS Code');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+            document.getElementById('report-section').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+
+            updateProgress(10, 'Fetching contract data from Opportunity Scout...');
+
+            try {
+                // First, get Opportunity Scout data
+                updateProgress(30, 'Analyzing market opportunities...');
+                const scoutResponse = await fetch('/api/government-contracts/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!scoutResponse.ok) {
+                    throw new Error('Failed to fetch Opportunity Scout data');
+                }
+
+                const scoutData = await scoutResponse.json();
+                updateProgress(60, 'Matching agency pain points...');
+
+                // Generate comprehensive report
+                updateProgress(80, 'Generating strategic recommendations...');
+                const reportResponse = await fetch('/api/target-market-report/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...formData,
+                        scoutData: scoutData
+                    })
+                });
+
+                if (!reportResponse.ok) {
+                    throw new Error('Failed to generate report');
+                }
+
+                const reportData = await reportResponse.json();
+                currentReportData = reportData;
+
+                updateProgress(100, 'Report generated successfully!');
+                
+                setTimeout(() => {
+                    displayReport(reportData);
+                }, 500);
+
+            } catch (error) {
+                console.error('Error generating report:', error);
+                showError(error.message || 'Failed to generate report. Please try again.');
+            }
+        });
+
+        function updateProgress(percent, status) {
+            document.getElementById('progress-percent').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('loading-status').textContent = status;
+        }
+
+        function displayReport(data) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('report-section').classList.remove('hidden');
+            document.getElementById('report-date').textContent = `Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+
+            const content = document.getElementById('report-content');
+            content.innerHTML = generateReportHTML(data);
+        }
+
+        function generateReportHTML(data) {
+            return `
+                <!-- Executive Summary -->
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Executive Summary</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-4">
+                        <p class="text-lg text-gray-800 mb-4">${data.executiveSummary}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl font-bold text-linkedin-blue">${data.summaryStats.totalAgencies}</div>
+                                <div class="text-sm text-gray-600">Target Agencies</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl font-bold text-green-600">$${formatCurrency(data.summaryStats.totalSpending)}</div>
+                                <div class="text-sm text-gray-600">Total Market Size</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl font-bold text-purple-600">${data.summaryStats.totalContracts}</div>
+                                <div class="text-sm text-gray-600">Contract Opportunities</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Top Target Agencies -->
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Top Target Agencies</h2>
+                    <div class="space-y-4">
+                        ${data.topAgencies.map((agency, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-900">${index + 1}. ${agency.name}</h3>
+                                        <p class="text-gray-600">${agency.parentAgency || ''}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(agency.setAsideSpending)}</div>
+                                        <div class="text-sm text-gray-600">Set-Aside Spending</div>
+                                    </div>
+                                </div>
+                                
+                                ${agency.painPoints && agency.painPoints.length > 0 ? `
+                                    <div class="mt-4">
+                                        <h4 class="font-semibold text-gray-900 mb-2">Key Pain Points:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                            ${agency.painPoints.slice(0, 3).map(pp => `<li>${pp}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                    <div>
+                                        <div class="font-semibold text-gray-900">Contracts</div>
+                                        <div class="text-gray-600">${agency.contractCount}</div>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900">Total Spending</div>
+                                        <div class="text-gray-600">$${formatCurrency(agency.totalSpending)}</div>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900">Office ID</div>
+                                        <div class="text-linkedin-blue">${agency.officeId || 'N/A'}</div>
+                                    </div>
+                                    <div>
+                                        <a href="${agency.samGovUrl || '#'}" target="_blank" class="text-linkedin-blue hover:underline font-semibold">View on SAM.gov →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+
+                <!-- Market Opportunities -->
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Market Opportunities</h2>
+                    <div class="space-y-4">
+                        ${data.opportunities.map(opp => `
+                            <div class="bg-green-50 border-l-4 border-green-500 rounded-lg p-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">${opp.title}</h3>
+                                <p class="text-gray-700 mb-4">${opp.description}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    ${opp.agencies.map(a => `<span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">${a}</span>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+
+                <!-- Strategic Recommendations -->
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Strategic Recommendations</h2>
+                    <div class="space-y-4">
+                        ${data.recommendations.map((rec, index) => `
+                            <div class="bg-purple-50 border-l-4 border-purple-500 rounded-lg p-6">
+                                <div class="flex items-start">
+                                    <div class="text-2xl font-bold text-purple-600 mr-4">${index + 1}</div>
+                                    <div class="flex-1">
+                                        <h3 class="text-xl font-bold text-gray-900 mb-2">${rec.title}</h3>
+                                        <p class="text-gray-700 mb-3">${rec.description}</p>
+                                        ${rec.actionItems && rec.actionItems.length > 0 ? `
+                                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                                ${rec.actionItems.map(item => `<li>${item}</li>`).join('')}
+                                            </ul>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+
+                <!-- Competitive Analysis -->
+                ${data.competitiveAnalysis ? `
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Competitive Analysis</h2>
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <p class="text-gray-700 mb-4">${data.competitiveAnalysis.summary}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Advantages</h4>
+                                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                    ${data.competitiveAnalysis.advantages.map(a => `<li>${a}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Considerations</h4>
+                                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                    ${data.competitiveAnalysis.considerations.map(c => `<li>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ` : ''}
+
+                <!-- Next Steps -->
+                <section>
+                    <h2 class="text-3xl font-bold text-linkedin-blue mb-4">Next Steps</h2>
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <ol class="list-decimal list-inside space-y-3 text-gray-700">
+                            ${data.nextSteps.map(step => `<li class="font-semibold">${step}</li>`).join('')}
+                        </ol>
+                    </div>
+                </section>
+            `;
+        }
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return (amount / 1000000).toFixed(2) + 'M';
+            } else if (amount >= 1000) {
+                return (amount / 1000).toFixed(2) + 'K';
+            }
+            return amount.toLocaleString();
+        }
+
+        function showError(message) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').textContent = message;
+        }
+
+        function exportReport() {
+            if (!currentReportData) return;
+            
+            // Create a downloadable JSON file
+            const dataStr = JSON.stringify(currentReportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `target-market-report-${Date.now()}.json`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
+
+

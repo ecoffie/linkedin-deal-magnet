@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "description": "Department of Defense organizational structure with branch-specific commands and pain points",
+    "lastUpdated": "2025-12-21",
+    "source": "Research from official DoD, Army, Navy, Air Force, Marine Corps, and Space Force sources"
+  },
+  "structure": {
+    "Department of Defense": {
+      "military_departments": [
+        "Department of the Army",
+        "Department of the Navy",
+        "Department of the Air Force"
+      ],
+      "branches": [
+        "United States Army",
+        "United States Navy",
+        "United States Marine Corps",
+        "United States Air Force",
+        "United States Space Force"
+      ]
+    }
+  },
+  "branches": {
+    "Department of the Army": {
+      "abbreviation": "DA",
+      "contains": ["United States Army"],
+      "secretary": "Secretary of the Army",
+      "service_chief": "Chief of Staff of the Army",
+      "major_commands": {
+        "Army Materiel Command": {
+          "abbreviation": "AMC",
+          "headquarters": "Redstone Arsenal, AL",
+          "mission": "Provides technology, acquisition support, materiel readiness, and sustainment",
+          "sub_organizations": [
+            "Army Contracting Command (ACC)",
+            "Aviation and Missile Command (AMCOM)",
+            "Communications-Electronics Command (CECOM)",
+            "Joint Munitions Command (JMC)",
+            "Tank-Automotive and Armaments Command (TACOM)",
+            "Surface Deployment and Distribution Command (SDDC)"
+          ],
+          "pain_points_key": "Army Materiel Command"
+        },
+        "Army Contracting Command": {
+          "abbreviation": "ACC",
+          "headquarters": "Redstone Arsenal, AL",
+          "parent": "Army Materiel Command",
+          "mission": "Awards more than 190,000 contracts annually valued at $60.9 billion",
+          "employees": "6,100+ military and civilian at 115+ locations worldwide",
+          "components": {
+            "Mission and Installation Contracting Command": {
+              "abbreviation": "MICC",
+              "headquarters": "Joint Base San Antonio, TX",
+              "contracting_support_brigades": 3,
+              "field_offices": 33,
+              "personnel": "1,500+ military and civilian"
+            },
+            "Expeditionary Contracting Command": {
+              "mission": "Supports deployed forces worldwide"
+            },
+            "Contracting Centers": [
+              "ACC-Aberdeen (Aberdeen Proving Ground, MD)",
+              "ACC-New Jersey (Picatinny Arsenal, NJ)",
+              "ACC-Redstone (Redstone Arsenal, AL)",
+              "ACC-Rock Island (Rock Island Arsenal, IL)",
+              "ACC-Natick (Natick, MA)"
+            ]
+          },
+          "pain_points_key": "Army Contracting Command"
+        },
+        "Army Forces Command": {
+          "abbreviation": "FORSCOM",
+          "mission": "Trains, mobilizes, deploys, sustains, transforms, and reconstitutes conventional forces"
+        },
+        "U.S. Army Corps of Engineers": {
+          "abbreviation": "USACE",
+          "note": "See usace-office-specific-pain-points.json for mission-area mappings",
+          "pain_points_key": "USACE"
+        }
+      },
+      "pain_points_key": "Department of the Army"
+    },
+    "Department of the Navy": {
+      "abbreviation": "DON",
+      "contains": ["United States Navy", "United States Marine Corps"],
+      "secretary": "Secretary of the Navy",
+      "service_chiefs": ["Chief of Naval Operations", "Commandant of the Marine Corps"],
+      "major_commands": {
+        "Naval Sea Systems Command": {
+          "abbreviation": "NAVSEA",
+          "headquarters": "Washington Navy Yard, DC",
+          "mission": "Designs, builds, delivers, and maintains ships and systems",
+          "program_executive_offices": [
+            "PEO Ships",
+            "PEO Submarines",
+            "PEO Carriers",
+            "PEO Integrated Warfare Systems"
+          ],
+          "pain_points_key": "NAVSEA"
+        },
+        "Naval Air Systems Command": {
+          "abbreviation": "NAVAIR",
+          "headquarters": "Patuxent River, MD",
+          "mission": "Provides material support for aircraft and airborne weapon systems",
+          "major_sites": [
+            "Naval Air Warfare Center Aircraft Division (Patuxent River, MD)",
+            "Naval Air Warfare Center Weapons Division (China Lake, CA)"
+          ],
+          "pain_points_key": "NAVAIR"
+        },
+        "Naval Facilities Engineering Systems Command": {
+          "abbreviation": "NAVFAC",
+          "headquarters": "Washington Navy Yard, DC",
+          "mission": "Delivers facilities, infrastructure, and shore readiness",
+          "regional_commands": [
+            "NAVFAC Atlantic (Norfolk, VA)",
+            "NAVFAC Pacific (Pearl Harbor, HI)",
+            "NAVFAC Southwest (San Diego, CA)",
+            "NAVFAC Southeast (Jacksonville, FL)",
+            "NAVFAC Mid-Atlantic (Washington, DC)",
+            "NAVFAC Northwest (Silverdale, WA)",
+            "NAVFAC EXWC (Port Hueneme, CA)"
+          ],
+          "pain_points_key": "NAVFAC"
+        },
+        "Naval Information Warfare Systems Command": {
+          "abbreviation": "NAVWAR",
+          "formerly": "SPAWAR (Space and Naval Warfare Systems Command)",
+          "headquarters": "San Diego, CA",
+          "mission": "Develops, delivers, and sustains information warfare systems and capabilities",
+          "pain_points_key": "NAVWAR"
+        },
+        "Naval Supply Systems Command": {
+          "abbreviation": "NAVSUP",
+          "headquarters": "Mechanicsburg, PA",
+          "mission": "Provides logistics, business, and support services",
+          "fleet_logistics_centers": [
+            "FLC Norfolk",
+            "FLC San Diego",
+            "FLC Pearl Harbor",
+            "FLC Jacksonville",
+            "FLC Puget Sound",
+            "FLC Yokosuka"
+          ]
+        },
+        "Marine Corps Systems Command": {
+          "abbreviation": "MCSC",
+          "headquarters": "Marine Corps Base Quantico, VA",
+          "mission": "Acquisition command for all Marine Corps ground weapon and IT programs",
+          "programs": "450+ acquisition programs",
+          "contracting_divisions": [
+            "Tactical Communications & Electromagnetic Warfare Systems (TCE)",
+            "Combat Support Systems (CSS)",
+            "Information Technology Contracting Center (ITCC)",
+            "Program Executive Officer Land Systems (PEO LS)",
+            "Training Systems (TRASYS)"
+          ],
+          "pain_points_key": "Marine Corps Systems Command"
+        }
+      },
+      "pain_points_key": "Department of the Navy"
+    },
+    "Department of the Air Force": {
+      "abbreviation": "DAF",
+      "contains": ["United States Air Force", "United States Space Force"],
+      "secretary": "Secretary of the Air Force",
+      "service_chiefs": ["Chief of Staff of the Air Force", "Chief of Space Operations"],
+      "major_commands": {
+        "Air Force Materiel Command": {
+          "abbreviation": "AFMC",
+          "headquarters": "Wright-Patterson AFB, OH",
+          "mission": "Manages $80 billion annual budget for research, development, test, acquisition, and sustainment",
+          "personnel": "89,000 military and civilian",
+          "centers": [
+            "Air Force Life Cycle Management Center (AFLCMC)",
+            "Air Force Installation Contracting Center (Wright-Patterson AFB)",
+            "Air Force Research Laboratory (AFRL)",
+            "Air Force Test Center (AFTC)",
+            "Air Force Nuclear Weapons Center (AFNWC)",
+            "Arnold Engineering Development Complex (AEDC)"
+          ],
+          "pain_points_key": "Air Force Materiel Command"
+        },
+        "Air Force Sustainment Center": {
+          "abbreviation": "AFSC",
+          "headquarters": "Tinker AFB, OK",
+          "mission": "Provides depot maintenance, supply chain management, and weapon system support",
+          "air_logistics_complexes": [
+            "Ogden ALC (Hill AFB, UT)",
+            "Oklahoma City ALC (Tinker AFB, OK)",
+            "Warner Robins ALC (Robins AFB, GA)"
+          ],
+          "pain_points_key": "Air Force Sustainment Center"
+        },
+        "Air Force Global Strike Command": {
+          "abbreviation": "AFGSC",
+          "headquarters": "Barksdale AFB, LA",
+          "mission": "Organizes, trains, equips, and maintains forces to provide strategic deterrence and global strike"
+        },
+        "Air Combat Command": {
+          "abbreviation": "ACC",
+          "headquarters": "Joint Base Langley-Eustis, VA",
+          "mission": "Provides combat airpower"
+        }
+      },
+      "pain_points_key": "Department of the Air Force"
+    },
+    "United States Space Force": {
+      "abbreviation": "USSF",
+      "parent_department": "Department of the Air Force",
+      "established": "December 20, 2019",
+      "service_chief": "Chief of Space Operations",
+      "headquarters": "Pentagon, Arlington, VA",
+      "major_commands": {
+        "Space Systems Command": {
+          "abbreviation": "SSC",
+          "headquarters": "Los Angeles AFB, CA",
+          "mission": "Develops, acquires, and sustains lethal and resilient space capabilities",
+          "pain_points_key": "Space Systems Command"
+        },
+        "Space Operations Command": {
+          "abbreviation": "SpOC",
+          "headquarters": "Peterson SFB, CO",
+          "mission": "Organizes, trains, and equips space forces"
+        }
+      },
+      "pain_points_key": "United States Space Force"
+    }
+  },
+  "detection_rules": {
+    "patterns": {
+      "Army Materiel Command": ["Army Materiel Command", "AMC", "Materiel Command"],
+      "Army Contracting Command": ["Army Contracting Command", "\\bACC\\b", "ACC-Aberdeen", "ACC-Redstone", "ACC-Rock Island", "ACC-New Jersey", "ACC-Natick"],
+      "NAVSEA": ["Naval Sea Systems", "NAVSEA", "PEO Ships", "PEO Submarines"],
+      "NAVAIR": ["Naval Air Systems", "NAVAIR", "Naval Air Warfare Center"],
+      "NAVFAC": ["Naval Facilities Engineering", "NAVFAC", "NAVFAC Atlantic", "NAVFAC Pacific", "NAVFAC Southwest"],
+      "NAVWAR": ["Naval Information Warfare", "NAVWAR", "SPAWAR"],
+      "NAVSUP": ["Naval Supply Systems", "NAVSUP", "Fleet Logistics Center"],
+      "Marine Corps Systems Command": ["Marine Corps Systems Command", "MCSC", "MARCORSYSCOM"],
+      "Air Force Materiel Command": ["Air Force Materiel Command", "AFMC", "Wright-Patterson", "AFLCMC"],
+      "Air Force Sustainment Center": ["Air Force Sustainment Center", "AFSC", "Air Logistics Complex", "Tinker AFB", "Hill AFB", "Robins AFB"],
+      "Space Systems Command": ["Space Systems Command", "SSC", "Los Angeles AFB"]
+    },
+    "office_codes": {
+      "N00421": "Naval Air Warfare Center Aircraft Division",
+      "M95494": "Marine Corps Systems Command",
+      "N69450": "NAVFAC Southeast",
+      "N62473": "NAVFAC Southwest",
+      "N40085": "NAVFAC Mid-Atlantic",
+      "FA0021": "Air Force Installation Contracting Agency",
+      "FA4830": "23rd Contracting Squadron",
+      "W50S8P": "ACC-Ohio Army National Guard",
+      "W9126G": "USACE Fort Worth District",
+      "W91278": "USACE Mobile District",
+      "W912DR": "USACE Baltimore District"
+    }
+  },
+  "how_to_use": {
+    "step1": "Extract office name from contract data",
+    "step2": "Check patterns against office name",
+    "step3": "Look up pain_points_key for matched command",
+    "step4": "Load pain points from agency-pain-points.json using the key",
+    "step5": "Display command-specific pain points instead of generic 'Department of Defense'"
+  }
+}

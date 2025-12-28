@@ -1,0 +1,1159 @@
+@import url("/e2/global/rv7/elements/reset.css"); 
+@import url("/e2/fonts/rv7/gi/fonts.css"); 
+@import url("/e2/global/rv7/brand/armybrand.css"); 
+
+/* change the label left of search icon */
+:root {
+    --navbarlabel: 'FEATURES';
+    --submenu-height: 56px;
+    --globalbannernotifyheight: 0px; /* 61px when in use */
+    --globalnavheight: calc(var(--globalbannernotifyheight) + 101px); /* 101px is the default without the global notification */
+}
+
+.menu-window :is(span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    text-indent: 0px;
+    text-align: left;
+    float: none;
+    display: revert
+}
+/* iOS reset */
+
+textarea,
+input.text,
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+.input-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+#skip-repetitive-content-link {
+    position: absolute;
+    width: 100%;
+    padding: 0px;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+}
+#skip-repetitive-content-link a {
+    opacity: 0;
+    transform: translateY(-100%);
+    top: 0;
+    position: absolute;
+    color: var(--armyblack);
+    background-color: var(--greyscaleaccent20);
+    line-height: 50px;
+    width: 100%;
+    text-align: center;
+}
+#skip-repetitive-content-link a:focus {
+    opacity: 1;
+    transform: translateY(0);
+    text-decoration: underline;
+}
+
+.menu-window ol {
+    list-style: decimal;
+    margin-left: 20px
+}
+
+.menu-window ul {
+    list-style: none
+}
+
+#globalnavcontainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 1999;
+    font-size: 18px;
+    line-height: 18px;
+    font-family: 'GIfont', Arial, Helvetica, sans-serif;
+    font-weight: 530;
+}
+
+body.hasstickymenu #globalnavcontainer {
+    position: sticky;
+}
+
+/* hide the checkbox inputs */
+#globalnavcontainer #globalnavmenutoggle,
+#globalnavcontainer #globalnotificationtoggle,
+#govsearch {
+    opacity: 0;
+    position: absolute;
+}
+#globalnavcontainer .globalnavmenutogglelabel::before {
+    line-height: 100%;
+    font-family: 'armyicons';
+    content: "\e96d";
+    display: inline-block;
+    position: relative;
+    color: #FFF;
+    font-size: 32px;
+    font-weight: normal;
+}
+
+#globalnavcontainer #globalnavmenutoggle:focus~.navbar .globalnavmenutogglelabel,
+#globalnavcontainer #globalnavmenutoggle:focus~.navbar .globalnavmenutogglelabel::before,
+#govsearch:focus ~ label.search-button,
+#govsearch:focus ~ label.search-button::after {
+    color: var(--armygold);
+}
+#globalnavcontainer .menu-container .list-container label:has(input:focus) {
+    background-color: var(--greyscaleaccent80);
+}
+
+#globalnavcontainer #globalnavmenutoggle:checked~.navbar .globalnavmenutogglelabel::before {
+    content: "\e96f";
+}
+
+#globalnavcontainer #globalnavmenutoggle:checked~.menu-window {
+    left: 0px;
+    height: 95vh;
+    overflow-y: auto;
+    position: fixed;
+    top: 68px;
+    left: 0px
+}
+
+#globalnavcontainer #globalnavmenutoggle:checked~.navbar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 3000;
+    width: 100%;
+    display: block
+}
+
+#globalnavcontainer .nav-button {
+    border: 0 solid var(--greyscaleaccent80);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    height: 100%;
+    outline: 0 none;
+    padding: 0 20px;
+    position: absolute;
+    text-decoration: none !important;
+    text-indent: 0;
+    text-transform: uppercase;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    box-sizing: content-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: auto;
+}
+/* overwrite the styles from _buttons.scss */
+#globalnavcontainer .nav-button span,
+#globalnavcontainer .notification-button span {
+    display: inline;
+    height: auto;
+    width: auto;
+    line-height: normal;
+    background: none;
+}
+#globalnavcontainer .nav-button,
+#globalnavcontainer .nav-button::before,
+#globalnavcontainer .nav-button::after {
+    transition: color .3s ease-in-out;
+}
+#globalnavcontainer #featureslabelink~.nav-button.search-button span {
+    display: none;
+}
+
+#globalnavcontainer .navbar {
+    border: 0px
+}
+
+#globalnavcontainer .navbar .navbar-container {
+    background: var(--armyblack);
+    border-bottom: 2px solid var(--armygold);
+    height: 66px;
+    box-sizing: content-box;
+    position: relative;
+}
+
+#globalnavcontainer .featureslabel {
+    color: #ADADAD;
+    font-size: 18px;
+    font-weight: 530;
+    letter-spacing: 0.05em;
+    line-height: 20px;
+    padding: 16px 20px 16px;
+    position: absolute;
+    right: 73px;
+    text-decoration: none;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
+#globalnavcontainer .featureslabel::after {
+    content:var(--navbarlabel);
+}
+
+#globalnavcontainer .featureslabel:focus,
+#globalnavcontainer .featureslabel:hover {
+    color: var(--armygold);
+}
+
+#globalnavcontainer .navbar .nav-army-star {
+    background-image: none;
+    padding: 8px;
+    margin-top:5px;
+    line-height: 0;
+    position: absolute;
+    top:0px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2001;
+    transition: all .3s ease-in-out;
+    text-indent: 0;
+}
+
+#globalnavcontainer .navbar .nav-army-star:focus,
+#globalnavcontainer .navbar .nav-army-star:hover {
+    transform: translateX(-50%) scale(1.1)
+}
+
+#globalnavcontainer .navbar .nav-army-star img {
+    width: 160px;
+    height: 36px;
+}
+
+#globalnavcontainer .menu-window {
+    display: block;
+    height: 0vh;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    color: #FFF;
+    position: absolute;
+    width: 100%;
+    z-index: 2000;
+    font-family: 'GIfont', Arial, Helvetica, san-serif;
+    font-size: 16px;
+    font-weight:530;
+    line-height: 1.2em;
+    transition: height .5s ease-in-out
+}
+
+#globalnavcontainer .menu-container {
+    display: flex;
+    width: 100%;
+    padding: 50px 3%;
+    box-sizing: border-box;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 60px
+}
+
+#globalnavcontainer .menu-container .list-container {
+    display: flex;
+    width: 80%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start
+}
+
+#globalnavcontainer .menu-container .list-container .menu {
+    width: 32%;
+    margin: 0 .5%;
+    list-style-type: none;
+    padding: 0 0 .8em;
+    border-bottom-width: 0;
+    display: table-cell;
+    vertical-align: top;
+}
+#globalnavcontainer .menu-container .list-container .globalmenutoggle {
+    opacity: 0;
+}
+#globalnavcontainer .menu-container .list-container .menu li {
+    padding: 1px 0px;
+    list-style-type: none;
+}
+
+#globalnavcontainer .menu-container .list-container .menu label {
+    color: var(--armygold);
+    display: block;
+    font-size: 1.125em;
+    font-weight: 700;
+    letter-spacing: .05em;
+    outline: 0 none;
+    padding: 15px 10px 15px 0px;
+    margin-bottom: 10px;
+    position: relative;
+    text-decoration: none;
+}
+
+#globalnavcontainer .menu-container .list-container .menu label span {
+    position: absolute;
+    background: #fff;
+    background-image: none;
+    bottom: 0;
+    height: 1px;
+    left: 0;
+    right: auto;
+    top: auto;
+    width: 40px
+}
+
+#globalnavcontainer .menu-container .list-container .menu  ul li a {
+    color: #fff;
+    padding: .469em 45px .469em 0;
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    transition: color .2s linear 0s;
+}
+
+#globalnavcontainer .menu-container .list-container .menu  ul li a:focus,
+#globalnavcontainer .menu-container .list-container .menu  ul li a:hover {
+    color: var(--armygold);
+}
+
+#globalnavcontainer .menu-container .list-container .menu:not(.social)  ul li a:after {
+    font-family: 'armyicons';
+    content: "\e90a";
+    color: var(--armygold);
+    opacity: 0;
+    height: 17px;
+    margin-left: 30px;
+    position: absolute;
+    transition: all .5s ease-in-out;
+    width: 15px
+}
+
+#globalnavcontainer .menu-container .list-container .menu  ul li a:focus:after,
+#globalnavcontainer .menu-container .list-container .menu  ul li a:hover:after {
+    margin-left: 10px;
+    opacity: 1;
+}
+
+#globalnavcontainer .menu-container .list-container .menu .social ul {
+    margin-left: -5px;
+    max-width: 150px;
+    padding: 0;
+    text-align: left;
+}
+
+#globalnavcontainer .menu-container .list-container .menu .social ul li a {
+    padding: 3px 5px;
+}
+
+
+#globalnavcontainer .menu-container .list-container .menu.social ul li a:focus:after,
+#globalnavcontainer .menu-container .list-container .menu.social  ul li a:hover:after {
+    content: "";
+    display:none;
+}
+
+
+#globalnavcontainer .menu-container .quicklinks {
+    display: block;
+    width: 20%;
+}
+
+#globalnavcontainer .menu-container .quicklinks li {
+    margin-bottom: 10px;
+    list-style-type: none;
+}
+
+#globalnavcontainer .menu-container .quicklinks li a {
+    background: #333;
+    color: #ccc;
+    display: flex;
+    height: 66px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: .938em;
+    font-weight: 700;
+    outline: 0 none;
+    padding: 0 35px 0 20px;
+    position: relative;
+    transition: background .2s linear 0s, color .2s linear 0s;
+    align-items: center;
+}
+
+#globalnavcontainer .menu-container .quicklinks li a:focus,
+#globalnavcontainer .menu-container .quicklinks li a:hover {
+    background: #2a2a2a;
+    color: var(--armygold)
+}
+
+#globalnavcontainer .menu-container .quicklinks li a:after {
+    font-family: 'armyicons';
+    content: "\e90a";
+    color: var(--armygold);
+    height: 26px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px
+}
+
+@media screen and (max-width: 992px) {
+    #globalnavcontainer .menu-container .quicklinks li {
+        float: left;
+        box-sizing: border-box;
+        text-align: center;
+        width: 48%;
+        margin: 1%
+    }
+
+    #globalnavcontainer .menu-container .quicklinks li a {
+        padding: 0 20px;
+    }
+
+    #globalnavcontainer .menu-container .quicklinks li a:after {
+        display: none
+    }
+}
+
+@media screen and (max-width: 993px) {
+    #globalnavcontainer .featureslabel {
+        display: none
+    }
+
+    #globalnavcontainer .menu-container .list-container {
+        width: 100%
+    }
+
+    #globalnavcontainer .menu-container .quicklinks {
+        width: 100%
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #globalnavcontainer #globalnavmenutoggle:after {
+        font-size: 1.3em;
+        padding: 20px 10px
+    }
+}
+
+@media screen and (max-width: 769px) {
+    #globalnavcontainer .nav-button {
+        border-width: 0 1px 0 0;
+    }
+
+    #globalnavcontainer .nav-button.search-button {
+        border-width: 0 0 0 1px;
+    }
+
+    #globalnavcontainer .nav-button span {
+        display: none;
+    }
+
+    #globalnavcontainer .menu-container {
+        padding: 50px 3% 150px
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu  label {
+        -webkit-text-size-adjust: none;
+        color: #ccc;
+        display: block;
+        font-size: 1.125em;
+        font-weight: 700;
+        letter-spacing: .05em;
+        outline: 0 none;
+        padding: 25px 10px;
+        position: relative;
+        text-decoration: none;
+        border-bottom: 1px solid #333;
+        position: relative
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu label {
+        position: relative;
+        margin: 0px
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu label::before {
+        content: "+";
+        position: absolute;
+        top: 0px;
+        margin-top: .7em;
+        right: 0px;
+        z-index: 2100;
+        display: block;
+        height: 1em;
+        width: 1em;
+        color: #FFF;
+        font-family: 'GIfont', Arial, Helvetica, sans-serif;
+        font-size: 1.8em;
+        font-weight: 530;
+        text-align: center
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu label:hover {
+        cursor: pointer;
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu:has(input:checked) label:before {
+        content: "\2014";
+        color: #444
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu  label span {
+        display: none
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu  label span {
+        display: none
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu ul {
+        overflow: hidden;
+        border-bottom: 1px solid #333;
+        transition: max-height .5s linear;
+    }
+    #globalnavcontainer .menu-container .list-container .menu ul li {
+        margin-left: 2em;
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu .social ul {
+        height: auto !important;
+        transition: none;
+        padding-bottom: 20px
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu ul {
+        max-height: 0px;
+    }
+    #globalnavcontainer .menu-container .list-container .menu.social ul {
+        max-height: 200px;
+        margin-top: 1.5em;
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu:has(input:checked) ul {
+        max-height: 400px;
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu:has(input:checked) label:before {
+        content: "\2014";
+        color: #444
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu {
+        width: 99%;
+        margin: 0% .5%;
+        display: block;
+        padding: 1px 0px
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu li a {
+        padding-left: 30px
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu .social ul {
+        margin: auto;
+        max-width: 80%;
+        text-align: center
+    }
+
+    #globalnavcontainer .menu-container .list-container .menu .social li {
+        display: inline-block
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #globalnavcontainer .menu-container .quicklinks li {
+        width: 98%;
+    }
+}
+
+#featureBar {
+    height: var(--globalnavheight);
+}
+
+.globalnavisloaded #featureBar,
+#homepage #featureBar {
+    display: none !important
+}
+
+.navbar-fixed-top {
+    position: absolute;
+    top: var(--globalnavheight) !important;
+    z-index: 500 !important
+}
+
+@media screen and (max-width: 992px) {
+    .navbar-fixed-top {
+        margin-top: 55px;
+        z-index: 501 !important
+    }
+}
+
+.affix,
+#anchor_nav {
+    top: 0px !important;
+    z-index: 500 !important
+}
+
+.globalnavisloaded {
+    margin-top: var(--globalnavheight) !important
+}
+
+.globalnavisloaded .masthead-buffer {
+    height: 0
+}
+
+.globalnavisloaded header:not(.pageheader) {
+    position: relative
+}
+
+.globalnavisloaded #top_bar:not(.collapsed) {
+    position: absolute;
+    top: 0px;
+    z-index: 800;
+    width: 100%
+}
+
+#page #top_bar:not(.collapsed),
+#top_bar:not(.collapsed) {
+    position: absolute;
+    top: var(--globalnavheight);
+    z-index: 1000
+}
+
+.globalnavisloaded #top_bar #menu,
+#top_bar #menu {
+    display: block;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: 10
+}
+
+.globalnavisloaded #top_bar #menu.open {
+    position: fixed;
+    top: 30px;
+    z-index: 10
+}
+
+.globalnavisloaded #top_bar #menu.open #menu_inner {
+    position: relative;
+    top: calc( var(--globalnavheight) + 40px);
+}
+
+.globalnavisloaded .masthead_buffer {
+    height: 50px
+}
+
+@media screen and (max-width: 1156px) {
+    #globalnavcontainer+#top_bar #menu_button+#menu {
+        top: 65px;
+        position: fixed;
+        z-index: 999
+    }
+
+    #globalnavcontainer+#top_bar #menu_button {
+        z-index: 1000
+    }
+
+    #globalnavcontainer+#top_bar #menu_button+#menu #menu_inner {
+        margin-left: 65px;
+        padding-top: 20px
+    }
+}
+
+@media screen and (max-width: 992px) {
+
+    .globalnavisloaded #top_bar #menu,
+    #top_bar #menu {
+        top: 30px
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+    .globalnavisloaded .masthead_buffer {
+        height: 66px
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .globalnavisloaded {
+        margin-top: var(--globalnavheight) !important
+    }
+
+    .globalnavisloaded .masthead_buffer {
+        height: 70px
+    }
+}
+
+#header {
+    top: var(--globalnavheight);
+}
+
+#globalnavcontainer .nav-button.search-button {
+    right: 0;
+    left: auto;
+}
+
+#globalnavcontainer .nav-button.search-button::after {
+    font-family: 'armyicons';
+    content: "\e96e";
+    display: inline-block;
+    position: relative;
+    color: #FFF;
+    font-size: 32px;
+    font-weight: normal;
+    padding-bottom: 1px;
+}
+#globalnavcontainer .nav-button:hover,
+#globalnavcontainer .nav-button:hover::before,
+#globalnavcontainer .nav-button:hover::after {
+    cursor: pointer;
+    color: var(--armygold);
+}
+
+.menu-window .social .social-button {
+    display: inline-block
+}
+
+.menu-window .social-button span {
+    height: 25px;
+    width: 30px
+}
+
+.menu-window .social .social-button a {
+    display: block;
+    line-height: 0;
+    padding: 15px 16px;
+    width: 35px;
+    height: 40px;
+}
+
+.menu-window .social-button a::before {
+    font-family: 'armyicons';
+    font-size: 25px;
+    line-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.menu-window .social-button span {
+    display:none;
+}
+
+.menu-window .social-button.facebook-button a::before {
+	content: "\ea90";
+}
+
+.menu-window .social-button.twitter-button a::before {
+	content: "\e979";
+}
+
+.menu-window .social-button.flickr-button a::before {
+	content: "\eaa5";
+}
+
+.menu-window .social-button.youtube-button a::before {
+    content: "\ea9d";
+}
+
+.menu-window .social-button.email-button a::before {
+    content: "\e95f";
+}
+
+.menu-window .social-button.instagram-button a::before {
+    content: "\ea92";
+}
+
+.menu-window .social-button.linkedin-button a::before {
+	content: "\eaca";
+}
+
+.menu-window .social-button.rss-button a::before {
+    content: "\e974";
+}
+
+/* PREVENT BRANDING CONFLICTS */
+
+#top_bar #menu #menu_inner h4 {
+    font-size: 1.125em;
+    line-height: 1.1;;
+}
+
+/* GLOBAL SEARCH BAR */
+
+/* Basic styling */
+
+#govsearchbar.search-window {
+    display:block;
+    color: #eaeaea;
+    height:fit-content;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #221f20;
+    left: 0;
+    position: relative;
+    top: 100%;
+    z-index: 1;
+}
+#govsearchbar.search-window form {
+        margin: 0px 0px 0px 0px;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+}
+#govsearchbar .search-form-container {
+    padding:1.5em;
+}
+#govsearchbar .search-form-container input {
+    border: 0;
+    display: inline-block;
+    width:calc(100% - 8em);
+    box-sizing: border-box;
+    color: #4c4c4c;
+    font-weight: 400;
+    font-size: .938em;
+    line-height: 200%;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 30px;
+    outline: none;
+    padding: 0 10px;
+    background-color: #FFF;
+}
+#govsearchbar .search-form-container label {
+    display: none;
+}
+/* toggle function */ 
+
+#govsearchbar {
+    max-height:0px;
+    overflow: hidden;
+    transition: max-height .5s ease-in-out;
+}
+
+#govsearch:checked ~ #govsearchbar {
+    overflow-y: visible;
+    max-height:400px;
+}
+
+#govsearchsubmit {
+        display: inline-block;
+        width: 7em;
+        margin-left:1em;
+        padding: .5em;
+        font-size: .8em;
+        box-sizing: border-box;
+        font-weight: bold;
+        text-transform: uppercase;
+        appearance: none;
+        -webkit-appearance: none;
+        border-radius: 0;
+        color: #000;
+        background-color: #ccc;
+}
+
+#govsearch:checked + label.search-button::after
+{
+    content: "\e96f";
+}
+
+
+
+
+/* OFFICIAL GOV SITE BANNER */ 
+
+#officialgovsite {
+    background-color: #111;
+    color: #FFF;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#officialgovsite strong {
+    color: var(--armygold);
+    font-weight: 500;
+}
+#officialgovsite details {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+#officialgovsite details summary {
+    font-weight: 100;
+    padding: 7.5px 2em;
+    background-color: #373737;
+    user-select: none;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+/* hover and open state on link */ 
+#officialgovsite details summary:focus .govbanner_how_expand,
+#officialgovsite details summary:hover .govbanner_how_expand,
+#officialgovsite details[open] summary .govbanner_how_expand {
+    color: var(--armygold);
+}
+#officialgovsite details summary:focus .icon_expand,
+#officialgovsite details summary:hover .icon_expand,
+#officialgovsite details[open] summary .icon_expand {
+    fill: var(--armygold);
+}
+#officialgovsite details summary::marker,
+#officialgovsite details summary::before  {
+    content: "";
+}
+#officialgovsite details summary::-webkit-details-marker /* Safari */ { display: none; }
+
+#officialgovsite details summary img.govbanner_flag {
+    width: 1.3em;
+    margin-right: .5em;
+    vertical-align: -1px;
+}
+
+#officialgovsite  .govbannercontent {
+    background-color: #111;
+    overflow: hidden;
+    max-height: 0vh;
+    transition: max-height .3s ease-in-out;
+} 
+#officialgovsite .govbannercontent ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0px;
+    padding: 1.5em 0px;
+    overflow: hidden; 
+}
+       
+#officialgovsite details[open] ~ .govbannercontent {
+    max-height: 100vh;
+    transition: max-height 1s ease-in-out;
+}
+#officialgovsite .govbannercontent ul li {
+    display: inline-block;
+    width: 41%;
+    padding: 1% 1% 1% 60px;
+    margin-left: 5%;
+    box-sizing: border-box;
+    list-style-type: none;
+    font-size: 1.15em;
+    line-height: 1.7em;
+    font-weight: 100;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+#officialgovsite .govbannercontent ul li::before {
+    content:"";
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    width:50px;
+    box-sizing: border-box;
+    color: var(--armygold);
+    border: .5px solid #000;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    background-color: transparent;
+    position: absolute;
+    left:0px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: .7em;
+    filter: brightness(0) saturate(100%) invert(88%) sepia(13%) saturate(7138%) hue-rotate(356deg) brightness(101%) contrast(104%);
+}
+#officialgovsite .govbannercontent ul li:first-child:before {
+    background-image: url('/e2/global/rv7/topnav/images/icon-dot-gov.svg');
+}
+#officialgovsite .govbannercontent ul li:last-child:before {
+    background-image: url('/e2/global/rv7/topnav/images/icon-https.svg');
+}
+#officialgovsite .govbannercontent ul li span.title {
+    font-size: 1.3em;
+    margin-bottom: .2em;
+    display: block;
+}
+#officialgovsite .govbannercontent .govbanner_icon_lock,  
+#officialgovsite .govbanner_icon_expand  {
+    display: inline-block;
+    position: relative;
+}
+#officialgovsite .govbanner_icon_expand  {
+    transform: rotate(90deg);
+    transition: transform .3s ease-in-out;
+    margin-left:.5em;
+    width: 1em;
+}
+#officialgovsite .govbannercontent .govbanner_icon_lock {
+   width: 1.5em; 
+}
+
+#officialgovsite details[open] summary .govbanner_icon_expand {
+    transform: rotate(-90deg);
+}
+#officialgovsite .govbannercontent .govbanner_icon_lock svg {
+    height: 1em;
+    width: 1em;
+}
+#officialgovsite .govbannercontent .govbanner_icon_lock .icon_lock {
+    fill: var(--armygold);
+}
+#officialgovsite .govbanner_icon_expand .icon_expand {
+    fill: #fff;
+}
+@media screen and (max-width:750px) {
+    #officialgovsite .govbannercontent ul li {
+        width: 90%;
+        margin-top: 1em;
+    }
+    #officialgovsite {
+        font-size: 12px;
+    }
+}
+
+/* TEMPORARY FIXES FOR GOV BANNER TRANSITION */
+
+body:has(#officialgovsite) .policy-update {
+    margin-top: var(--globalnavheight) !important;
+}
+
+body:has(#officialgovsite) nav.sticky-nav {
+    position: sticky;
+    top: 0;
+}
+
+body:has(#officialgovsite).hasstickymenu nav.sticky-nav {
+    top: var(--globalnavheight);
+}
+
+/* d-day */
+body:has(#officialgovsite) .submenu  {
+    top: 50px;
+}
+
+/* rangers */ 
+
+body:has(#officialgovsite)  #container {
+    margin-top: var(--globalnavheight);
+}
+
+/* site-wide notification banner, if adding to the markup the --globalnavheight variable needs to have the height added to it */
+
+body #global-sitewide-notification {
+    background-color: var(--armyaccenttan);
+    color: var(--armyblack);
+    padding: 5px 10px 8px;
+    height: 61px;
+    min-height: 61px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+
+    .global-notification-toggle-button {
+        color: var(--armyblack);
+        display: none;
+        height: 100%;
+        padding: 0 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 1px solid transparent;
+
+        span {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            height: 18px;
+            width: 16px;
+        }
+        i.armyicons-chevron_right {
+            color: var(--armyblack);
+            transform: rotate(90deg);
+            position: absolute;
+            transform-origin: 50% 50%;
+            height: 18px;
+            width: 18px;
+        }
+    }
+    
+    p {
+        color: var(--armyblack);
+        font-size: 16px;
+        font-weight: normal;
+        line-height: normal;
+        overflow: hidden;
+        max-height: 48px;
+        padding: 0;
+        margin: 0;
+        position: relative;
+
+        a {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: normal;
+            display: inline;
+            color: var(--armyblack);
+            border-width: 0px;
+            padding: 0;
+            width: 0;
+            text-decoration: none;
+        }
+        a:focus,
+        a:hover {
+            text-decoration: underline;
+        }
+        strong {
+            font-weight: bold;
+        }
+    }
+}
+/* highlight the notification banner when checkbox is focused, for accessibility */
+body #globalnavcontainer #globalnotificationtoggle:focus~#global-sitewide-notification .global-notification-toggle-button {
+    border-color: var(--armyblack);
+}
+body #globalnavcontainer #globalnotificationtoggle:checked~#global-sitewide-notification {
+    height: auto;
+    p {
+        max-height: none;
+    }
+    .global-notification-toggle-button i.armyicons-chevron_right {
+        transform: rotate(270deg);
+    }
+}
+@media screen and (max-width: 900px) {
+    body #global-sitewide-notification p {
+        font-size: 16px;
+        a {
+            font-size: 16px;
+        }
+    }
+}
+@media screen and (max-width: 800px) {
+    body #global-sitewide-notification {
+        p {
+            padding: 0 60px 0 0;
+        }
+        .global-notification-toggle-button {
+            display: block;
+        }
+    }
+}

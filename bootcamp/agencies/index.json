@@ -33,7 +33,7 @@
       "aliases": ["Army", "Department of Army", "US Army"]
     },
     "Department of the Air Force": {
-      "file": "dod.json",
+      "file": "air-force.json",
       "aliases": ["Air Force", "Department of Air Force", "USAF", "US Air Force"]
     },
     "Air Force Materiel Command": {

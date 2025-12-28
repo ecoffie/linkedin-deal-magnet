@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -144,6 +146,16 @@ app.get('/onboarding', (req, res) => {
 // Serve the Opportunity Scout page
 app.get('/opportunity-scout', (req, res) => {
     res.sendFile(path.join(__dirname, 'content-engine-test.html'));
+});
+
+// Serve the Target Market Report page
+app.get('/target-market-report', (req, res) => {
+    res.sendFile(path.join(__dirname, 'target-market-report.html'));
+});
+
+// Serve the Comprehensive Market Report page (8 report types)
+app.get('/comprehensive-market-report', (req, res) => {
+    res.sendFile(path.join(__dirname, 'comprehensive-market-report.html'));
 });
 
 // Serve the Content Generator page
@@ -2696,6 +2708,76 @@ app.post('/api/government-contracts/search', async (req, res) => {
             result.status === 'fulfilled' ? result.value : topOffices[index]
         );
 
+        // Enhance USACE entries with district names based on location
+        console.log('🏗️ Enhancing USACE entries with district names...');
+        topOffices = topOffices.map(office => {
+            const isUSACE = office.agencyName && (
+                office.agencyName.toUpperCase().includes('USACE') ||
+                office.agencyName.toUpperCase().includes('ARMY CORPS OF ENGINEERS') ||
+                office.agencyName.toUpperCase().includes('U.S. ARMY ENGINEER')
+            );
+
+            if (isUSACE && office.city) {
+                const cityUpper = office.city.toUpperCase();
+
+                // USACE District mapping based on primary location
+                const districtMap = {
+                    'MOBILE': 'Mobile District',
+                    'SAVANNAH': 'Savannah District',
+                    'JACKSONVILLE': 'Jacksonville District',
+                    'CHARLESTON': 'Charleston District',
+                    'WILMINGTON': 'Wilmington District',
+                    'NORFOLK': 'Norfolk District',
+                    'BALTIMORE': 'Baltimore District',
+                    'PHILADELPHIA': 'Philadelphia District',
+                    'NEW YORK': 'New York District',
+                    'NEW ENGLAND': 'New England District',
+                    'BUFFALO': 'Buffalo District',
+                    'DETROIT': 'Detroit District',
+                    'CHICAGO': 'Chicago District',
+                    'ROCK ISLAND': 'Rock Island District',
+                    'ST. PAUL': 'St. Paul District',
+                    'ST. LOUIS': 'St. Louis District',
+                    'KANSAS CITY': 'Kansas City District',
+                    'OMAHA': 'Omaha District',
+                    'NEW ORLEANS': 'New Orleans District',
+                    'VICKSBURG': 'Vicksburg District',
+                    'MEMPHIS': 'Memphis District',
+                    'NASHVILLE': 'Nashville District',
+                    'LOUISVILLE': 'Louisville District',
+                    'HUNTSVILLE': 'Huntsville Center',
+                    'LITTLE ROCK': 'Little Rock District',
+                    'TULSA': 'Tulsa District',
+                    'FORT WORTH': 'Fort Worth District',
+                    'GALVESTON': 'Galveston District',
+                    'ALBUQUERQUE': 'Albuquerque District',
+                    'LOS ANGELES': 'Los Angeles District',
+                    'SAN FRANCISCO': 'San Francisco District',
+                    'SACRAMENTO': 'Sacramento District',
+                    'PORTLAND': 'Portland District',
+                    'SEATTLE': 'Seattle District',
+                    'ALASKA': 'Alaska District',
+                    'WALLA WALLA': 'Walla Walla District',
+                    // Military bases in Georgia -> Mobile District typically handles this region
+                    'FORT BENNING': 'Mobile District',
+                    'BENNING': 'Mobile District',
+                    'FORT MOORE': 'Mobile District',
+                    'COLUMBUS': 'Mobile District'  // Columbus, GA (Fort Benning area)
+                };
+
+                // Try to match city to a known district
+                for (const [location, district] of Object.entries(districtMap)) {
+                    if (cityUpper.includes(location) || location.includes(cityUpper)) {
+                        const newName = `USACE - ${district}`;
+                        console.log(`   Enhanced USACE: "${office.agencyName}" → "${newName}" (based on ${office.city})`);
+                        return { ...office, agencyName: newName };
+                    }
+                }
+            }
+
+            return office;
+        });
+
         // Generate search suggestions if results are limited OR search was auto-adjusted
         let suggestions = null;
         if ((topOffices.length < 10 || wasAutoAdjusted) && (naicsCode || businessFormation || zipCode)) {
@@ -2762,6 +2844,129 @@ app.post('/api/government-contracts/search', async (req, res) => {
             error: 'Failed to search government contracts',
             message: error.message,
             details: error.response?.data
+        });
+    }
+});
+
+// API endpoint to get USACE mission-specific pain points based on location and office name
+app.get('/api/usace-mission-pain-points', async (req, res) => {
+    try {
+        const { officeName, location } = req.query;
+        console.log(`🔍 USACE mission detection request - Office: ${officeName}, Location: ${location}`);
+
+        // Load USACE office-specific pain points data
+        const usaceDataPath = path.join(__dirname, 'bootcamp', 'usace-office-specific-pain-points.json');
+        const usaceData = JSON.parse(fs.readFileSync(usaceDataPath, 'utf8'));
+
+        let missionArea = null;
+        let matchMethod = 'default';
+
+        // Extract location city/state from location parameter (format: "CITY, STATE" or "CITY")
+        const locationUpper = (location || '').toUpperCase();
+        const locationParts = locationUpper.split(',').map(p => p.trim());
+        const locationCity = locationParts[0] || '';
+
+        // 1. Check MILCON offices by location
+        const milconLocations = usaceData.district_mappings.milcon_offices.locations;
+        for (const [loc, mission] of Object.entries(milconLocations)) {
+            // Use more precise matching - only match if location is substantial (3+ chars) and matches
+            const locUpper = loc.toUpperCase();
+            if (locationCity.length >= 3 && (locationCity.includes(locUpper) || locUpper.includes(locationCity))) {
+                missionArea = mission;
+                matchMethod = `location:${loc}`;
+                break;
+            }
+        }
+
+        // 2. Check Civil Works districts by location
+        if (!missionArea) {
+            const civilWorksLocations = usaceData.district_mappings.civil_works_districts.locations;
+            for (const [loc, mission] of Object.entries(civilWorksLocations)) {
+                const locUpper = loc.toUpperCase();
+                if (locationCity.length >= 3 && (locationCity.includes(locUpper) || locUpper.includes(locationCity))) {
+                    missionArea = mission;
+                    matchMethod = `location:${loc}`;
+                    break;
+                }
+            }
+        }
+
+        // 3. Check Environmental offices by location
+        if (!missionArea) {
+            const envLocations = usaceData.district_mappings.environmental_offices.locations;
+            for (const [loc, mission] of Object.entries(envLocations)) {
+                const locUpper = loc.toUpperCase();
+                if (locationCity.length >= 3 && (locationCity.includes(locUpper) || locUpper.includes(locationCity))) {
+                    missionArea = mission;
+                    matchMethod = `location:${loc}`;
+                    break;
+                }
+            }
+        }
+
+        // 4. Check keywords in office name if no location match
+        if (!missionArea && officeName) {
+            const officeNameUpper = officeName.toUpperCase();
+
+            // Check MILCON keywords
+            const milconKeywords = usaceData.district_mappings.milcon_offices.keywords;
+            if (milconKeywords.some(keyword => officeNameUpper.includes(keyword.toUpperCase()))) {
+                missionArea = 'military_construction';
+                matchMethod = 'keyword:milcon';
+            }
+
+            // Check Civil Works keywords
+            if (!missionArea) {
+                const civilWorksKeywords = usaceData.district_mappings.civil_works_districts.keywords;
+                if (civilWorksKeywords.some(keyword => officeNameUpper.includes(keyword.toUpperCase()))) {
+                    missionArea = 'civil_works';
+                    matchMethod = 'keyword:civil_works';
+                }
+            }
+
+            // Check Environmental keywords
+            if (!missionArea) {
+                const envKeywords = usaceData.district_mappings.environmental_offices.keywords;
+                if (envKeywords.some(keyword => officeNameUpper.includes(keyword.toUpperCase()))) {
+                    missionArea = 'environmental';
+                    matchMethod = 'keyword:environmental';
+                }
+            }
+        }
+
+        // 5. Default to Civil Works if no match (most common USACE mission)
+        if (!missionArea) {
+            missionArea = 'civil_works';
+            matchMethod = 'default';
+        }
+
+        // Get pain points for the identified mission area
+        const missionData = usaceData.usace_mission_areas[missionArea];
+        if (!missionData) {
+            return res.status(404).json({
+                success: false,
+                error: `Mission area not found: ${missionArea}`
+            });
+        }
+
+        // Extract just the pain point text
+        const painPoints = missionData.painPoints.map(pp => pp.pain);
+
+        console.log(`✅ USACE mission detected: ${missionArea} (${matchMethod})`);
+
+        res.json({
+            success: true,
+            missionArea,
+            matchMethod,
+            description: missionData.description,
+            painPoints
+        });
+    } catch (error) {
+        console.error('❌ Error detecting USACE mission:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to detect USACE mission area',
+            message: error.message
         });
     }
 });
@@ -3147,6 +3352,976 @@ function getBorderingStates(state) {
     };
 
     return borders[state] || [];
+}
+
+// Target Market Report API: Generate comprehensive market analysis report
+app.post('/api/target-market-report/generate', async (req, res) => {
+    try {
+        const { scoutData, businessFormation, naicsCode, companyName, zipCode, veteranStatus, goodsOrServices } = req.body;
+
+        console.log('📊 Generating Target Market Report...');
+
+        // Load agency pain points database
+        const painPointsPath = path.join(__dirname, 'bootcamp', 'agency-pain-points.json');
+        const painPointsData = JSON.parse(fs.readFileSync(painPointsPath, 'utf8'));
+
+        // Helper function to match agency name to pain points
+        function findAgencyPainPoints(agencyName, parentAgency) {
+            const agencies = painPointsData.agencies;
+            
+            // Try exact match first
+            if (agencies[agencyName]) {
+                return agencies[agencyName].painPoints || [];
+            }
+            
+            // Try parent agency
+            if (parentAgency && agencies[parentAgency]) {
+                return agencies[parentAgency].painPoints || [];
+            }
+            
+            // Try partial matches (e.g., "NAVFAC" in "NAVFAC Atlantic")
+            for (const [key, value] of Object.entries(agencies)) {
+                if (agencyName.includes(key) || key.includes(agencyName)) {
+                    return value.painPoints || [];
+                }
+            }
+            
+            // Try Department-level match
+            if (agencyName.includes('Department of Defense') || parentAgency?.includes('Department of Defense')) {
+                return agencies['Department of Defense']?.painPoints || [];
+            }
+            if (agencyName.includes('Department of the Navy') || parentAgency?.includes('Department of the Navy')) {
+                return agencies['Department of the Navy']?.painPoints || [];
+            }
+            if (agencyName.includes('Department of the Army') || parentAgency?.includes('Department of the Army')) {
+                return agencies['Department of the Army']?.painPoints || [];
+            }
+            if (agencyName.includes('Department of the Air Force') || parentAgency?.includes('Department of the Air Force')) {
+                return agencies['Department of the Air Force']?.painPoints || [];
+            }
+            
+            return [];
+        }
+
+        // Process agencies from Opportunity Scout data
+        const agencies = scoutData.agencies || [];
+        const topAgencies = agencies.slice(0, 10).map(agency => {
+            const agencyName = typeof agency.agencyName === 'string' ? agency.agencyName : 
+                              (agency.agencyName?._ || 'Unknown Agency');
+            const parentAgency = agency.parentAgency || '';
+            
+            return {
+                name: agencyName,
+                parentAgency: parentAgency,
+                setAsideSpending: agency.setAsideSpending || 0,
+                totalSpending: agency.totalSpending || 0,
+                contractCount: agency.setAsideContractCount || 0,
+                officeId: agency.searchableOfficeCode || agency.subAgencyCode || 'N/A',
+                samGovUrl: `https://sam.gov/search/?index=opp&q=${encodeURIComponent(agencyName)}`,
+                painPoints: findAgencyPainPoints(agencyName, parentAgency)
+            };
+        });
+
+        // Calculate summary statistics
+        const totalSpending = agencies.reduce((sum, a) => sum + (a.setAsideSpending || 0), 0);
+        const totalContracts = agencies.reduce((sum, a) => sum + (a.setAsideContractCount || 0), 0);
+
+        // Generate executive summary
+        const businessTypeLabel = businessFormation ? businessFormation.split('-').map(w => 
+            w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Small Business';
+        
+        const executiveSummary = `Based on your ${businessTypeLabel} profile and NAICS code ${naicsCode}, we've identified ${agencies.length} target agencies with significant contracting opportunities. 
+        These agencies have awarded $${(totalSpending / 1000000).toFixed(2)}M in set-aside contracts over the past 3 years, representing ${totalContracts} contract opportunities. 
+        This report provides strategic insights, agency pain points, and actionable recommendations to help you win more government contracts.`;
+
+        // Generate market opportunities
+        const opportunities = [];
+        
+        // Group by agency type
+        const agencyGroups = {};
+        topAgencies.forEach(agency => {
+            const group = agency.parentAgency || 'Other Agencies';
+            if (!agencyGroups[group]) {
+                agencyGroups[group] = [];
+            }
+            agencyGroups[group].push(agency.name);
+        });
+
+        Object.entries(agencyGroups).slice(0, 5).forEach(([group, names]) => {
+            opportunities.push({
+                title: `${group} - High Contract Volume`,
+                description: `${group} has awarded significant contracts matching your profile. Focus on building relationships with these agencies' small business offices.`,
+                agencies: names.slice(0, 3)
+            });
+        });
+
+        // Generate strategic recommendations
+        const recommendations = [
+            {
+                title: 'Prioritize Top 5 Agencies',
+                description: `Focus your outreach efforts on the top 5 agencies identified in this report. These agencies have the highest set-aside spending in your NAICS category.`,
+                actionItems: [
+                    'Contact SBLOs from top 5 agencies within 30 days',
+                    'Create agency-specific capability statements',
+                    'Attend industry days for these agencies',
+                    'Monitor SAM.gov for opportunities from these offices'
+                ]
+            },
+            {
+                title: 'Address Agency Pain Points',
+                description: `Each agency has specific pain points that create opportunities. Tailor your approach to address these challenges directly.`,
+                actionItems: [
+                    'Review pain points for each target agency',
+                    'Update your capability statements to address specific pain points',
+                    'Position your solutions as solving their problems',
+                    'Use agency terminology in your communications'
+                ]
+            },
+            {
+                title: 'Leverage Your Certifications',
+                description: `${businessTypeLabel} status gives you access to set-aside contracts with less competition.`,
+                actionItems: [
+                    'Highlight your certification in all communications',
+                    'Search for set-aside opportunities on SAM.gov',
+                    'Join agency small business programs',
+                    'Network with other certified businesses'
+                ]
+            },
+            {
+                title: 'Build Relationships Proactively',
+                description: `Agencies struggle to find qualified small businesses. Make yourself easy to find and match.`,
+                actionItems: [
+                    'Complete SAM.gov registration with detailed capabilities',
+                    'Register in agency vendor systems',
+                    'Attend matchmaking events and industry days',
+                    'Follow up regularly with SBLOs'
+                ]
+            }
+        ];
+
+        // Competitive analysis
+        const competitiveAnalysis = {
+            summary: `As a ${businessTypeLabel}, you have access to set-aside contracts with significantly less competition than full-and-open competitions. The agencies in this report actively seek businesses like yours to meet their small business goals.`,
+            advantages: [
+                'Access to set-aside contracts with less competition',
+                'Agencies actively seeking your business type',
+                'Potential for faster procurement processes',
+                'Opportunity to build long-term relationships'
+            ],
+            considerations: [
+                'Ensure your capabilities clearly match agency needs',
+                'Be prepared to demonstrate past performance',
+                'Understand agency-specific requirements',
+                'Build relationships before opportunities arise'
+            ]
+        };
+
+        // Next steps
+        const nextSteps = [
+            'Review the top 10 target agencies and their pain points',
+            'Create agency-specific capability statements for top 5 agencies',
+            'Contact SBLOs from top 5 agencies within the next 2 weeks',
+            'Register for upcoming industry days and matchmaking events',
+            'Set up SAM.gov alerts for opportunities from target agencies',
+            'Track your outreach and follow up regularly'
+        ];
+
+        // Generate report
+        const report = {
+            companyName: companyName || 'Your Company',
+            generatedDate: new Date().toISOString(),
+            searchCriteria: {
+                businessFormation,
+                naicsCode,
+                zipCode,
+                veteranStatus,
+                goodsOrServices
+            },
+            executiveSummary,
+            summaryStats: {
+                totalAgencies: agencies.length,
+                totalSpending: totalSpending,
+                totalContracts: totalContracts
+            },
+            topAgencies,
+            opportunities,
+            recommendations,
+            competitiveAnalysis,
+            nextSteps
+        };
+
+        console.log('✅ Target Market Report generated successfully');
+        res.json(report);
+
+    } catch (error) {
+        console.error('❌ Error generating Target Market Report:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate report',
+            message: error.message 
+        });
+    }
+});
+
+// Comprehensive Market Report API: Generate ALL 8 reports at once for selected agencies
+app.post('/api/comprehensive-report/generate-all', async (req, res) => {
+    try {
+        const { 
+            selectedAgencies,
+            scoutData,
+            businessFormation, 
+            naicsCode, 
+            companyName, 
+            zipCode, 
+            veteranStatus, 
+            goodsOrServices
+        } = req.body;
+
+        console.log(`📊 Generating all 8 reports for ${selectedAgencies.length} selected agencies...`);
+
+        // Load agency pain points database
+        const painPointsPath = path.join(__dirname, 'bootcamp', 'agency-pain-points.json');
+        const painPointsData = JSON.parse(fs.readFileSync(painPointsPath, 'utf8'));
+
+        // Helper function to match agency name to pain points
+        function findAgencyPainPoints(agencyName, parentAgency) {
+            const agencies = painPointsData.agencies;
+            if (agencies[agencyName]) return agencies[agencyName].painPoints || [];
+            if (parentAgency && agencies[parentAgency]) return agencies[parentAgency].painPoints || [];
+            for (const [key, value] of Object.entries(agencies)) {
+                if (agencyName.includes(key) || key.includes(agencyName)) {
+                    return value.painPoints || [];
+                }
+            }
+            return [];
+        }
+
+        // Process selected agencies
+        const processedAgencies = selectedAgencies.map(agency => {
+            const agencyNameStr = typeof agency.agencyName === 'string' ? agency.agencyName : 
+                                (agency.agencyName?._ || 'Unknown Agency');
+            const parentAgency = agency.parentAgency || '';
+            
+            return {
+                name: agencyNameStr,
+                parentAgency: parentAgency,
+                setAsideSpending: agency.setAsideSpending || 0,
+                totalSpending: agency.totalSpending || 0,
+                contractCount: agency.setAsideContractCount || 0,
+                officeId: agency.searchableOfficeCode || agency.subAgencyCode || 'N/A',
+                samGovUrl: `https://sam.gov/search/?index=opp&q=${encodeURIComponent(agencyNameStr)}`,
+                painPoints: findAgencyPainPoints(agencyNameStr, parentAgency),
+                location: agency.location || '',
+                city: agency.primaryPlaceOfPerformance?.city_name || ''
+            };
+        });
+
+        const totalSpending = processedAgencies.reduce((sum, a) => sum + a.setAsideSpending, 0);
+        const totalContracts = processedAgencies.reduce((sum, a) => sum + a.contractCount, 0);
+
+        // Generate ALL 8 reports
+        const reportParams = { businessFormation, naicsCode, companyName, painPointsData };
+        const allReports = {
+            governmentBuyers: generateGovernmentBuyersReport(processedAgencies, reportParams),
+            tier2: generateTier2Report(processedAgencies, reportParams),
+            forecast: generateForecastReport(processedAgencies, reportParams),
+            agencyNeeds: generateAgencyNeedsReport(processedAgencies, painPointsData, reportParams),
+            painPoints: generatePainPointsReport(processedAgencies, painPointsData, reportParams),
+            decemberSpend: generateDecemberSpendReport(processedAgencies, reportParams),
+            tribes: generateTribesReport(processedAgencies, reportParams),
+            primes: generatePrimesReport(processedAgencies, reportParams)
+        };
+
+        console.log('✅ All 8 reports generated successfully');
+        res.json(allReports);
+
+    } catch (error) {
+        console.error('❌ Error generating comprehensive reports:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate reports',
+            message: error.message 
+        });
+    }
+});
+
+// Comprehensive Market Report API: Generate reports for all 8 report types (legacy - single report)
+app.post('/api/comprehensive-report/generate', async (req, res) => {
+    try {
+        const { 
+            reportType, 
+            scoutData, 
+            businessFormation, 
+            naicsCode, 
+            companyName, 
+            zipCode, 
+            veteranStatus, 
+            goodsOrServices,
+            // Type-specific fields
+            agencyName,
+            officeCode,
+            primeCompany,
+            contractValue,
+            fiscalYear,
+            agencyFilter,
+            needType,
+            capabilityFocus,
+            spendThreshold,
+            tribeName,
+            tribalCertification,
+            contractType
+        } = req.body;
+
+        console.log(`📊 Generating ${reportType} report...`);
+
+        // Load agency pain points database
+        const painPointsPath = path.join(__dirname, 'bootcamp', 'agency-pain-points.json');
+        const painPointsData = JSON.parse(fs.readFileSync(painPointsPath, 'utf8'));
+
+        // Helper function to match agency name to pain points
+        function findAgencyPainPoints(agencyName, parentAgency) {
+            const agencies = painPointsData.agencies;
+            if (agencies[agencyName]) return agencies[agencyName].painPoints || [];
+            if (parentAgency && agencies[parentAgency]) return agencies[parentAgency].painPoints || [];
+            for (const [key, value] of Object.entries(agencies)) {
+                if (agencyName.includes(key) || key.includes(agencyName)) {
+                    return value.painPoints || [];
+                }
+            }
+            return [];
+        }
+
+        // Process agencies from Opportunity Scout data
+        const agencies = scoutData.agencies || [];
+        const processedAgencies = agencies.map(agency => {
+            const agencyNameStr = typeof agency.agencyName === 'string' ? agency.agencyName : 
+                                (agency.agencyName?._ || 'Unknown Agency');
+            const parentAgency = agency.parentAgency || '';
+            
+            return {
+                name: agencyNameStr,
+                parentAgency: parentAgency,
+                setAsideSpending: agency.setAsideSpending || 0,
+                totalSpending: agency.totalSpending || 0,
+                contractCount: agency.setAsideContractCount || 0,
+                officeId: agency.searchableOfficeCode || agency.subAgencyCode || 'N/A',
+                samGovUrl: `https://sam.gov/search/?index=opp&q=${encodeURIComponent(agencyNameStr)}`,
+                painPoints: findAgencyPainPoints(agencyNameStr, parentAgency),
+                location: agency.location || '',
+                city: agency.primaryPlaceOfPerformance?.city_name || ''
+            };
+        });
+
+        const totalSpending = agencies.reduce((sum, a) => sum + (a.setAsideSpending || 0), 0);
+        const totalContracts = agencies.reduce((sum, a) => sum + (a.setAsideContractCount || 0), 0);
+
+        // Generate report based on type
+        let report;
+        
+        switch(reportType) {
+            case 'government-buyers':
+                report = generateGovernmentBuyersReport(processedAgencies, { agencyName, officeCode, businessFormation, naicsCode, companyName });
+                break;
+            case 'tier2':
+                report = generateTier2Report(processedAgencies, { primeCompany, contractValue, businessFormation, naicsCode, companyName });
+                break;
+            case 'forecast':
+                report = generateForecastReport(processedAgencies, { fiscalYear, agencyFilter, businessFormation, naicsCode, companyName });
+                break;
+            case 'agency-needs':
+                report = generateAgencyNeedsReport(processedAgencies, painPointsData, { agencyName, needType, businessFormation, naicsCode, companyName });
+                break;
+            case 'pain-points':
+                report = generatePainPointsReport(processedAgencies, painPointsData, { agencyName, capabilityFocus, businessFormation, naicsCode, companyName });
+                break;
+            case 'december-spend':
+                report = generateDecemberSpendReport(processedAgencies, { fiscalYear, spendThreshold, businessFormation, naicsCode, companyName });
+                break;
+            case 'tribes':
+                report = generateTribesReport(processedAgencies, { tribeName, tribalCertification, businessFormation, naicsCode, companyName });
+                break;
+            case 'primes':
+                report = generatePrimesReport(processedAgencies, { primeCompany, contractType, businessFormation, naicsCode, companyName });
+                break;
+            default:
+                throw new Error('Invalid report type');
+        }
+
+        console.log(`✅ ${reportType} report generated successfully`);
+        res.json(report);
+
+    } catch (error) {
+        console.error('❌ Error generating comprehensive report:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate report',
+            message: error.message 
+        });
+    }
+});
+
+// Report Generator Functions
+function generateGovernmentBuyersReport(agencies, params) {
+    const topAgencies = agencies.slice(0, 15);
+    
+    return {
+        reportType: 'government-buyers',
+        reportTitle: 'Government Buyers Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies ${topAgencies.length} contracting offices and decision makers who award contracts matching your ${params.businessFormation || 'small business'} profile in NAICS ${params.naicsCode}. These offices have awarded $${(agencies.reduce((s, a) => s + a.setAsideSpending, 0) / 1000000).toFixed(2)}M in set-aside contracts.`,
+        summaryStats: {
+            totalOffices: topAgencies.length,
+            totalSpending: agencies.reduce((s, a) => s + a.setAsideSpending, 0),
+            totalContracts: agencies.reduce((s, a) => s + a.contractCount, 0)
+        },
+        contractingOffices: topAgencies.map(agency => ({
+            officeName: agency.name,
+            parentAgency: agency.parentAgency,
+            officeId: agency.officeId,
+            setAsideSpending: agency.setAsideSpending,
+            contractCount: agency.contractCount,
+            location: agency.location || agency.city,
+            samGovUrl: agency.samGovUrl,
+            contactStrategy: `Contact the Small Business Liaison Officer (SBLO) at ${agency.parentAgency || agency.name} to discuss opportunities.`
+        })),
+        recommendations: [
+            {
+                title: 'Identify SBLO Contacts',
+                description: 'Each contracting office has a Small Business Liaison Officer responsible for connecting small businesses with opportunities.',
+                actionItems: [
+                    'Search agency websites for SBLO contact information',
+                    'Attend agency small business outreach events',
+                    'Request capability statement review meetings',
+                    'Follow up quarterly with SBLOs'
+                ]
+            },
+            {
+                title: 'Build Relationships Before Opportunities',
+                description: 'Government buyers prefer working with businesses they know and trust.',
+                actionItems: [
+                    'Reach out proactively, not just when opportunities are posted',
+                    'Share relevant case studies and past performance',
+                    'Offer to help solve their pain points',
+                    'Maintain regular communication'
+                ]
+            }
+        ],
+        reportHTML: generateReportHTML('government-buyers', {
+            contractingOffices: topAgencies,
+            summaryStats: {
+                totalOffices: topAgencies.length,
+                totalSpending: agencies.reduce((s, a) => s + a.setAsideSpending, 0),
+                totalContracts: agencies.reduce((s, a) => s + a.contractCount, 0)
+            }
+        })
+    };
+}
+
+function generateTier2Report(agencies, params) {
+    // Suggest primes based on agency pain points and NAICS
+    const suggestedPrimes = suggestPrimesForAgencies(agencies, params);
+    
+    return {
+        reportType: 'tier2',
+        reportTitle: 'Tier 2 Subcontracting Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies Tier 2 subcontracting opportunities with prime contractors working with your ${agencies.length} target agencies. As a ${params.businessFormation || 'small business'}, you can partner with primes to access larger contracts.`,
+        suggestedPrimes: suggestedPrimes,
+        recommendations: [
+            {
+                title: 'Register in Prime Contractor Portals',
+                description: 'Most large primes have supplier registration systems.',
+                actionItems: [
+                    'Register in prime contractor supplier portals',
+                    'Attend prime contractor small business events',
+                    'Submit capability statements to primes',
+                    'Network at industry events'
+                ]
+            }
+        ],
+        reportHTML: generateTier2ReportHTML(suggestedPrimes, agencies)
+    };
+}
+
+function suggestPrimesForAgencies(agencies, params) {
+    // Analyze agency pain points to suggest relevant primes
+    const primeSuggestions = [];
+    const naics = params.naicsCode || '';
+    
+    // Common primes by industry
+    const primesByIndustry = {
+        '541': ['Booz Allen Hamilton', 'Deloitte', 'Accenture', 'IBM', 'Leidos'],
+        '236': ['Hensel Phelps', 'Turner Construction', 'Bechtel', 'Fluor'],
+        '237': ['AECOM', 'Jacobs Engineering', 'CH2M Hill'],
+        '238': ['EMCOR Group', 'Tutor Perini', 'Granite Construction'],
+        '561': ['CACI', 'ManTech', 'SAIC', 'General Dynamics'],
+        '518': ['Amazon Web Services', 'Microsoft', 'Google Cloud', 'Oracle']
+    };
+    
+    // Get NAICS prefix
+    const naicsPrefix = naics.substring(0, 3);
+    const suggestedPrimes = primesByIndustry[naicsPrefix] || ['Booz Allen Hamilton', 'Lockheed Martin', 'Leidos', 'CACI', 'SAIC'];
+    
+    // Analyze agency pain points to refine suggestions
+    agencies.forEach(agency => {
+        if (agency.painPoints && agency.painPoints.length > 0) {
+            agency.painPoints.forEach(pp => {
+                if (pp.includes('Cybersecurity') || pp.includes('IT')) {
+                    suggestedPrimes.push('Booz Allen Hamilton', 'CACI', 'ManTech');
+                }
+                if (pp.includes('Construction') || pp.includes('Infrastructure')) {
+                    suggestedPrimes.push('Hensel Phelps', 'Turner Construction', 'AECOM');
+                }
+            });
+        }
+    });
+    
+    // Remove duplicates and create prime objects
+    const uniquePrimes = [...new Set(suggestedPrimes)];
+    
+    return uniquePrimes.slice(0, 10).map(prime => ({
+        name: prime,
+        description: `Prime contractor working with agencies matching your profile`,
+        opportunities: getOpportunitiesForPrime(prime, naics),
+        contactStrategy: `Register in ${prime} supplier portal and attend small business events`,
+        relevantAgencies: agencies.slice(0, 3).map(a => a.name)
+    }));
+}
+
+function getOpportunitiesForPrime(prime, naics) {
+    const opportunities = {
+        'Booz Allen Hamilton': 'Cybersecurity, data analytics, IT modernization, consulting',
+        'Lockheed Martin': 'IT services, engineering support, professional services',
+        'Leidos': 'IT modernization, cybersecurity, health IT',
+        'CACI': 'IT services, cybersecurity, intelligence support',
+        'SAIC': 'IT services, engineering, technical support',
+        'Deloitte': 'Consulting, IT modernization, financial services',
+        'Accenture': 'IT services, digital transformation, consulting',
+        'IBM': 'IT services, cloud computing, AI/ML',
+        'Hensel Phelps': 'Construction, facilities management',
+        'Turner Construction': 'Construction, project management',
+        'AECOM': 'Engineering, construction, infrastructure',
+        'Jacobs Engineering': 'Engineering, construction, environmental',
+        'ManTech': 'IT services, cybersecurity, intelligence',
+        'General Dynamics': 'IT services, engineering, defense',
+        'Amazon Web Services': 'Cloud computing, IT infrastructure',
+        'Microsoft': 'Cloud computing, software, IT services',
+        'Google Cloud': 'Cloud computing, AI/ML, data analytics',
+        'Oracle': 'Database, cloud computing, IT services'
+    };
+    return opportunities[prime] || 'IT services, professional services, consulting';
+}
+
+function generateForecastReport(agencies, params) {
+    return {
+        reportType: 'forecast',
+        reportTitle: `FY${params.fiscalYear || '2026'} Forecast List Report`,
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies forecasted opportunities for FY${params.fiscalYear || '2026'} from agencies matching your profile.`,
+        forecastedOpportunities: agencies.slice(0, 20).map(agency => ({
+            agency: agency.name,
+            parentAgency: agency.parentAgency,
+            estimatedValue: agency.setAsideSpending * 0.3, // Estimate 30% of past spending
+            expectedQuarter: 'Q1-Q4 FY' + (params.fiscalYear || '2026'),
+            naicsCode: params.naicsCode,
+            setAsideType: params.businessFormation
+        })),
+        recommendations: [
+            {
+                title: 'Monitor Agency Forecast Lists',
+                description: 'Agencies publish forecast lists showing planned procurements.',
+                actionItems: [
+                    'Check agency forecast lists quarterly',
+                    'Set up SAM.gov alerts for forecasted opportunities',
+                    'Contact agencies before solicitations are released',
+                    'Prepare capability statements in advance'
+                ]
+            }
+        ],
+        reportHTML: generateReportHTML('forecast', {})
+    };
+}
+
+function generateAgencyNeedsReport(agencies, painPointsData, params) {
+    const topAgencies = agencies.slice(0, 10).map(agency => ({
+        ...agency,
+        needs: agency.painPoints.slice(0, 5)
+    }));
+    
+    return {
+        reportType: 'agency-needs',
+        reportTitle: 'Agency Needs Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies specific needs and requirements from ${topAgencies.length} target agencies matching your capabilities.`,
+        agencyNeeds: topAgencies,
+        recommendations: [
+            {
+                title: 'Match Your Capabilities to Agency Needs',
+                description: 'Position your solutions to directly address identified agency needs.',
+                actionItems: [
+                    'Update capability statements to address specific needs',
+                    'Use agency terminology when describing solutions',
+                    'Provide examples of how you solve similar challenges',
+                    'Reference agency strategic plans'
+                ]
+            }
+        ],
+        reportHTML: generateReportHTML('agency-needs', { agencyNeeds: topAgencies })
+    };
+}
+
+function generatePainPointsReport(agencies, painPointsData, params) {
+    const topAgencies = agencies.slice(0, 10);
+    
+    return {
+        reportType: 'pain-points',
+        reportTitle: 'Agency Pain Points Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report matches your capabilities to agency pain points across ${topAgencies.length} target agencies.`,
+        agenciesWithPainPoints: topAgencies.map(agency => ({
+            name: agency.name,
+            parentAgency: agency.parentAgency,
+            painPoints: agency.painPoints,
+            setAsideSpending: agency.setAsideSpending,
+            opportunityMatch: `Your ${params.capabilityFocus || 'capabilities'} directly address ${agency.painPoints.length} identified pain points.`
+        })),
+        recommendations: [
+            {
+                title: 'Address Pain Points in Your Outreach',
+                description: 'Agencies are actively seeking solutions to their pain points.',
+                actionItems: [
+                    'Reference specific pain points in capability statements',
+                    'Show how you solve their challenges',
+                    'Use pain point language in proposals',
+                    'Position yourself as a solution provider'
+                ]
+            }
+        ],
+        reportHTML: generateReportHTML('pain-points', { agenciesWithPainPoints: topAgencies })
+    };
+}
+
+function generateDecemberSpendReport(agencies, params) {
+    // Focus on Q4 spending (July-September)
+    const q4Agencies = agencies.filter(a => a.setAsideSpending > (parseInt(params.spendThreshold) || 50000));
+    
+    return {
+        reportType: 'december-spend',
+        reportTitle: `FY${params.fiscalYear || '2026'} December Spend Forecast`,
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies end-of-year spending opportunities. Agencies must spend allocated budgets by September 30th, creating urgent procurement needs.`,
+        q4Opportunities: q4Agencies.slice(0, 15).map(agency => ({
+            agency: agency.name,
+            parentAgency: agency.parentAgency,
+            estimatedQ4Spending: agency.setAsideSpending * 0.4, // Estimate 40% in Q4
+            urgency: 'High - Must spend by Sept 30',
+            quickTurnaround: true
+        })),
+        recommendations: [
+            {
+                title: 'Prepare for Quick Turnarounds',
+                description: 'Q4 opportunities often have fast response requirements.',
+                actionItems: [
+                    'Have capability statements ready',
+                    'Prepare quick quotes and proposals',
+                    'Ensure you can start work immediately',
+                    'Monitor SAM.gov daily in Q4'
+                ]
+            }
+        ],
+        reportHTML: generateReportHTML('december-spend', {})
+    };
+}
+
+function generateTribesReport(agencies, params) {
+    // Suggest tribes and agencies based on pain points
+    const suggestedTribes = suggestTribesForAgencies(agencies, params);
+    const tribalAgencies = suggestAgenciesForTribes(agencies, params);
+    
+    return {
+        reportType: 'tribes',
+        reportTitle: 'Tribal Contracting Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies opportunities for Native American/Tribal businesses. Based on your ${agencies.length} target agencies, we've identified ${tribalAgencies.length} agencies with strong tribal contracting programs.`,
+        tribalOpportunities: agencies.map(agency => ({
+            agency: agency.name,
+            parentAgency: agency.parentAgency,
+            setAsideSpending: agency.setAsideSpending,
+            tribalSetAsides: '8(a) Tribal, ANCSA opportunities available',
+            painPoints: agency.painPoints.slice(0, 3)
+        })),
+        suggestedTribes: suggestedTribes,
+        recommendedAgencies: tribalAgencies,
+        recommendations: [
+            {
+                title: 'Leverage Tribal Business Status',
+                description: 'Tribal businesses have access to unique contracting opportunities.',
+                actionItems: [
+                    'Ensure tribal certification is current',
+                    'Register in SBA 8(a) program if eligible',
+                    'Attend tribal business conferences',
+                    'Network with other tribal contractors',
+                    'Contact agencies with strong tribal programs'
+                ]
+            }
+        ],
+        reportHTML: generateTribesReportHTML(agencies, suggestedTribes, tribalAgencies)
+    };
+}
+
+function suggestTribesForAgencies(agencies, params) {
+    // Suggest tribes based on agency locations and needs
+    return [
+        {
+            name: 'Navajo Nation',
+            description: 'Largest Native American tribe, strong government contracting presence',
+            opportunities: 'Construction, IT services, professional services',
+            certifications: '8(a) Tribal, ANCSA'
+        },
+        {
+            name: 'Cherokee Nation',
+            description: 'Major tribal contractor with diverse capabilities',
+            opportunities: 'IT services, healthcare, construction',
+            certifications: '8(a) Tribal'
+        },
+        {
+            name: 'Choctaw Nation',
+            description: 'Established government contracting program',
+            opportunities: 'Professional services, IT, facilities management',
+            certifications: '8(a) Tribal'
+        }
+    ];
+}
+
+function suggestAgenciesForTribes(agencies, params) {
+    // Suggest additional agencies with strong tribal programs
+    const tribalFriendlyAgencies = [
+        { name: 'Department of the Interior', reason: 'Strong tribal contracting program', spending: 'High' },
+        { name: 'Department of Health and Human Services', reason: 'Tribal health programs', spending: 'High' },
+        { name: 'Department of Energy', reason: 'Tribal energy programs', spending: 'Medium' },
+        { name: 'Department of Defense', reason: 'Tribal business outreach', spending: 'High' }
+    ];
+    
+    return tribalFriendlyAgencies;
+}
+
+function generatePrimesReport(agencies, params) {
+    // Suggest primes based on agency pain points
+    const suggestedPrimes = suggestPrimesForAgencies(agencies, params);
+    const otherAgencies = suggestOtherAgencies(agencies, params, params.painPointsData);
+    
+    return {
+        reportType: 'primes',
+        reportTitle: 'Prime Contractor Report',
+        companyName: params.companyName || 'Your Company',
+        generatedDate: new Date().toISOString(),
+        executiveSummary: `This report identifies prime contractors and subcontracting opportunities matching your ${params.businessFormation || 'small business'} profile. Based on your ${agencies.length} target agencies' pain points, we've identified ${suggestedPrimes.length} prime contractors to consider.`,
+        primeContractors: suggestedPrimes.map(prime => ({
+            name: prime.name,
+            contractTypes: ['IDIQ', 'BPA', 'GWAC'],
+            smallBusinessSubcontracting: 'High',
+            opportunities: prime.opportunities,
+            description: prime.description,
+            contactStrategy: prime.contactStrategy,
+            relevantAgencies: prime.relevantAgencies
+        })),
+        otherAgenciesToConsider: otherAgencies,
+        recommendations: [
+            {
+                title: 'Partner with Primes',
+                description: 'Subcontracting with primes provides access to larger contracts.',
+                actionItems: [
+                    'Register in prime contractor supplier portals',
+                    'Attend prime contractor small business events',
+                    'Submit capability statements',
+                    'Build relationships with prime small business offices',
+                    'Focus on primes working with your target agencies'
+                ]
+            }
+        ],
+        reportHTML: generatePrimesReportHTML(suggestedPrimes, otherAgencies, agencies)
+    };
+}
+
+function suggestOtherAgencies(selectedAgencies, params, painPointsData) {
+    // Suggest other agencies based on pain points and NAICS
+    
+    // Collect pain points from selected agencies
+    const allPainPoints = new Set();
+    selectedAgencies.forEach(agency => {
+        if (agency.painPoints) {
+            agency.painPoints.forEach(pp => allPainPoints.add(pp));
+        }
+    });
+    
+    // Find other agencies with similar pain points
+    const suggestedAgencies = [];
+    const selectedNames = new Set(selectedAgencies.map(a => a.name));
+    
+    if (painPointsData && painPointsData.agencies) {
+        Object.entries(painPointsData.agencies).forEach(([agencyName, data]) => {
+            if (!selectedNames.has(agencyName) && data.painPoints) {
+                const matchingPainPoints = data.painPoints.filter(pp => 
+                    Array.from(allPainPoints).some(selectedPP => {
+                        const ppLower = pp.toLowerCase();
+                        const selectedPPLower = selectedPP.toLowerCase();
+                        return ppLower.includes(selectedPPLower.substring(0, Math.min(10, selectedPPLower.length))) ||
+                               selectedPPLower.includes(ppLower.substring(0, Math.min(10, ppLower.length)));
+                    })
+                );
+                
+                if (matchingPainPoints.length > 0) {
+                    suggestedAgencies.push({
+                        name: agencyName,
+                        reason: `Similar pain points: ${matchingPainPoints.slice(0, 2).join(', ')}`,
+                        painPoints: data.painPoints.slice(0, 5),
+                        matchScore: matchingPainPoints.length
+                    });
+                }
+            }
+        });
+    }
+    
+    // Sort by match score and return top 5
+    return suggestedAgencies
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, 5);
+}
+
+// Helper function to generate HTML for reports
+function generateReportHTML(reportType, data) {
+    // This will generate HTML based on report type
+    // For now, return a placeholder - can be enhanced later
+    return `<div class="report-content"><h2>${reportType} Report</h2><p>Report content will be generated here</p></div>`;
+}
+
+function generateTier2ReportHTML(primes, agencies) {
+    return `
+        <section class="border-b-2 border-gray-200 pb-8">
+            <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Suggested Prime Contractors</h3>
+            <div class="space-y-4">
+                ${primes.map((prime, index) => `
+                    <div class="border-2 border-gray-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${prime.name}</h4>
+                        <p class="text-gray-700 mb-4">${prime.description}</p>
+                        <div class="mb-4">
+                            <div class="font-semibold text-gray-900 mb-2">Opportunities:</div>
+                            <p class="text-gray-700">${prime.opportunities}</p>
+                        </div>
+                        <div class="mb-4">
+                            <div class="font-semibold text-gray-900 mb-2">Relevant Agencies:</div>
+                            <p class="text-gray-700">${prime.relevantAgencies.join(', ')}</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-700"><strong>Contact Strategy:</strong> ${prime.contactStrategy}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+    `;
+}
+
+function generateTribesReportHTML(agencies, suggestedTribes, recommendedAgencies) {
+    return `
+        <section class="border-b-2 border-gray-200 pb-8">
+            <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Target Agencies with Tribal Opportunities</h3>
+            <div class="space-y-4">
+                ${agencies.map((agency, index) => `
+                    <div class="border-2 border-gray-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${agency.name}</h4>
+                        <p class="text-gray-600 mb-4">${agency.parentAgency}</p>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <div class="font-semibold text-gray-900">Set-Aside Spending</div>
+                                <div class="text-green-600 font-bold">$${formatCurrency(agency.setAsideSpending)}</div>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Pain Points</div>
+                                <ul class="list-disc list-inside text-sm text-gray-700">
+                                    ${agency.painPoints.map(pp => `<li>${pp}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+        ${recommendedAgencies.length > 0 ? `
+        <section class="border-b-2 border-gray-200 pb-8">
+            <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Other Agencies to Consider</h3>
+            <div class="space-y-4">
+                ${recommendedAgencies.map((agency, index) => `
+                    <div class="bg-green-50 border-l-4 border-green-500 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${agency.name}</h4>
+                        <p class="text-gray-700">${agency.reason}</p>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+        ` : ''}
+    `;
+}
+
+function generatePrimesReportHTML(primes, otherAgencies, selectedAgencies) {
+    return `
+        <section class="border-b-2 border-gray-200 pb-8">
+            <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Suggested Prime Contractors</h3>
+            <div class="space-y-4">
+                ${primes.map((prime, index) => `
+                    <div class="border-2 border-gray-200 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${prime.name}</h4>
+                        <p class="text-gray-700 mb-4">${prime.description}</p>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <div class="font-semibold text-gray-900 mb-2">Opportunities</div>
+                                <p class="text-gray-700">${prime.opportunities}</p>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900 mb-2">Relevant Agencies</div>
+                                <p class="text-gray-700">${prime.relevantAgencies.join(', ')}</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-700"><strong>Contact Strategy:</strong> ${prime.contactStrategy}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+        ${otherAgencies.length > 0 ? `
+        <section class="border-b-2 border-gray-200 pb-8">
+            <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Other Agencies to Consider (Based on Pain Points)</h3>
+            <div class="space-y-4">
+                ${otherAgencies.map((agency, index) => `
+                    <div class="bg-purple-50 border-l-4 border-purple-500 rounded-lg p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${agency.name}</h4>
+                        <p class="text-gray-700 mb-4">${agency.reason}</p>
+                        <div class="mt-4">
+                            <div class="font-semibold text-gray-900 mb-2">Key Pain Points:</div>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                ${agency.painPoints.map(pp => `<li>${pp}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+        ` : ''}
+    `;
+}
+
+function formatCurrency(amount) {
+    if (amount >= 1000000) {
+        return (amount / 1000000).toFixed(2) + 'M';
+    } else if (amount >= 1000) {
+        return (amount / 1000).toFixed(2) + 'K';
+    }
+    return amount.toLocaleString();
 }
 
 // Start server (only for local development)

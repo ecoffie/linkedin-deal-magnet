@@ -1,0 +1,62 @@
+{
+  "Sandia National Laboratories": {
+    "portal_url": "https://www.sandia.gov/supplier/",
+    "opportunities_url": "https://www.sandia.gov/supplier/supplier-opportunities/",
+    "notes": "Subcontracting and small business opportunities"
+  },
+  "Los Alamos National Laboratory (LANL)": {
+    "portal_url": "https://www.lanl.gov/business/",
+    "opportunities_url": "https://www.lanl.gov/business/small-business/opportunities.php",
+    "notes": "Business opportunities and subcontracting"
+  },
+  "Lawrence Livermore National Laboratory (LLNL)": {
+    "portal_url": "https://www.llnl.gov/business/procurement",
+    "opportunities_url": "https://www.llnl.gov/business/procurement/opportunities",
+    "notes": "Procurement opportunities"
+  },
+  "Oak Ridge National Laboratory (ORNL)": {
+    "portal_url": "https://www.ornl.gov/suppliers",
+    "opportunities_url": "https://www.ornl.gov/suppliers/opportunities",
+    "notes": "Supplier opportunities"
+  },
+  "Pacific Northwest National Laboratory (PNNL)": {
+    "portal_url": "https://www.pnnl.gov/suppliers",
+    "opportunities_url": "https://www.pnnl.gov/suppliers/opportunities",
+    "notes": "Supplier portal"
+  },
+  "Brookhaven National Laboratory (BNL)": {
+    "portal_url": "https://www.bnl.gov/procurement/",
+    "opportunities_url": "https://www.bnl.gov/procurement/opportunities.php",
+    "notes": "Procurement opportunities"
+  },
+  "Fermi National Accelerator Laboratory (Fermilab)": {
+    "portal_url": "https://www.fnal.gov/procurement/",
+    "opportunities_url": "https://www.fnal.gov/procurement/opportunities.html",
+    "notes": "Procurement opportunities"
+  },
+  "Argonne National Laboratory": {
+    "portal_url": "https://www.anl.gov/suppliers",
+    "opportunities_url": "https://www.anl.gov/suppliers/opportunities",
+    "notes": "Supplier opportunities"
+  },
+  "Jefferson Lab": {
+    "portal_url": "https://www.jlab.org/procurement",
+    "opportunities_url": "https://www.jlab.org/procurement/opportunities",
+    "notes": "Procurement opportunities"
+  },
+  "SLAC National Accelerator Laboratory": {
+    "portal_url": "https://www6.slac.stanford.edu/procurement",
+    "opportunities_url": "https://www6.slac.stanford.edu/procurement/opportunities",
+    "notes": "Procurement opportunities"
+  },
+  "U.S. Postal Service (USPS)": {
+    "portal_url": "https://about.usps.com/suppliers/",
+    "opportunities_url": "https://about.usps.com/suppliers/becoming.htm",
+    "notes": "Supplier portal and becoming a supplier"
+  },
+  "Tennessee Valley Authority (TVA)": {
+    "portal_url": "https://www.tva.com/about-tva/suppliers",
+    "opportunities_url": "https://www.tva.com/about-tva/suppliers/opportunities",
+    "notes": "Supplier opportunities"
+  }
+}

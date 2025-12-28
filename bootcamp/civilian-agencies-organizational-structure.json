@@ -1,0 +1,337 @@
+{
+  "metadata": {
+    "description": "Comprehensive organizational structure for major civilian federal agencies with component-specific mappings",
+    "lastUpdated": "2025-12-21",
+    "source": "Research from official agency websites and Congressional reports",
+    "note": "This complements dod-organizational-structure.json for civilian agencies"
+  },
+  "agencies": {
+    "Department of Health and Human Services": {
+      "abbreviation": "HHS",
+      "secretary": "Secretary of Health and Human Services",
+      "budget_fy2025": "$1.7T mandatory + $130.7B discretionary",
+      "note_2025": "Undergoing reorganization - reducing from 28 to 15 top-level divisions",
+      "operating_divisions": {
+        "public_health_service": [
+          "National Institutes of Health (NIH)",
+          "Centers for Disease Control and Prevention (CDC)",
+          "Food and Drug Administration (FDA)",
+          "Health Resources and Services Administration (HRSA)",
+          "Indian Health Service (IHS)",
+          "Agency for Toxic Substances and Disease Registry (ATSDR)"
+        ],
+        "human_services": [
+          "Centers for Medicare & Medicaid Services (CMS)",
+          "Administration for Children and Families (ACF)",
+          "Administration for Community Living (ACL)"
+        ]
+      },
+      "major_components": {
+        "National Institutes of Health": {
+          "abbreviation": "NIH",
+          "headquarters": "Bethesda, MD",
+          "mission": "Medical research agency conducting and supporting health research",
+          "workforce_2025": "Reducing by 1,200 employees (reorganization)",
+          "institutes_centers": "27 institutes and centers",
+          "budget": "$49B+ annually",
+          "contracting_focus": [
+            "Biomedical research contracts",
+            "Clinical trials and studies",
+            "Laboratory equipment and supplies",
+            "IT and data management",
+            "Professional services"
+          ],
+          "pain_points_key": "NIH"
+        },
+        "Centers for Disease Control and Prevention": {
+          "abbreviation": "CDC",
+          "headquarters": "Atlanta, GA",
+          "mission": "Protects public health through disease prevention and control",
+          "workforce_2025": "Reducing by 2,400 employees (20% cut)",
+          "budget": "$15B+ annually",
+          "contracting_focus": [
+            "Public health surveillance systems",
+            "Laboratory diagnostics and testing",
+            "Emergency response capabilities",
+            "Data analytics and epidemiology",
+            "Health communications"
+          ],
+          "pain_points_key": "CDC"
+        },
+        "Food and Drug Administration": {
+          "abbreviation": "FDA",
+          "headquarters": "Silver Spring, MD",
+          "mission": "Ensures safety of food, drugs, medical devices, and cosmetics",
+          "workforce_2025": "Reducing by 3,500 employees (19% cut)",
+          "budget": "$6.5B+ annually",
+          "contracting_focus": [
+            "Laboratory testing and analysis",
+            "Regulatory science and research",
+            "Inspection and compliance systems",
+            "IT modernization",
+            "Drug safety monitoring"
+          ],
+          "pain_points_key": "FDA"
+        },
+        "Centers for Medicare & Medicaid Services": {
+          "abbreviation": "CMS",
+          "headquarters": "Baltimore, MD",
+          "mission": "Administers Medicare, Medicaid, and health insurance marketplace",
+          "workforce_2025": "Reducing by 300 employees",
+          "budget": "$1.5T+ in program spending",
+          "contracting_percentage": "75% of HHS contract obligations with CDC and NIH",
+          "contracting_focus": [
+            "IT and professional services (76% of obligations)",
+            "Healthcare data systems",
+            "Claims processing and payment systems",
+            "Fraud detection and prevention",
+            "Quality measurement and reporting"
+          ],
+          "pain_points_key": "CMS"
+        }
+      },
+      "pain_points_key": "Department of Health and Human Services"
+    },
+    "Department of Energy": {
+      "abbreviation": "DOE",
+      "secretary": "Secretary of Energy",
+      "budget_fy2025": "$50B+ annually",
+      "note_2025": "Restructured Nov 2025 for energy dominance priorities, AI/quantum focus",
+      "major_components": {
+        "National Nuclear Security Administration": {
+          "abbreviation": "NNSA",
+          "mission": "Nuclear security, nonproliferation, and naval reactors",
+          "budget": "$21B+ annually",
+          "laboratories": [
+            "Los Alamos National Laboratory (LANL)",
+            "Lawrence Livermore National Laboratory (LLNL)",
+            "Sandia National Laboratories"
+          ],
+          "production_facilities": [
+            "Y-12 National Security Complex (TN)",
+            "Pantex Plant (TX)",
+            "Kansas City National Security Campus (MO)",
+            "Savannah River Site (SC)"
+          ],
+          "contracting_focus": [
+            "Nuclear weapons modernization",
+            "Nonproliferation technology",
+            "Naval reactor support",
+            "Security and safeguards",
+            "Emergency response"
+          ],
+          "pain_points_key": "NNSA"
+        },
+        "Office of Science": {
+          "abbreviation": "SC",
+          "mission": "Supports fundamental research in physical sciences and advanced computing",
+          "budget": "$8B+ annually",
+          "laboratories": 10,
+          "national_labs": [
+            "Argonne National Laboratory (IL)",
+            "Brookhaven National Laboratory (NY)",
+            "Fermilab (IL)",
+            "Lawrence Berkeley National Laboratory (CA)",
+            "Oak Ridge National Laboratory (TN)",
+            "Pacific Northwest National Laboratory (WA)",
+            "Princeton Plasma Physics Laboratory (NJ)",
+            "SLAC National Accelerator Laboratory (CA)",
+            "Ames National Laboratory (IA)",
+            "Thomas Jefferson National Accelerator Facility (VA)"
+          ],
+          "contracting_focus": [
+            "Scientific research and development",
+            "High-performance computing",
+            "User facility operations",
+            "Advanced instrumentation",
+            "Fusion energy research"
+          ],
+          "pain_points_key": "DOE Office of Science"
+        },
+        "Office of Fossil Energy and Carbon Management": {
+          "abbreviation": "FECM",
+          "laboratories": [
+            "National Energy Technology Laboratory (NETL) - only GOGO lab"
+          ],
+          "contracting_focus": [
+            "Carbon capture and storage",
+            "Hydrogen production",
+            "Critical minerals",
+            "Coal technology",
+            "Natural gas infrastructure"
+          ],
+          "pain_points_key": "DOE Fossil Energy"
+        },
+        "Office of Nuclear Energy": {
+          "abbreviation": "NE",
+          "laboratories": [
+            "Idaho National Laboratory (INL)"
+          ],
+          "contracting_focus": [
+            "Advanced reactor development",
+            "Small modular reactors (SMRs)",
+            "Nuclear fuel cycle",
+            "Microreactor technology",
+            "Spent fuel management"
+          ],
+          "pain_points_key": "DOE Nuclear Energy"
+        }
+      },
+      "pain_points_key": "Department of Energy"
+    },
+    "Department of Transportation": {
+      "abbreviation": "DOT",
+      "secretary": "Secretary of Transportation",
+      "workforce": "55,000+ employees",
+      "budget_fy2025": "$140B+ annually",
+      "operating_administrations": {
+        "Federal Aviation Administration": {
+          "abbreviation": "FAA",
+          "headquarters": "Washington, DC",
+          "mission": "Oversees safety of civil aviation",
+          "workforce": "45,000+ employees",
+          "contracting_focus": [
+            "Air traffic control systems modernization (NextGen)",
+            "Airport infrastructure grants",
+            "Aviation safety equipment",
+            "Cybersecurity for aviation systems",
+            "Unmanned aircraft systems (UAS) integration"
+          ],
+          "pain_points_key": "FAA"
+        },
+        "Federal Highway Administration": {
+          "abbreviation": "FHWA",
+          "mission": "Coordinates highway transportation programs with states",
+          "contracting_focus": [
+            "Highway infrastructure funding",
+            "Bridge repair and replacement",
+            "Intelligent transportation systems (ITS)",
+            "Safety technology and research",
+            "Environmental mitigation"
+          ],
+          "pain_points_key": "FHWA"
+        },
+        "Federal Transit Administration": {
+          "abbreviation": "FTA",
+          "mission": "Assists in developing mass transportation systems",
+          "contracting_focus": [
+            "Transit system grants",
+            "Bus and rail vehicle procurement",
+            "Station modernization",
+            "Zero-emission bus transition",
+            "Transit cybersecurity"
+          ],
+          "pain_points_key": "FTA"
+        },
+        "Federal Railroad Administration": {
+          "abbreviation": "FRA",
+          "mission": "Promotes railroad safety and development",
+          "contracting_focus": [
+            "High-speed rail development",
+            "Positive Train Control (PTC) systems",
+            "Railroad infrastructure improvements",
+            "Safety technology",
+            "Grade crossing elimination"
+          ],
+          "pain_points_key": "FRA"
+        }
+      },
+      "pain_points_key": "Department of Transportation"
+    },
+    "Department of Commerce": {
+      "abbreviation": "DOC",
+      "secretary": "Secretary of Commerce",
+      "budget_fy2025": "$11B+ annually",
+      "bureaus": 13,
+      "major_components": {
+        "National Oceanic and Atmospheric Administration": {
+          "abbreviation": "NOAA",
+          "headquarters": "Silver Spring, MD",
+          "administrator": "Neil Jacobs (confirmed Oct 2025)",
+          "budget": "$6B+ annually (over 50% of Commerce budget)",
+          "mission": "Weather forecasting, fisheries management, ocean research",
+          "contracting_focus": [
+            "Weather satellite systems",
+            "Supercomputing and modeling",
+            "Marine research vessels",
+            "Fisheries enforcement technology",
+            "Climate data systems"
+          ],
+          "pain_points_key": "NOAA"
+        },
+        "National Institute of Standards and Technology": {
+          "abbreviation": "NIST",
+          "headquarters": "Gaithersburg, MD",
+          "mission": "Nonregulatory agency setting technology standards",
+          "budget": "$1.5B+ annually",
+          "associate_directors": 3,
+          "contracting_focus": [
+            "Cybersecurity framework development",
+            "Advanced manufacturing research",
+            "Quantum information science",
+            "Artificial intelligence standards",
+            "Measurement science"
+          ],
+          "pain_points_key": "NIST"
+        },
+        "U.S. Census Bureau": {
+          "abbreviation": "Census",
+          "headquarters": "Suitland, MD",
+          "director": "George Cook (acting, Sept 2025)",
+          "mission": "Conducts national census and economic surveys",
+          "budget": "$2B+ annually (varies by census year)",
+          "contracting_focus": [
+            "IT infrastructure and data systems",
+            "Survey data collection technology",
+            "Cybersecurity for sensitive data",
+            "Address canvassing systems",
+            "Data dissemination platforms"
+          ],
+          "pain_points_key": "Census Bureau"
+        }
+      },
+      "pain_points_key": "Department of Commerce"
+    }
+  },
+  "detection_rules": {
+    "HHS_components": {
+      "NIH": ["National Institutes of Health", "\\bNIH\\b", "Bethesda"],
+      "CDC": ["Centers for Disease Control", "\\bCDC\\b", "Atlanta"],
+      "FDA": ["Food and Drug Administration", "\\bFDA\\b", "Silver Spring"],
+      "CMS": ["Centers for Medicare", "Medicaid Services", "\\bCMS\\b", "Baltimore"]
+    },
+    "DOE_components": {
+      "NNSA": ["National Nuclear Security Administration", "\\bNNSA\\b", "Los Alamos", "Livermore", "Sandia"],
+      "Office of Science": ["Office of Science", "Argonne", "Oak Ridge", "Brookhaven", "Fermilab"],
+      "INL": ["Idaho National Laboratory", "\\bINL\\b"],
+      "NETL": ["National Energy Technology Laboratory", "\\bNETL\\b"]
+    },
+    "DOT_components": {
+      "FAA": ["Federal Aviation Administration", "\\bFAA\\b", "NextGen"],
+      "FHWA": ["Federal Highway Administration", "\\bFHWA\\b"],
+      "FTA": ["Federal Transit Administration", "\\bFTA\\b"],
+      "FRA": ["Federal Railroad Administration", "\\bFRA\\b"]
+    },
+    "DOC_components": {
+      "NOAA": ["National Oceanic", "Atmospheric Administration", "\\bNOAA\\b", "Silver Spring"],
+      "NIST": ["National Institute of Standards", "\\bNIST\\b", "Gaithersburg"],
+      "Census": ["Census Bureau", "\\bCensus\\b", "Suitland"]
+    }
+  },
+  "office_codes": {
+    "75FCMC": "HHS Office of Acquisition and Grants Management",
+    "75P001": "HHS Program Support Center Acquisition",
+    "1331L5": "Commerce Small and Strategic Business Programs",
+    "1333LB": "U.S. Census Bureau",
+    "1305M2": "NOAA",
+    "1305M3": "NOAA"
+  },
+  "how_to_use": {
+    "step1": "Extract office name and parent agency from contract data",
+    "step2": "Check if parent is HHS, DOE, DOT, or DOC",
+    "step3": "Match office name against component patterns",
+    "step4": "Look up pain_points_key for matched component",
+    "step5": "Load component-specific pain points from agency-pain-points.json",
+    "step6": "Display component pain points instead of generic department"
+  }
+}

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Market Reports - LinkedIn Deal Magnet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loading {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #0077B5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .agency-checkbox {
+            transition: all 0.2s ease;
+        }
+        .agency-checkbox:checked + label {
+            background: #EBF5FF;
+            border-color: #0077B5;
+        }
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        linkedin: {
+                            blue: '#0077B5',
+                            dark: '#004182',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">📊 Comprehensive Market Reports</h1>
+            <p class="text-gray-600 text-lg">Enter your 5 core inputs → Select agencies → Generate all 8 reports</p>
+        </div>
+
+        <!-- Step 1: Input Section -->
+        <div id="step1-input" class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Step 1: Enter Your 5 Core Inputs</h2>
+            <p class="text-gray-600 mb-6">Provide your business information to discover target agencies</p>
+            
+            <form id="input-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Business Type -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Business Type *</label>
+                        <select id="business-formation" required class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select type</option>
+                            <option value="women-owned">Women Owned</option>
+                            <option value="hubzone">HUBZone</option>
+                            <option value="8a">8(a) Certified</option>
+                            <option value="small-business">Small Business</option>
+                            <option value="dot-certified">DOT Certified</option>
+                            <option value="native-american">Native American/Tribal</option>
+                        </select>
+                    </div>
+
+                    <!-- NAICS Code -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">NAICS Code *</label>
+                        <input type="text" id="naics-code" required placeholder="e.g., 541330" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Zip Code</label>
+                        <input type="text" id="zip-code" placeholder="e.g., 10001" maxlength="5" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+
+                    <!-- Veteran Status -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Veteran Status</label>
+                        <select id="veteran-status" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select status</option>
+                            <option value="veteran-owned">Veteran Owned</option>
+                            <option value="service-disabled-veteran">Service Disabled Vet</option>
+                            <option value="not-applicable">Not Applicable</option>
+                        </select>
+                    </div>
+
+                    <!-- Goods or Services -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Goods or Services?</label>
+                        <select id="goods-or-services" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                            <option value="">Select one</option>
+                            <option value="goods">Goods</option>
+                            <option value="services">Services</option>
+                            <option value="both">Both</option>
+                        </select>
+                    </div>
+
+                    <!-- Company Name -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Company Name</label>
+                        <input type="text" id="company-name" placeholder="Your Company Name" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    </div>
+                </div>
+
+                <button type="submit" id="search-btn" class="w-full bg-linkedin-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-linkedin-dark transition shadow-md hover:shadow-lg">
+                    🔍 Find Target Agencies
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading State for Step 2 -->
+        <div id="loading-agencies" class="hidden bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-2xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="loading border-white border-t-transparent"></div>
+                    <div>
+                        <p class="font-semibold">Finding Target Agencies...</p>
+                        <p class="text-sm opacity-90" id="loading-status">Analyzing contract data</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold" id="progress-percent">0%</p>
+                    <p class="text-xs opacity-75">Complete</p>
+                </div>
+            </div>
+            <div class="mt-3 bg-white bg-opacity-20 rounded-full h-2 overflow-hidden">
+                <div id="progress-bar" class="bg-white h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Step 2: Agency Selection -->
+        <div id="step2-selection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Step 2: Select Agencies for Report Generation</h2>
+                <p class="text-gray-600 mb-6">Choose which agencies to include in your comprehensive reports</p>
+                
+                <!-- Quick Selection Buttons -->
+                <div class="flex gap-3 mb-6">
+                    <button onclick="selectTopAgencies(10)" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200 transition">
+                        Select Top 10
+                    </button>
+                    <button onclick="selectTopAgencies(20)" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200 transition">
+                        Select Top 20
+                    </button>
+                    <button onclick="selectAllAgencies()" class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200 transition">
+                        Select All
+                    </button>
+                    <button onclick="clearSelection()" class="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
+                        Clear Selection
+                    </button>
+                </div>
+
+                <div class="mb-4">
+                    <p class="text-sm text-gray-600">
+                        <span id="selected-count" class="font-bold text-linkedin-blue">0</span> agencies selected
+                    </p>
+                </div>
+
+                <!-- Agencies List -->
+                <div id="agencies-list" class="space-y-3 max-h-96 overflow-y-auto border-2 border-gray-200 rounded-lg p-4">
+                    <!-- Agencies will be dynamically inserted here -->
+                </div>
+
+                <button onclick="generateAllReports()" id="generate-reports-btn" disabled class="w-full mt-6 bg-linkedin-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-linkedin-dark transition shadow-md hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    📊 Generate All 8 Reports for Selected Agencies
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State for Step 3 -->
+        <div id="loading-reports" class="hidden bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl shadow-2xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="loading border-white border-t-transparent"></div>
+                    <div>
+                        <p class="font-semibold">Generating All 8 Reports...</p>
+                        <p class="text-sm opacity-90" id="report-loading-status">Creating comprehensive analysis</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold" id="report-progress-percent">0%</p>
+                    <p class="text-xs opacity-75">Complete</p>
+                </div>
+            </div>
+            <div class="mt-3 bg-white bg-opacity-20 rounded-full h-2 overflow-hidden">
+                <div id="report-progress-bar" class="bg-white h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Step 3: All 8 Reports Display -->
+        <div id="step3-reports" class="hidden">
+            <!-- Report Header -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6 no-print">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Your Comprehensive Market Reports</h2>
+                        <p class="text-gray-600" id="report-date"></p>
+                        <p class="text-sm text-gray-500 mt-1" id="selected-agencies-summary"></p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="window.print()" class="bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-700 transition">
+                            🖨️ Print / Save PDF
+                        </button>
+                        <button onclick="exportAllReports()" class="bg-linkedin-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-linkedin-dark transition">
+                            📥 Export All Reports
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All 8 Reports -->
+            <div id="all-reports-container" class="space-y-8">
+                <!-- Reports will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="hidden bg-red-50 border-2 border-red-200 rounded-xl p-6">
+            <h2 class="text-xl font-bold text-red-900 mb-2">Error</h2>
+            <p id="error-message" class="text-red-800"></p>
+        </div>
+    </div>
+
+    <script>
+        let currentAgencies = [];
+        let selectedAgencyIndices = new Set();
+        let currentInputData = {};
+        let allReportsData = {};
+
+        // Step 1: Submit input form
+        document.getElementById('input-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            currentInputData = {
+                businessFormation: document.getElementById('business-formation').value,
+                naicsCode: document.getElementById('naics-code').value,
+                zipCode: document.getElementById('zip-code').value,
+                veteranStatus: document.getElementById('veteran-status').value,
+                goodsOrServices: document.getElementById('goods-or-services').value,
+                companyName: document.getElementById('company-name').value || 'Your Company'
+            };
+
+            // Validate required fields
+            if (!currentInputData.businessFormation || !currentInputData.naicsCode) {
+                showError('Please fill in Business Type and NAICS Code');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('step1-input').classList.add('hidden');
+            document.getElementById('loading-agencies').classList.remove('hidden');
+            document.getElementById('step2-selection').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+
+            updateProgress(10, 'Connecting to USAspending API...');
+
+            try {
+                updateProgress(30, 'Fetching contract data...');
+                const response = await fetch('/api/government-contracts/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentInputData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch agencies');
+                }
+
+                const data = await response.json();
+                currentAgencies = data.agencies || [];
+                selectedAgencyIndices.clear();
+
+                updateProgress(100, 'Agencies found!');
+                
+                setTimeout(() => {
+                    displayAgencies(currentAgencies);
+                }, 500);
+
+            } catch (error) {
+                console.error('Error fetching agencies:', error);
+                showError(error.message || 'Failed to fetch agencies. Please try again.');
+            }
+        });
+
+        function updateProgress(percent, status) {
+            document.getElementById('progress-percent').textContent = percent + '%';
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('loading-status').textContent = status;
+        }
+
+        function displayAgencies(agencies) {
+            document.getElementById('loading-agencies').classList.add('hidden');
+            document.getElementById('step2-selection').classList.remove('hidden');
+
+            const agenciesList = document.getElementById('agencies-list');
+            agenciesList.innerHTML = agencies.map((agency, index) => {
+                const agencyName = typeof agency.agencyName === 'string' ? agency.agencyName : 
+                                  (agency.agencyName?._ || 'Unknown Agency');
+                const parentAgency = agency.parentAgency || '';
+                const setAsideSpending = agency.setAsideSpending || 0;
+                const contractCount = agency.setAsideContractCount || 0;
+
+                return `
+                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition agency-item">
+                        <input type="checkbox" 
+                               class="agency-checkbox mr-4 w-5 h-5 text-linkedin-blue focus:ring-linkedin-blue" 
+                               value="${index}"
+                               onchange="updateSelection()">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-gray-900">${agencyName}</h3>
+                                    <p class="text-sm text-gray-600">${parentAgency}</p>
+                                </div>
+                                <div class="text-right ml-4">
+                                    <div class="text-lg font-bold text-green-600">$${formatCurrency(setAsideSpending)}</div>
+                                    <div class="text-xs text-gray-600">${contractCount} contracts</div>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                `;
+            }).join('');
+
+            updateSelection();
+        }
+
+        function updateSelection() {
+            selectedAgencyIndices.clear();
+            document.querySelectorAll('.agency-checkbox:checked').forEach(cb => {
+                selectedAgencyIndices.add(parseInt(cb.value));
+            });
+
+            const count = selectedAgencyIndices.size;
+            document.getElementById('selected-count').textContent = count;
+            document.getElementById('generate-reports-btn').disabled = count === 0;
+        }
+
+        function selectTopAgencies(count) {
+            selectedAgencyIndices.clear();
+            for (let i = 0; i < Math.min(count, currentAgencies.length); i++) {
+                selectedAgencyIndices.add(i);
+                document.querySelector(`.agency-checkbox[value="${i}"]`).checked = true;
+            }
+            updateSelection();
+        }
+
+        function selectAllAgencies() {
+            selectedAgencyIndices.clear();
+            currentAgencies.forEach((_, index) => {
+                selectedAgencyIndices.add(index);
+                document.querySelector(`.agency-checkbox[value="${index}"]`).checked = true;
+            });
+            updateSelection();
+        }
+
+        function clearSelection() {
+            selectedAgencyIndices.clear();
+            document.querySelectorAll('.agency-checkbox').forEach(cb => cb.checked = false);
+            updateSelection();
+        }
+
+        // Step 3: Generate all 8 reports
+        async function generateAllReports() {
+            if (selectedAgencyIndices.size === 0) {
+                showError('Please select at least one agency');
+                return;
+            }
+
+            const selectedAgencies = Array.from(selectedAgencyIndices).map(i => currentAgencies[i]);
+
+            // Show loading
+            document.getElementById('step2-selection').classList.add('hidden');
+            document.getElementById('loading-reports').classList.remove('hidden');
+            document.getElementById('step3-reports').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+
+            updateReportProgress(10, 'Preparing report generation...');
+
+            try {
+                updateReportProgress(20, 'Generating Government Buyers Report...');
+                const reportResponse = await fetch('/api/comprehensive-report/generate-all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...currentInputData,
+                        selectedAgencies: selectedAgencies,
+                        scoutData: { agencies: currentAgencies }
+                    })
+                });
+
+                if (!reportResponse.ok) {
+                    throw new Error('Failed to generate reports');
+                }
+
+                const reportsData = await reportResponse.json();
+                allReportsData = reportsData;
+
+                updateReportProgress(100, 'All reports generated!');
+                
+                setTimeout(() => {
+                    displayAllReports(reportsData, selectedAgencies);
+                }, 500);
+
+            } catch (error) {
+                console.error('Error generating reports:', error);
+                showError(error.message || 'Failed to generate reports. Please try again.');
+            }
+        }
+
+        function updateReportProgress(percent, status) {
+            document.getElementById('report-progress-percent').textContent = percent + '%';
+            document.getElementById('report-progress-bar').style.width = percent + '%';
+            document.getElementById('report-loading-status').textContent = status;
+        }
+
+        function displayAllReports(reportsData, selectedAgencies) {
+            document.getElementById('loading-reports').classList.add('hidden');
+            document.getElementById('step3-reports').classList.remove('hidden');
+            document.getElementById('report-date').textContent = `Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            document.getElementById('selected-agencies-summary').textContent = `${selectedAgencies.length} agencies selected`;
+
+            const container = document.getElementById('all-reports-container');
+            container.innerHTML = generateAllReportsHTML(reportsData);
+        }
+
+        function generateAllReportsHTML(reportsData) {
+            const reportTypes = [
+                { key: 'governmentBuyers', title: '👥 Government Buyers Report', icon: '👥' },
+                { key: 'tier2', title: '🔗 Tier 2 Subcontracting Report', icon: '🔗' },
+                { key: 'forecast', title: '📅 Forecast List Report', icon: '📅' },
+                { key: 'agencyNeeds', title: '🎯 Agency Needs Report', icon: '🎯' },
+                { key: 'painPoints', title: '💡 Agency Pain Points Report', icon: '💡' },
+                { key: 'decemberSpend', title: '💰 December Spend Forecast', icon: '💰' },
+                { key: 'tribes', title: '🏛️ Tribal Contracting Report', icon: '🏛️' },
+                { key: 'primes', title: '⭐ Prime Contractor Report', icon: '⭐' }
+            ];
+
+            return reportTypes.map((type, index) => {
+                const report = reportsData[type.key];
+                if (!report) return '';
+
+                return `
+                    <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-linkedin-blue mb-8">
+                        <h2 class="text-3xl font-bold text-linkedin-blue mb-6">${type.title}</h2>
+                        <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                            <p class="text-lg text-gray-800">${report.executiveSummary || ''}</p>
+                        </div>
+                        ${report.reportHTML || generateReportHTMLByType(type.key, report)}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function generateReportHTMLByType(type, data) {
+            switch(type) {
+                case 'governmentBuyers':
+                    return generateGovernmentBuyersHTML(data);
+                case 'tier2':
+                    return generateTier2HTML(data);
+                case 'forecast':
+                    return generateForecastHTML(data);
+                case 'agencyNeeds':
+                    return generateAgencyNeedsHTML(data);
+                case 'painPoints':
+                    return generatePainPointsHTML(data);
+                case 'decemberSpend':
+                    return generateDecemberSpendHTML(data);
+                case 'tribes':
+                    return generateTribesHTML(data);
+                case 'primes':
+                    return generatePrimesHTML(data);
+                default:
+                    return `<div class="report-content"><p>${data.executiveSummary || 'Report content'}</p></div>`;
+            }
+        }
+
+        function generateGovernmentBuyersHTML(data) {
+            const offices = data.contractingOffices || [];
+            return `
+                <section class="border-b-2 border-gray-200 pb-8">
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Contracting Offices & Decision Makers</h3>
+                    <div class="space-y-4">
+                        ${offices.map((office, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">${index + 1}. ${office.officeName}</h4>
+                                        <p class="text-gray-600">${office.parentAgency || ''}</p>
+                                        <p class="text-sm text-gray-500 mt-1">📍 ${office.location || 'Location not specified'}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(office.setAsideSpending)}</div>
+                                        <div class="text-sm text-gray-600">${office.contractCount} contracts</div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <div class="font-semibold text-gray-900">Office ID</div>
+                                        <div class="text-linkedin-blue">${office.officeId}</div>
+                                    </div>
+                                    <div>
+                                        <a href="${office.samGovUrl}" target="_blank" class="text-linkedin-blue hover:underline font-semibold">View on SAM.gov →</a>
+                                    </div>
+                                </div>
+                                <div class="mt-4 bg-blue-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-700"><strong>Contact Strategy:</strong> ${office.contactStrategy}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+                ${data.recommendations ? `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Recommendations</h3>
+                    ${data.recommendations.map((rec, index) => `
+                        <div class="bg-purple-50 border-l-4 border-purple-500 rounded-lg p-6 mb-4">
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">${rec.title}</h4>
+                            <p class="text-gray-700 mb-3">${rec.description}</p>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                ${rec.actionItems.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </section>
+                ` : ''}
+            `;
+        }
+
+        function generateTier2HTML(data) {
+            return data.reportHTML || `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Suggested Prime Contractors</h3>
+                    <div class="space-y-4">
+                        ${(data.suggestedPrimes || []).map((prime, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${prime.name}</h4>
+                                <p class="text-gray-700 mb-4">${prime.description}</p>
+                                <div class="mb-4">
+                                    <div class="font-semibold text-gray-900 mb-2">Opportunities:</div>
+                                    <p class="text-gray-700">${prime.opportunities}</p>
+                                </div>
+                                <div class="bg-blue-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-700"><strong>Contact Strategy:</strong> ${prime.contactStrategy}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generateForecastHTML(data) {
+            return `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Forecasted Opportunities</h3>
+                    <div class="space-y-4">
+                        ${(data.forecastedOpportunities || []).map((opp, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">${index + 1}. ${opp.agency}</h4>
+                                        <p class="text-gray-600">${opp.parentAgency}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(opp.estimatedValue)}</div>
+                                        <div class="text-sm text-gray-600">Est. Value</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generateAgencyNeedsHTML(data) {
+            return `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Agency Needs & Requirements</h3>
+                    <div class="space-y-4">
+                        ${(data.agencyNeeds || []).map((agency, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">${index + 1}. ${agency.name}</h4>
+                                        <p class="text-gray-600">${agency.parentAgency}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(agency.setAsideSpending)}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h5 class="font-semibold text-gray-900 mb-2">Key Needs:</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                        ${(agency.needs || []).map(need => `<li>${need}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generatePainPointsHTML(data) {
+            return `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Agencies & Pain Points</h3>
+                    <div class="space-y-4">
+                        ${(data.agenciesWithPainPoints || []).map((agency, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">${index + 1}. ${agency.name}</h4>
+                                        <p class="text-gray-600">${agency.parentAgency}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(agency.setAsideSpending)}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h5 class="font-semibold text-gray-900 mb-2">Pain Points:</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                        ${(agency.painPoints || []).map(pp => `<li>${pp}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="mt-4 bg-green-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-700"><strong>Opportunity Match:</strong> ${agency.opportunityMatch}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generateDecemberSpendHTML(data) {
+            return `
+                <section>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-yellow-800 font-semibold">⚠️ High Urgency: Agencies must spend allocated budgets by September 30th</p>
+                    </div>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Q4 Spending Opportunities</h3>
+                    <div class="space-y-4">
+                        ${(data.q4Opportunities || []).map((opp, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">${index + 1}. ${opp.agency}</h4>
+                                        <p class="text-gray-600">${opp.parentAgency}</p>
+                                        <span class="inline-block mt-2 bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">${opp.urgency}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-600">$${formatCurrency(opp.estimatedQ4Spending)}</div>
+                                        <div class="text-sm text-gray-600">Est. Q4 Spending</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generateTribesHTML(data) {
+            return data.reportHTML || `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Tribal Contracting Opportunities</h3>
+                    <div class="space-y-4">
+                        ${(data.tribalOpportunities || []).map((opp, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${opp.agency}</h4>
+                                <p class="text-gray-600 mb-4">${opp.parentAgency}</p>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-green-600">$${formatCurrency(opp.setAsideSpending)}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function generatePrimesHTML(data) {
+            return data.reportHTML || `
+                <section>
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Suggested Prime Contractors</h3>
+                    <div class="space-y-4">
+                        ${(data.primeContractors || []).map((prime, index) => `
+                            <div class="border-2 border-gray-200 rounded-lg p-6">
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${prime.name}</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <div class="font-semibold text-gray-900 mb-2">Opportunities</div>
+                                        <p class="text-gray-700">${prime.opportunities}</p>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900 mb-2">Small Business Subcontracting</div>
+                                        <p class="text-gray-700">${prime.smallBusinessSubcontracting}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+                ${data.otherAgenciesToConsider && data.otherAgenciesToConsider.length > 0 ? `
+                <section class="mt-8">
+                    <h3 class="text-2xl font-bold text-linkedin-blue mb-4">Other Agencies to Consider (Based on Pain Points)</h3>
+                    <div class="space-y-4">
+                        ${data.otherAgenciesToConsider.map((agency, index) => `
+                            <div class="bg-purple-50 border-l-4 border-purple-500 rounded-lg p-6">
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">${index + 1}. ${agency.name}</h4>
+                                <p class="text-gray-700 mb-4">${agency.reason}</p>
+                                <div class="mt-4">
+                                    <div class="font-semibold text-gray-900 mb-2">Key Pain Points:</div>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                        ${(agency.painPoints || []).map(pp => `<li>${pp}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+                ` : ''}
+            `;
+        }
+
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return (amount / 1000000).toFixed(2) + 'M';
+            } else if (amount >= 1000) {
+                return (amount / 1000).toFixed(2) + 'K';
+            }
+            return amount.toLocaleString();
+        }
+
+        function showError(message) {
+            document.getElementById('loading-agencies').classList.add('hidden');
+            document.getElementById('loading-reports').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').textContent = message;
+        }
+
+        function exportAllReports() {
+            if (!allReportsData || Object.keys(allReportsData).length === 0) return;
+            
+            const dataStr = JSON.stringify(allReportsData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `comprehensive-market-reports-${Date.now()}.json`;
+            link.click();
+        }
+    </script>
+</body>
+</html>

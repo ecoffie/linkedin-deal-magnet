@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-12-22T11:57:43.127Z",
+  "summary": {
+    "totalAgencies": 80,
+    "criticalIssues": 0,
+    "highIssues": 0,
+    "mediumIssues": 2,
+    "warnings": 0
+  },
+  "issues": [
+    {
+      "type": "orphaned_file",
+      "severity": "medium",
+      "file": "air-force.json",
+      "message": "File exists but not in index.json: air-force.json"
+    },
+    {
+      "type": "orphaned_file",
+      "severity": "medium",
+      "file": "army.json",
+      "message": "File exists but not in index.json: army.json"
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,1316 @@
+{
+  "metadata": {
+    "source": "FY2025 NDAA Gap Analysis",
+    "totalAgencies": 20,
+    "missingAgencies": 20,
+    "totalFunding": 105000000000,
+    "lastUpdated": "2025-12-22T11:03:41.476Z"
+  },
+  "agencies": [
+    {
+      "name": "Defense Logistics Agency (DLA)",
+      "budget": "$46.9 billion",
+      "budgetAmount": 46900000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Largest DoD logistics agency",
+        "Manages supply chain for military worldwide",
+        "25,000+ employees",
+        "9 major supply chains (fuel, food, medical, clothing, etc.)"
+      ],
+      "contractingFocus": [
+        "Supply chain management systems",
+        "Distribution center modernization",
+        "Inventory management software",
+        "Warehouse automation",
+        "Fuel distribution infrastructure",
+        "Medical supply logistics",
+        "Food service contracts"
+      ],
+      "painPoints": [
+        {
+          "point": "Aging distribution centers - $2B+ backlog",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Supply chain visibility - real-time tracking systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Inventory optimization - AI/ML for demand forecasting",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Cybersecurity for logistics networks",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Vendor management systems modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Energy efficiency in fuel operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        },
+        {
+          "point": "Cold chain management for medical supplies",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$46.9 billion"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Missile Defense Agency (MDA)",
+      "budget": "$13.7 billion",
+      "budgetAmount": 13700000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Develops/tests/fields integrated ballistic missile defense system",
+        "High-tech R&D contracts",
+        "Advanced sensor and interceptor programs"
+      ],
+      "contractingFocus": [
+        "Ballistic missile defense systems",
+        "Radar and sensor development",
+        "Interceptor technology",
+        "Command and control systems",
+        "Testing and evaluation",
+        "Space-based sensors",
+        "Hypersonic defense"
+      ],
+      "painPoints": [
+        {
+          "point": "Hypersonic threat detection - new sensor requirements",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Space-based early warning systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Integrated air and missile defense",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Multi-domain command and control",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Test infrastructure modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Next-generation interceptor development",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        },
+        {
+          "point": "Cybersecurity for missile defense networks",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$13.7 billion"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Defense Information Systems Agency (DISA)",
+      "budget": "$2.1 billion",
+      "budgetAmount": 2100000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Provides IT and communications support to President, SecDef, Joint Staff, combatant commands",
+        "Manages classified networks",
+        "Critical infrastructure provider"
+      ],
+      "contractingFocus": [
+        "Network infrastructure and cybersecurity",
+        "Cloud services (milCloud 2.0)",
+        "Satellite communications",
+        "Command and control systems",
+        "Zero trust architecture",
+        "Joint Regional Security Stacks (JRSS)",
+        "Defense Information Systems Network (DISN)"
+      ],
+      "painPoints": [
+        {
+          "point": "Zero trust architecture implementation",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "Cloud migration for classified systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "Network modernization - DISN upgrade",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "Cybersecurity operations center (CSOC) modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "5G integration for military bases",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "Identity and access management (ICAM)",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        },
+        {
+          "point": "Quantum-resistant encryption",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1 billion"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Defense Contract Management Agency (DCMA)",
+      "budget": "~$1.3 billion (estimated)",
+      "budgetAmount": 1300000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Manages 300,000+ contracts worth $4+ trillion",
+        "11,000+ employees",
+        "Oversight of major defense contractors",
+        "Quality assurance for critical systems"
+      ],
+      "contractingFocus": [
+        "Contract administration systems",
+        "Quality assurance tools",
+        "Supplier performance tracking",
+        "Cybersecurity compliance monitoring",
+        "Data analytics for contract oversight",
+        "Risk management systems"
+      ],
+      "painPoints": [
+        {
+          "point": "Contract administration system modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Supplier cybersecurity compliance monitoring",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Cost and schedule performance analytics",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Quality assurance automation",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Contractor business systems oversight",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Supply chain risk management",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        },
+        {
+          "point": "Earned value management system (EVMS) tools",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$1.3 billion (estimated)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Defense Contract Audit Agency (DCAA)",
+      "budget": "~$700 million (estimated)",
+      "budgetAmount": 700000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Audits $4+ trillion in contracts annually",
+        "4,500+ auditors",
+        "Ensures contractor compliance",
+        "Cost/pricing data validation"
+      ],
+      "contractingFocus": [
+        "Audit automation tools",
+        "Data analytics platforms",
+        "Fraud detection systems",
+        "Contract pricing analysis",
+        "Cybersecurity for audit systems",
+        "Document management"
+      ],
+      "painPoints": [
+        {
+          "point": "Audit automation and AI integration",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Contractor accounting system access",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Data analytics for fraud detection",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Cybersecurity for sensitive contractor data",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Workforce modernization - remote auditing capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Risk-based audit selection",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        },
+        {
+          "point": "Incurred cost audit backlog reduction",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$700 million (estimated)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Defense Advanced Research Projects Agency (DARPA)",
+      "budget": "~$4.1 billion",
+      "budgetAmount": 4099999999.9999995,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Breakthrough technology R&D",
+        "High-risk, high-reward programs",
+        "First adopter of emerging tech",
+        "Rapid prototyping authority"
+      ],
+      "contractingFocus": [
+        "Advanced R&D contracts",
+        "Prototype development",
+        "Emerging technology assessment",
+        "AI and autonomous systems",
+        "Quantum computing",
+        "Hypersonics",
+        "Biotechnology"
+      ],
+      "painPoints": [
+        {
+          "point": "Rapid prototyping acquisition authorities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "Emerging technology transition to services",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "AI/ML for defense applications",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "Quantum computing research",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "Hypersonic weapons development",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "Biotechnology and human performance",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        },
+        {
+          "point": "Trusted supplier base for critical tech",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4.1 billion"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Special Operations Command (USSOCOM/SOCOM)",
+      "budget": "$2.1+ billion (O&M alone)",
+      "budgetAmount": null,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Oversees all special operations forces",
+        "70,000+ personnel",
+        "Unique acquisition authority (MFP-11)",
+        "Rapid acquisition for SOF-peculiar equipment"
+      ],
+      "contractingFocus": [
+        "Special operations-peculiar equipment",
+        "Intelligence systems",
+        "Unmanned systems",
+        "Night vision and sensors",
+        "Communications equipment",
+        "Tactical vehicles",
+        "Training and simulation"
+      ],
+      "painPoints": [
+        {
+          "point": "Rapid acquisition for urgent SOF needs",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Counter-terrorism technology",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Unmanned systems for special operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Advanced communications in denied environments",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Intelligence, surveillance, reconnaissance (ISR) systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Combat support and service support",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        },
+        {
+          "point": "Training and simulation for complex environments",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.1+ billion (O&M alone)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Cyber Command (USCYBERCOM)",
+      "budget": "$2.7+ billion total",
+      "budgetAmount": null,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Unified combatant command for cyberspace operations",
+        "Defends DoD networks",
+        "Conducts offensive cyber operations",
+        "Integrated with NSA"
+      ],
+      "contractingFocus": [
+        "Offensive cyber capabilities",
+        "Defensive cyber tools",
+        "Threat intelligence platforms",
+        "Cyber workforce training",
+        "Network security operations",
+        "Malware analysis",
+        "Hunt forward operations support"
+      ],
+      "painPoints": [
+        {
+          "point": "Offensive cyber weapons development",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Defensive cyber operations center (DCOC) tools",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Threat intelligence sharing platforms",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Cyber workforce development and training",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Hunt forward capability expansion",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Zero trust for tactical networks",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        },
+        {
+          "point": "Quantum-resistant cryptography",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "$2.7+ billion total"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Transportation Command (USTRANSCOM)",
+      "budget": "~$500 million+ (O&M)",
+      "budgetAmount": 500000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Global military transportation",
+        "Air, land, sea logistics",
+        "Commercial transportation partnerships",
+        "Critical for force projection"
+      ],
+      "contractingFocus": [
+        "Transportation management systems",
+        "Cargo tracking and visibility",
+        "Airlift services (CRAF - Civil Reserve Air Fleet)",
+        "Sealift services (MSC - Military Sealift Command)",
+        "Port operations",
+        "Distribution planning tools"
+      ],
+      "painPoints": [
+        {
+          "point": "Global transportation visibility systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "AI-driven logistics optimization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Commercial airlift and sealift partnerships",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Port infrastructure modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Automated cargo handling",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Real-time asset tracking",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Predictive maintenance for transportation assets",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Strategic Command (USSTRATCOM)",
+      "budget": "~$400 million+ (O&M)",
+      "budgetAmount": 400000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Nuclear deterrence operations",
+        "Space operations",
+        "Cyberspace operations",
+        "Missile defense",
+        "Strategic intelligence"
+      ],
+      "contractingFocus": [
+        "Nuclear command and control systems",
+        "Space situational awareness",
+        "Strategic communications",
+        "Early warning systems",
+        "Threat assessment systems",
+        "Decision support tools"
+      ],
+      "painPoints": [
+        {
+          "point": "Nuclear command, control, and communications (NC3) modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Space situational awareness systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Integrated threat warning and attack assessment",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Strategic deterrence analysis tools",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Cyber-nuclear integration",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Next-generation strategic communications",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        },
+        {
+          "point": "Decision support for strategic operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$400 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Indo-Pacific Command (USINDOPACOM)",
+      "budget": "~$11 billion (Pacific Deterrence Initiative)",
+      "budgetAmount": 11000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Largest geographic combatant command",
+        "China focus",
+        "Infrastructure investments",
+        "Regional partnerships"
+      ],
+      "contractingFocus": [
+        "Infrastructure construction (Guam, Pacific islands)",
+        "Fuel and logistics pre-positioning",
+        "Port and airfield improvements",
+        "Communications infrastructure",
+        "Intelligence systems",
+        "Regional training facilities"
+      ],
+      "painPoints": [
+        {
+          "point": "Pacific posture infrastructure (Guam, Tinian, Palau)",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Fuel and munitions pre-positioning",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Distributed operations capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Regional communication networks",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Port and airfield resilience",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Allied interoperability systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        },
+        {
+          "point": "Long-range precision fires infrastructure",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$11 billion (Pacific Deterrence Initiative)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. European Command (USEUCOM)",
+      "budget": "~$4 billion (European Deterrence Initiative)",
+      "budgetAmount": 4000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Russia deterrence",
+        "NATO interoperability",
+        "European infrastructure",
+        "Ukraine support coordination"
+      ],
+      "contractingFocus": [
+        "Infrastructure improvements in Eastern Europe",
+        "Pre-positioned stocks",
+        "Training facilities",
+        "Communications systems",
+        "Intelligence sharing systems",
+        "Allied interoperability"
+      ],
+      "painPoints": [
+        {
+          "point": "European infrastructure resilience",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "Pre-positioned equipment maintenance",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "NATO interoperability systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "Rapid reinforcement capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "Strategic mobility infrastructure",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "Allied intelligence sharing platforms",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        },
+        {
+          "point": "Training facility modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$4 billion (European Deterrence Initiative)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Central Command (USCENTCOM)",
+      "budget": "~$2 billion+ (O&M)",
+      "budgetAmount": 2000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Middle East operations",
+        "Counter-terrorism",
+        "Regional partnerships",
+        "Iran deterrence"
+      ],
+      "contractingFocus": [
+        "Base operations support in Middle East",
+        "Intelligence systems",
+        "Counter-terrorism technology",
+        "Partner nation training",
+        "Logistics support",
+        "Force protection"
+      ],
+      "painPoints": [
+        {
+          "point": "Integrated air and missile defense for Middle East bases",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Counter-UAS (unmanned aerial systems) capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Partner nation training and equipping",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Intelligence fusion for counter-terrorism",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Base security and force protection",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Logistics support in contested areas",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        },
+        {
+          "point": "Regional cybersecurity operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Africa Command (USAFRICOM)",
+      "budget": "~$300 million+ (O&M)",
+      "budgetAmount": 300000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Counter-terrorism in Africa",
+        "Partner capacity building",
+        "China/Russia competition",
+        "Humanitarian assistance"
+      ],
+      "contractingFocus": [
+        "Training and advisory support",
+        "Intelligence and surveillance",
+        "Logistics and infrastructure",
+        "Communications systems",
+        "Medical support",
+        "Security cooperation programs"
+      ],
+      "painPoints": [
+        {
+          "point": "Partner nation capacity building programs",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Counter-terrorism and counter-VEO operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Intelligence, surveillance, reconnaissance (ISR) for vast areas",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Logistics support to remote locations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Medical and humanitarian assistance capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Security cooperation program management",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Communications infrastructure in denied areas",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Southern Command (USSOUTHCOM)",
+      "budget": "~$200 million+ (O&M)",
+      "budgetAmount": 200000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Counter-narcotics operations",
+        "Humanitarian assistance",
+        "Partner nation engagement",
+        "China influence in Latin America"
+      ],
+      "contractingFocus": [
+        "Counter-narcotics systems",
+        "Partner nation training",
+        "Humanitarian assistance/disaster relief (HA/DR)",
+        "Intelligence systems",
+        "Maritime domain awareness",
+        "Security cooperation programs"
+      ],
+      "painPoints": [
+        {
+          "point": "Counter-narcotics detection and monitoring",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "Maritime domain awareness in Caribbean and Latin America",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "Partner nation security cooperation",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "Humanitarian assistance/disaster relief capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "China influence counter-operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "Transnational threat networks disruption",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        },
+        {
+          "point": "Regional intelligence sharing",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$200 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Northern Command (USNORTHCOM)",
+      "budget": "~$300 million+ (O&M)",
+      "budgetAmount": 300000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Homeland defense",
+        "Defense support of civil authorities (DSCA)",
+        "North American Aerospace Defense Command (NORAD)",
+        "COVID-19 response coordination"
+      ],
+      "contractingFocus": [
+        "Homeland defense systems",
+        "Disaster response capabilities",
+        "Aerospace surveillance",
+        "Maritime domain awareness",
+        "CBRN (chemical, biological, radiological, nuclear) response",
+        "Arctic operations support"
+      ],
+      "painPoints": [
+        {
+          "point": "Homeland defense and NORAD modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Defense support to civil authorities (DSCA) capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Arctic domain awareness and operations",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Ballistic missile defense for homeland",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "CBRN response and recovery",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Cybersecurity for critical infrastructure",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        },
+        {
+          "point": "Mass casualty and disaster response",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$300 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "U.S. Space Command (USSPACECOM)",
+      "budget": "~$500 million+ (O&M)",
+      "budgetAmount": 500000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Space operations command and control",
+        "Space domain awareness",
+        "Satellite operations protection",
+        "Counter-space operations"
+      ],
+      "contractingFocus": [
+        "Space situational awareness systems",
+        "Satellite command and control",
+        "Space domain characterization",
+        "Threat warning and assessment",
+        "Counter-space capabilities",
+        "Positioning, navigation, timing (PNT) backup"
+      ],
+      "painPoints": [
+        {
+          "point": "Space domain awareness and tracking",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Satellite protection and resilience",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Counter-space operations capabilities",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Space traffic management",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Proliferated low-Earth orbit (LEO) architecture",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "Alternative PNT for GPS-denied environments",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        },
+        {
+          "point": "On-orbit servicing and logistics",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$500 million+ (O&M)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "National Geospatial-Intelligence Agency (NGA)",
+      "budget": "~$2 billion+",
+      "budgetAmount": 2000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Geospatial intelligence for DoD and Intelligence Community",
+        "Mapping and imagery analysis",
+        "Navigation support",
+        "Combat support"
+      ],
+      "contractingFocus": [
+        "Satellite imagery processing",
+        "Geospatial analytics platforms",
+        "AI/ML for imagery analysis",
+        "Map production systems",
+        "Commercial imagery acquisition",
+        "Cloud-based GEOINT systems"
+      ],
+      "painPoints": [
+        {
+          "point": "Commercial satellite imagery integration",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "AI/ML for automated feature extraction",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "Cloud-based geospatial analytics",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "Multi-INT fusion (geospatial + other intelligence)",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "Real-time imagery processing",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "Open-source geospatial intelligence",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        },
+        {
+          "point": "Geospatial data management at scale",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$2 billion+"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "National Security Agency (NSA)",
+      "budget": "~$10 billion+ (estimated, classified)",
+      "budgetAmount": 10000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Signals intelligence",
+        "Information assurance for national security systems",
+        "Cybersecurity for DoD",
+        "Dual-hatted with CYBERCOM"
+      ],
+      "contractingFocus": [
+        "Signals intelligence collection systems",
+        "Cryptographic equipment",
+        "Cybersecurity tools",
+        "Data analytics platforms",
+        "High-performance computing",
+        "Information assurance systems"
+      ],
+      "painPoints": [
+        {
+          "point": "Signals intelligence modernization",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "Cybersecurity for classified networks",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "Quantum computing and cryptography",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "AI/ML for intelligence analysis",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "High-performance computing for code-breaking",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "Secure communications systems",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        },
+        {
+          "point": "Supply chain risk management for critical tech",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$10 billion+ (estimated, classified)"
+        }
+      ],
+      "inDatabase": false
+    },
+    {
+      "name": "Defense Intelligence Agency (DIA)",
+      "budget": "~$5 billion+",
+      "budgetAmount": 5000000000,
+      "status": "❌ NOT IN DATABASE",
+      "whyItMatters": [
+        "Military intelligence for DoD",
+        "Defense attachés worldwide",
+        "Foreign military capabilities assessment",
+        "Technical intelligence"
+      ],
+      "contractingFocus": [
+        "Intelligence analysis platforms",
+        "All-source intelligence fusion",
+        "Technical intelligence systems",
+        "HUMINT support systems",
+        "Counterintelligence tools",
+        "Data analytics and visualization"
+      ],
+      "painPoints": [
+        {
+          "point": "All-source intelligence fusion platforms",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "AI/ML for intelligence analysis",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "Open-source intelligence (OSINT) tools",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "Foreign military capabilities assessment",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "Technical intelligence collection and analysis",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "Counterintelligence and insider threat detection",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        },
+        {
+          "point": "Intelligence data management and sharing",
+          "source": "FY2025 NDAA",
+          "priority": "high",
+          "funding": "~$5 billion+"
+        }
+      ],
+      "inDatabase": false
+    }
+  ]
+}
