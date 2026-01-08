@@ -37,68 +37,180 @@
                         Target Agencies <span class="text-red-500">*</span>
                     </label>
                     <p class="text-sm text-gray-600 mb-3">Which agencies do you want to create content about?</p>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="Department of Defense" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">DoD</span>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="Department of Veterans Affairs" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">VA</span>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="Department of Homeland Security" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">DHS</span>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="USACE" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">USACE</span>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="GSA" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">GSA</span>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                            <input type="checkbox" name="agencies" value="NASA" class="w-5 h-5 text-linkedin-blue">
-                            <span class="font-medium text-sm">NASA</span>
-                        </label>
-                    </div>
-                </div>
 
-                <!-- Post Templates -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Post Styles <span class="text-red-500">*</span>
-                    </label>
-                    <p class="text-sm text-gray-600 mb-3">Select the content structures you want to generate (choose 1-15)</p>
-
-                    <!-- Quick Tips -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <p class="text-sm font-semibold text-blue-900 mb-2">💡 Quick Selection Guide:</p>
-                        <div class="text-xs text-blue-800 space-y-1">
-                            <p><strong>For Engagement:</strong> Actionable, Observation, X vs Y, Contrarian Opinion</p>
-                            <p><strong>For Authority:</strong> Analytical, Data-Driven, Thought Leadership, Present vs Future</p>
-                            <p><strong>For Connection:</strong> Motivational Story, Story-Driven, Case Study</p>
-                            <p><strong>For Value:</strong> Actionable How-To, List/Tips, Question-Based</p>
+                    <!-- Your Agencies (from onboarding/Opportunity Scout) -->
+                    <div id="your-agencies-section" class="hidden mb-4">
+                        <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-3">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm font-semibold text-green-800">Your Target Agencies (from your profile)</p>
+                                <a href="/target-market-report.html" class="text-xs text-green-700 hover:text-green-900 underline">Change agencies</a>
+                            </div>
+                            <div id="your-agencies-container" class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                <!-- User's agencies will be loaded here -->
+                            </div>
                         </div>
                     </div>
 
-                    <div id="templates-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <!-- Templates will be loaded here -->
+                    <!-- All Agencies - Collapsible by Category -->
+                    <div class="border-2 border-gray-200 rounded-xl overflow-hidden">
+                        <!-- Navy -->
+                        <div class="border-b border-gray-200">
+                            <button type="button" onclick="toggleAgencySection('navy')" class="w-full flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 transition">
+                                <span class="font-semibold text-blue-900">Navy & Naval Commands</span>
+                                <svg id="navy-arrow" class="w-5 h-5 text-blue-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="navy-agencies" class="hidden p-3 bg-white">
+                                <div id="navy-agencies-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Army -->
+                        <div class="border-b border-gray-200">
+                            <button type="button" onclick="toggleAgencySection('army')" class="w-full flex items-center justify-between p-3 bg-green-50 hover:bg-green-100 transition">
+                                <span class="font-semibold text-green-900">Army Commands</span>
+                                <svg id="army-arrow" class="w-5 h-5 text-green-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="army-agencies" class="hidden p-3 bg-white">
+                                <div id="army-agencies-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Air Force -->
+                        <div class="border-b border-gray-200">
+                            <button type="button" onclick="toggleAgencySection('airForce')" class="w-full flex items-center justify-between p-3 bg-sky-50 hover:bg-sky-100 transition">
+                                <span class="font-semibold text-sky-900">Air Force Commands</span>
+                                <svg id="airForce-arrow" class="w-5 h-5 text-sky-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="airForce-agencies" class="hidden p-3 bg-white">
+                                <div id="airForce-agencies-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- DoD-Wide -->
+                        <div class="border-b border-gray-200">
+                            <button type="button" onclick="toggleAgencySection('dodWide')" class="w-full flex items-center justify-between p-3 bg-purple-50 hover:bg-purple-100 transition">
+                                <span class="font-semibold text-purple-900">DoD-Wide Agencies (DLA, DISA, DARPA...)</span>
+                                <svg id="dodWide-arrow" class="w-5 h-5 text-purple-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="dodWide-agencies" class="hidden p-3 bg-white">
+                                <div id="dodWide-agencies-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Civilian Agencies -->
+                        <div>
+                            <button type="button" onclick="toggleAgencySection('civilian')" class="w-full flex items-center justify-between p-3 bg-orange-50 hover:bg-orange-100 transition">
+                                <span class="font-semibold text-orange-900">Civilian Agencies (VA, GSA, NASA, HHS...)</span>
+                                <svg id="civilian-arrow" class="w-5 h-5 text-orange-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="civilian-agencies" class="hidden p-3 bg-white">
+                                <div id="civilian-agencies-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-gray-500 mt-2" id="agency-count">Click a section to expand and see all agencies</p>
+                </div>
+
+                <!-- Hidden num-posts for form consistency -->
+                <input type="hidden" id="num-posts" value="10">
+
+                <!-- Advanced Options (Collapsed by default) -->
+                <div class="border border-gray-200 rounded-lg">
+                    <button type="button" onclick="toggleAdvancedOptions()" class="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition">
+                        <span class="text-sm font-medium text-gray-600">Advanced Options</span>
+                        <svg id="advanced-arrow" class="w-4 h-4 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div id="advanced-options" class="hidden border-t border-gray-200 p-4 space-y-4">
+                        <p class="text-xs text-gray-500">Customize which content styles to use (optional - we'll pick great defaults if you skip this)</p>
+                        <div id="templates-container" class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <!-- Templates will be loaded here -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Number of Posts -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Number of Posts
-                    </label>
-                    <select id="num-posts" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
-                        <option value="3">3 posts (recommended)</option>
-                        <option value="5">5 posts</option>
-                        <option value="7">7 posts</option>
-                    </select>
-                    <p class="text-sm text-gray-500 mt-2">💡 Tip: If you select more posts than templates, we'll create variations using your selected styles.</p>
+                <!-- Company Profile Section -->
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-900 text-lg">Your Company Profile</h3>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="resetCompanyProfile()" class="text-xs bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded-full transition flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                Reset
+                            </button>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Personalizes your posts</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Add your company details to make posts unique to your business</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Company Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                            <input type="text" id="company-name" placeholder="e.g., Apex Federal Solutions"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Your Role -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Your Role/Title</label>
+                            <input type="text" id="user-role" placeholder="e.g., CEO, BD Director, Capture Manager"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Core Services -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Core Services/Capabilities</label>
+                            <textarea id="core-services" rows="2" placeholder="e.g., IT modernization, cybersecurity, cloud migration, AI/ML solutions"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+
+                        <!-- Differentiators -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">What Makes You Different?</label>
+                            <textarea id="differentiators" rows="2" placeholder="e.g., 15 years DoD experience, cleared staff, agile methodology, mission-focused approach"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+
+                        <!-- Certifications -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Certifications</label>
+                            <input type="text" id="certifications" placeholder="e.g., 8(a), SDVOSB, HUBZone, ISO 27001"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Contract Vehicles -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Contract Vehicles</label>
+                            <input type="text" id="contract-vehicles" placeholder="e.g., GSA MAS, SEWP V, CIO-SP3"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Past Performance Highlight -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Notable Past Performance (optional)</label>
+                            <textarea id="past-performance" rows="2" placeholder="e.g., Supported Navy's IT modernization saving $2M annually, Delivered Army cybersecurity solution 3 months ahead of schedule"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Save Profile Toggle -->
+                    <div class="mt-4 flex items-center gap-2">
+                        <input type="checkbox" id="save-profile" checked class="w-4 h-4 text-blue-600">
+                        <label for="save-profile" class="text-sm text-gray-600">Remember my profile for next time</label>
+                    </div>
                 </div>
 
                 <!-- GEO Boost Toggle -->
@@ -117,10 +229,30 @@
                     </div>
                 </div>
 
+                <!-- AI Model Selection -->
+                <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6">
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" id="use-fine-tuned" checked class="mt-1 w-5 h-5 text-green-600">
+                        <div>
+                            <label for="use-fine-tuned" class="font-semibold text-gray-900 cursor-pointer">
+                                Use GovCon-Tuned AI Model
+                            </label>
+                            <p class="text-sm text-gray-600 mt-1">
+                                Use our custom fine-tuned model trained specifically on high-performing government contracting LinkedIn content.
+                                This model writes in the authentic voice of successful GovCon thought leaders.
+                            </p>
+                            <p class="text-xs text-green-700 mt-2 font-medium">
+                                Trained on 146 viral GovCon posts for authentic, engaging content
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Generate Button -->
                 <button onclick="generateContent()" class="w-full bg-gradient-to-r from-linkedin-blue to-purple-600 hover:from-linkedin-dark hover:to-purple-700 text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                    Generate LinkedIn Posts
+                    Generate 10 LinkedIn Posts
                 </button>
+                <p class="text-center text-sm text-gray-500 mt-2">Get a diverse mix of content styles tailored to your target agencies</p>
             </div>
         </div>
 
@@ -168,14 +300,179 @@
                 userData = JSON.parse(userDataStr);
                 console.log('✅ Loaded user data:', userData);
             } else {
-                alert('Please complete onboarding first to use the Content Generator');
-                window.location.href = '/onboarding';
-                return;
+                // Create default user data for guests
+                userData = {
+                    userId: 'guest_' + Date.now(),
+                    linkedinData: { name: 'Guest User', email: '' },
+                    company: { naicsCodes: [], certifications: [], pastAgencies: [] }
+                };
+                console.log('ℹ️ Using guest mode');
             }
 
-            // Load available templates
+            // Load saved company profile from localStorage
+            loadCompanyProfile();
+
+            // Load available templates and agencies
             await loadTemplates();
+            await loadAgencies();
         });
+
+        // Load company profile from localStorage
+        function loadCompanyProfile() {
+            const savedProfile = localStorage.getItem('company_profile');
+            if (savedProfile) {
+                const profile = JSON.parse(savedProfile);
+                document.getElementById('company-name').value = profile.companyName || '';
+                document.getElementById('user-role').value = profile.userRole || '';
+                document.getElementById('core-services').value = profile.coreServices || '';
+                document.getElementById('differentiators').value = profile.differentiators || '';
+                document.getElementById('certifications').value = profile.certifications || '';
+                document.getElementById('contract-vehicles').value = profile.contractVehicles || '';
+                document.getElementById('past-performance').value = profile.pastPerformance || '';
+                console.log('✅ Loaded saved company profile');
+            }
+        }
+
+        // Save company profile to localStorage
+        function saveCompanyProfile() {
+            const profile = getCompanyProfile();
+            localStorage.setItem('company_profile', JSON.stringify(profile));
+            console.log('✅ Saved company profile');
+        }
+
+        // Reset company profile - clear form and localStorage
+        function resetCompanyProfile() {
+            if (confirm('Are you sure you want to clear your company profile? This will remove all saved information.')) {
+                // Clear localStorage
+                localStorage.removeItem('company_profile');
+
+                // Clear all form fields
+                document.getElementById('company-name').value = '';
+                document.getElementById('user-role').value = '';
+                document.getElementById('core-services').value = '';
+                document.getElementById('differentiators').value = '';
+                document.getElementById('certifications').value = '';
+                document.getElementById('contract-vehicles').value = '';
+                document.getElementById('past-performance').value = '';
+
+                console.log('✅ Company profile reset');
+            }
+        }
+
+        // Get company profile from form fields
+        function getCompanyProfile() {
+            return {
+                companyName: document.getElementById('company-name').value.trim(),
+                userRole: document.getElementById('user-role').value.trim(),
+                coreServices: document.getElementById('core-services').value.trim(),
+                differentiators: document.getElementById('differentiators').value.trim(),
+                certifications: document.getElementById('certifications').value.trim(),
+                contractVehicles: document.getElementById('contract-vehicles').value.trim(),
+                pastPerformance: document.getElementById('past-performance').value.trim()
+            };
+        }
+
+        // Store all agencies for reference
+        let allAgencies = { navy: [], army: [], airForce: [], dodWide: [], civilian: [] };
+        let totalAgencyCount = 0;
+
+        async function loadAgencies() {
+            try {
+                const response = await fetch('/api/agencies');
+                const result = await response.json();
+
+                if (result.success) {
+                    allAgencies = result.categorized;
+                    totalAgencyCount = result.totalCount;
+                    renderAgencies();
+                }
+            } catch (error) {
+                console.error('Error loading agencies:', error);
+            }
+        }
+
+        function renderAgencyList(agencies, containerId, colorClass = 'linkedin-blue') {
+            const container = document.getElementById(containerId);
+            if (!container || !agencies) return;
+
+            container.innerHTML = agencies.map(agency => `
+                <label class="flex items-center gap-2 p-2 border border-gray-200 bg-white rounded-lg cursor-pointer hover:border-${colorClass} transition text-xs">
+                    <input type="checkbox" name="agencies" value="${agency.name}" class="w-3 h-3 text-${colorClass}">
+                    <span class="font-medium text-gray-800 truncate" title="${agency.name}">${agency.shortCode}</span>
+                </label>
+            `).join('');
+        }
+
+        function renderAgencies() {
+            // Check for target agencies from Opportunity Scout report
+            const targetAgencies = userData?.targetAgencies || [];
+
+            // If user has target agencies from the report, show those prominently
+            if (targetAgencies.length > 0) {
+                const yourSection = document.getElementById('your-agencies-section');
+                const yourContainer = document.getElementById('your-agencies-container');
+
+                yourSection.classList.remove('hidden');
+
+                // Update the section title to indicate these are from the report
+                const sectionTitle = yourSection.querySelector('p');
+                if (sectionTitle) {
+                    sectionTitle.innerHTML = `<span class="text-green-800 font-semibold">Your Target Agencies</span> <span class="text-green-600">(from your Opportunity Scout report)</span>`;
+                }
+
+                yourContainer.innerHTML = targetAgencies.map(agency => `
+                    <label class="flex items-center gap-2 p-3 border-2 border-green-400 bg-green-50 rounded-lg cursor-pointer hover:border-green-500 transition shadow-sm">
+                        <input type="checkbox" name="agencies" value="${agency}" checked class="w-5 h-5 text-green-600">
+                        <span class="font-semibold text-sm text-gray-800">${agency}</span>
+                    </label>
+                `).join('');
+
+                // Update the count message
+                document.getElementById('agency-count').textContent = `${targetAgencies.length} target agencies selected - expand sections below to add more`;
+
+            } else {
+                // Fallback to company agencies if no target agencies
+                const userAgencies = userData?.company?.agencies || [];
+                if (userAgencies.length > 0) {
+                    const yourSection = document.getElementById('your-agencies-section');
+                    const yourContainer = document.getElementById('your-agencies-container');
+
+                    yourSection.classList.remove('hidden');
+                    yourContainer.innerHTML = userAgencies.map(agency => `
+                        <label class="flex items-center gap-2 p-2 border-2 border-green-300 bg-white rounded-lg cursor-pointer hover:border-green-500 transition">
+                            <input type="checkbox" name="agencies" value="${agency}" checked class="w-4 h-4 text-green-600">
+                            <span class="font-medium text-sm text-gray-800">${agency}</span>
+                        </label>
+                    `).join('');
+                }
+
+                // Update count
+                document.getElementById('agency-count').textContent = `${totalAgencyCount} agencies available - click a section to expand`;
+            }
+
+            // Render each category (always available for adding more)
+            renderAgencyList(allAgencies.navy, 'navy-agencies-container', 'blue-600');
+            renderAgencyList(allAgencies.army, 'army-agencies-container', 'green-600');
+            renderAgencyList(allAgencies.airForce, 'airForce-agencies-container', 'sky-600');
+            renderAgencyList(allAgencies.dodWide, 'dodWide-agencies-container', 'purple-600');
+            renderAgencyList(allAgencies.civilian, 'civilian-agencies-container', 'orange-600');
+        }
+
+        function toggleAgencySection(section) {
+            const container = document.getElementById(`${section}-agencies`);
+            const arrow = document.getElementById(`${section}-arrow`);
+
+            container.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+
+        function toggleAdvancedOptions() {
+            const container = document.getElementById('advanced-options');
+            const arrow = document.getElementById('advanced-arrow');
+
+            container.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
 
         async function loadTemplates() {
             try {
@@ -194,7 +491,7 @@
         function renderTemplates() {
             const container = document.getElementById('templates-container');
 
-            // Add emoji icons for visual categorization
+            // Compact emoji icons for visual categorization
             const templateIcons = {
                 'actionable': '✅',
                 'motivational': '💪',
@@ -213,23 +510,16 @@
                 'listicle': '📝'
             };
 
+            // Compact display for advanced options
             container.innerHTML = availableTemplates.map(template => `
-                <label class="flex items-start gap-3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition bg-white hover:shadow-md">
-                    <input type="checkbox" name="templates" value="${template.key}" class="mt-1 w-5 h-5 text-linkedin-blue">
-                    <div class="text-2xl">${templateIcons[template.key] || '📄'}</div>
-                    <div class="flex-1">
-                        <div class="font-semibold text-gray-900">${template.name}</div>
-                        <div class="text-sm text-gray-600 mt-1">${template.description}</div>
-                    </div>
+                <label class="flex items-center gap-2 p-2 border border-gray-200 rounded-lg cursor-pointer hover:border-linkedin-blue hover:bg-blue-50 transition text-sm" title="${template.description}">
+                    <input type="checkbox" name="templates" value="${template.key}" class="w-4 h-4 text-linkedin-blue">
+                    <span class="text-lg">${templateIcons[template.key] || '📄'}</span>
+                    <span class="text-gray-700 truncate">${template.name}</span>
                 </label>
             `).join('');
 
-            // Pre-select default templates (actionable, observation, x-vs-y)
-            const defaultTemplates = ['actionable', 'observation', 'x-vs-y'];
-            defaultTemplates.forEach(key => {
-                const checkbox = document.querySelector(`input[name="templates"][value="${key}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
+            // No pre-selection - we auto-select diverse templates when user generates
         }
 
         async function generateContent() {
@@ -242,17 +532,33 @@
                 return;
             }
 
-            // Get selected templates
-            const selectedTemplates = Array.from(document.querySelectorAll('input[name="templates"]:checked'))
+            const numPosts = parseInt(document.getElementById('num-posts').value);
+
+            // Get selected templates (or auto-select diverse mix if none chosen)
+            let selectedTemplates = Array.from(document.querySelectorAll('input[name="templates"]:checked'))
                 .map(cb => cb.value);
 
+            // If no templates selected, auto-select a diverse mix of high-performing styles
             if (selectedTemplates.length === 0) {
-                alert('Please select at least one post style');
-                return;
+                const diverseMix = [
+                    'actionable', 'observation', 'x-vs-y', 'stat-heavy', 'question-based',
+                    'contrarian', 'story-driven', 'thought-leadership', 'case-study', 'listicle'
+                ];
+                // Shuffle and pick templates for all 10 posts
+                const shuffled = diverseMix.sort(() => Math.random() - 0.5);
+                selectedTemplates = shuffled.slice(0, Math.min(numPosts, shuffled.length));
+                console.log('Auto-selected templates:', selectedTemplates);
             }
-
-            const numPosts = parseInt(document.getElementById('num-posts').value);
             const geoBoost = document.getElementById('geo-boost').checked;
+            const useFineTuned = document.getElementById('use-fine-tuned').checked;
+
+            // Get company profile data
+            const companyProfile = getCompanyProfile();
+
+            // Save profile if checkbox is checked
+            if (document.getElementById('save-profile').checked) {
+                saveCompanyProfile();
+            }
 
             // Hide form, show loading
             document.getElementById('generator-form').classList.add('hidden');
@@ -266,7 +572,7 @@
 
             setTimeout(() => {
                 document.getElementById('step-2').classList.remove('opacity-50');
-                document.getElementById('step-2').innerHTML = '✓ Injecting statistics and sources (GEO optimization)';
+                document.getElementById('step-2').innerHTML = '✓ Personalizing for ' + (companyProfile.companyName || 'your company');
             }, 3000);
 
             setTimeout(() => {
@@ -286,7 +592,9 @@
                         targetAgencies: selectedAgencies,
                         numPosts: numPosts,
                         geoBoost: geoBoost,
-                        templates: selectedTemplates
+                        templates: selectedTemplates,
+                        useFineTuned: useFineTuned,
+                        companyProfile: companyProfile  // NEW: Send company profile for personalization
                     })
                 });
 
@@ -305,12 +613,23 @@
             }
         }
 
+        // Store generated posts globally for copy/save operations
+        let generatedPosts = [];
+
         function displayPosts(posts, metadata) {
+            // Store posts globally
+            generatedPosts = posts;
+
             document.getElementById('loading-state').classList.add('hidden');
             document.getElementById('generated-posts').classList.remove('hidden');
 
+            // Show model info badge
+            const modelBadge = metadata?.model === 'fine-tuned'
+                ? '<span class="inline-flex items-center gap-1 bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full mb-4"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Generated with GovCon-Tuned AI Model</span>'
+                : '<span class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mb-4"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Generated with Grok AI</span>';
+
             const postsContainer = document.getElementById('posts-container');
-            postsContainer.innerHTML = posts.map((post, index) => `
+            postsContainer.innerHTML = `<div class="text-center">${modelBadge}</div>` + posts.map((post, index) => `
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-gray-200 hover:border-linkedin-blue transition">
                     <div class="bg-gradient-to-r from-linkedin-blue to-purple-600 px-6 py-4">
                         <div class="flex items-center justify-between flex-wrap gap-2">
@@ -321,9 +640,9 @@
 
                     <div class="p-6">
                         <!-- Post Content -->
-                        <div class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-gray-200">
+                        <div id="post-content-${index}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-gray-200">
                             <pre class="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">${post.content}</pre>
-                            ${post.hashtags.length > 0 ? `
+                            ${post.hashtags && post.hashtags.length > 0 ? `
                             <div class="mt-4 pt-4 border-t border-gray-300">
                                 <div class="flex flex-wrap gap-2">
                                     ${post.hashtags.map(tag => `<span class="text-linkedin-blue font-medium">${tag}</span>`).join(' ')}
@@ -335,7 +654,7 @@
                         <!-- Meta Information -->
                         <div class="bg-purple-50 rounded-lg p-4 mb-4 text-sm">
                             <p class="font-semibold text-purple-900 mb-2">📌 Pain Point Addressed:</p>
-                            <p class="text-purple-800">${post.painPointAddressed}</p>
+                            <p class="text-purple-800">${post.painPointAddressed || 'General government contracting'}</p>
                             ${post.stats && post.stats.length > 0 ? `
                             <p class="font-semibold text-purple-900 mt-3 mb-2">📊 Statistics Included:</p>
                             <ul class="text-purple-800 space-y-1">
@@ -344,10 +663,17 @@
                             ` : ''}
                         </div>
 
-                        <!-- Copy Button -->
-                        <button onclick="copyPost(${index})" class="w-full bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition">
-                            📋 Copy Post to Clipboard
-                        </button>
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <button id="copy-btn-${index}" onclick="copyPost(${index})" class="flex-1 bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                Copy
+                            </button>
+                            <button id="save-btn-${index}" onclick="savePost(${index})" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                Save to Library
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -357,22 +683,101 @@
         }
 
         function copyPost(index) {
-            const posts = document.querySelectorAll('.bg-gray-50.rounded-lg.p-6.mb-4');
-            const postContent = posts[index].textContent.trim();
+            const post = generatedPosts[index];
+            if (!post) return;
 
-            navigator.clipboard.writeText(postContent).then(() => {
-                const button = event.target;
-                const originalText = button.innerHTML;
-                button.innerHTML = '✅ Copied!';
-                button.classList.add('bg-green-600');
-                button.classList.remove('bg-linkedin-blue');
+            // Build the full post text with hashtags
+            let fullText = post.content;
+            if (post.hashtags && post.hashtags.length > 0) {
+                fullText += '\n\n' + post.hashtags.join(' ');
+            }
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                const button = document.getElementById(`copy-btn-${index}`);
+                const originalHTML = button.innerHTML;
+                button.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Copied!
+                `;
+                button.classList.remove('bg-linkedin-blue', 'hover:bg-linkedin-dark');
+                button.classList.add('bg-green-600', 'hover:bg-green-700');
 
                 setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.classList.remove('bg-green-600');
-                    button.classList.add('bg-linkedin-blue');
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    button.classList.add('bg-linkedin-blue', 'hover:bg-linkedin-dark');
                 }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
             });
+        }
+
+        async function savePost(index) {
+            const post = generatedPosts[index];
+            if (!post) return;
+
+            const button = document.getElementById(`save-btn-${index}`);
+            const originalHTML = button.innerHTML;
+
+            // Show saving state
+            button.innerHTML = `
+                <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Saving...
+            `;
+            button.disabled = true;
+
+            try {
+                const response = await fetch('/api/content-library/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: userData?.userId || userData?.linkedinData?.email,
+                        content: post.content,
+                        title: `${post.template || post.angle} - ${new Date().toLocaleDateString()}`,
+                        templateType: post.template || post.angle,
+                        agencyTarget: post.agency || '',
+                        painPoint: post.painPointAddressed || '',
+                        hashtags: post.hashtags || [],
+                        geoOptimized: post.geoOptimized || false
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    button.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Saved!
+                    `;
+                    button.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                    button.classList.add('bg-green-600', 'hover:bg-green-700');
+
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        button.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                        button.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Failed to save');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                button.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Error
+                `;
+                button.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                button.classList.add('bg-red-600', 'hover:bg-red-700');
+
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    button.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                    button.disabled = false;
+                }, 2000);
+            }
         }
 
         function resetGenerator() {
