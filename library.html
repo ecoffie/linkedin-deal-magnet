@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Library - GovCon Content Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        linkedin: {
+                            blue: '#0077B5',
+                            dark: '#004182',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-purple-900 to-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-xl font-bold">GovCon Content Generator</h1>
+                <div class="flex items-center gap-2">
+                    <a href="/content-generator" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Generator</a>
+                    <a href="/library" class="px-4 py-2 rounded-lg bg-white/20 font-semibold">Library</a>
+                    <a href="/calendar" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Calendar</a>
+                    <button onclick="logout()" class="px-4 py-2 rounded-lg hover:bg-white/10 transition">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900">Content Library</h2>
+                <p class="text-gray-600 mt-1">Your saved LinkedIn posts ready to publish</p>
+            </div>
+            <div class="flex gap-3">
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search posts..."
+                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <a href="/content-generator" class="flex items-center gap-2 px-6 py-2 bg-linkedin-blue hover:bg-linkedin-dark text-white font-semibold rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create New Post
+                </a>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 mb-6">
+            <button onclick="filterPosts('all')" id="filter-all" class="px-4 py-2 bg-linkedin-blue text-white rounded-lg font-medium transition">
+                All Posts
+            </button>
+            <button onclick="filterPosts('favorites')" id="filter-favorites" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                Favorites
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-4 shadow border border-gray-200">
+                <div class="text-3xl font-bold text-linkedin-blue" id="stat-total">0</div>
+                <div class="text-sm text-gray-600">Total Posts</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow border border-gray-200">
+                <div class="text-3xl font-bold text-yellow-500" id="stat-favorites">0</div>
+                <div class="text-sm text-gray-600">Favorites</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow border border-gray-200">
+                <div class="text-3xl font-bold text-green-600" id="stat-scheduled">0</div>
+                <div class="text-sm text-gray-600">Scheduled</div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-linkedin-blue mx-auto mb-4"></div>
+            <p class="text-gray-600">Loading your content library...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16">
+            <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No posts yet</h3>
+            <p class="text-gray-500 mb-6">Create your first LinkedIn post to get started</p>
+            <a href="/content-generator" class="inline-flex items-center gap-2 px-6 py-3 bg-linkedin-blue hover:bg-linkedin-dark text-white font-semibold rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Create Your First Post
+            </a>
+        </div>
+
+        <!-- Posts Grid -->
+        <div id="posts-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Posts will be inserted here -->
+        </div>
+
+        <!-- Load More -->
+        <div id="load-more-container" class="hidden text-center mt-8">
+            <button onclick="loadMore()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition">
+                Load More Posts
+            </button>
+        </div>
+    </div>
+
+    <!-- View Post Modal -->
+    <div id="view-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-gray-900" id="modal-title">Post Details</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <div id="modal-content" class="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-4">
+                    <!-- Content will be inserted here -->
+                </div>
+
+                <div id="modal-meta" class="text-sm text-gray-500 mb-6">
+                    <!-- Meta info will be inserted here -->
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="copyPost()" class="flex-1 px-4 py-3 bg-linkedin-blue hover:bg-linkedin-dark text-white rounded-lg font-medium transition flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                    <button onclick="schedulePost()" class="flex-1 px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Schedule
+                    </button>
+                    <button onclick="toggleFavorite()" id="btn-favorite" class="px-4 py-3 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 rounded-lg font-medium transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </button>
+                    <button onclick="deletePost()" class="px-4 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let posts = [];
+        let filteredPosts = [];
+        let currentFilter = 'all';
+        let selectedPost = null;
+        let currentOffset = 0;
+        const limit = 20;
+
+        async function loadPosts() {
+            try {
+                const userData = localStorage.getItem('user_data');
+                const userId = userData ? JSON.parse(userData).userId || JSON.parse(userData).linkedinData?.email : localStorage.getItem('user_id') || 'guest';
+
+                const response = await fetch(`/api/content-library/${encodeURIComponent(userId)}?limit=${limit}&offset=${currentOffset}`);
+                const result = await response.json();
+
+                document.getElementById('loading-state').classList.add('hidden');
+
+                if (result.success && result.data && result.data.length > 0) {
+                    posts = currentOffset === 0 ? result.data : [...posts, ...result.data];
+                    applyFilter();
+                    updateStats();
+
+                    // Show load more if there might be more posts
+                    if (result.data.length === limit) {
+                        document.getElementById('load-more-container').classList.remove('hidden');
+                    } else {
+                        document.getElementById('load-more-container').classList.add('hidden');
+                    }
+                } else if (currentOffset === 0) {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+            }
+        }
+
+        function loadMore() {
+            currentOffset += limit;
+            loadPosts();
+        }
+
+        function applyFilter() {
+            if (currentFilter === 'favorites') {
+                filteredPosts = posts.filter(p => p.is_favorite);
+            } else {
+                filteredPosts = posts;
+            }
+            renderPosts();
+        }
+
+        function filterPosts(filter) {
+            currentFilter = filter;
+
+            // Update button styles
+            document.getElementById('filter-all').className = filter === 'all'
+                ? 'px-4 py-2 bg-linkedin-blue text-white rounded-lg font-medium transition'
+                : 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition';
+
+            document.getElementById('filter-favorites').className = filter === 'favorites'
+                ? 'px-4 py-2 bg-linkedin-blue text-white rounded-lg font-medium transition'
+                : 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition';
+
+            applyFilter();
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total').textContent = posts.length;
+            document.getElementById('stat-favorites').textContent = posts.filter(p => p.is_favorite).length;
+            // Scheduled count would come from scheduled_posts table - showing 0 for now
+            document.getElementById('stat-scheduled').textContent = '0';
+        }
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container');
+
+            if (filteredPosts.length === 0) {
+                container.classList.add('hidden');
+                if (currentFilter === 'favorites') {
+                    container.innerHTML = '';
+                    document.getElementById('empty-state').classList.remove('hidden');
+                }
+                return;
+            }
+
+            document.getElementById('empty-state').classList.add('hidden');
+            container.classList.remove('hidden');
+
+            container.innerHTML = filteredPosts.map(post => {
+                const preview = post.content.substring(0, 150) + (post.content.length > 150 ? '...' : '');
+                const date = new Date(post.created_at).toLocaleDateString();
+                const title = post.title || post.template_type || 'Untitled Post';
+
+                return `
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition cursor-pointer" onclick="viewPost('${post.id}')">
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">${title}</h3>
+                                    <p class="text-xs text-gray-500">${date}</p>
+                                </div>
+                                ${post.is_favorite ? '<svg class="w-5 h-5 text-yellow-500 fill-current" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>' : ''}
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-3">${preview}</p>
+                            ${post.agency_target ? `<span class="inline-block mt-3 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">${post.agency_target}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewPost(id) {
+            selectedPost = posts.find(p => p.id === id);
+            if (!selectedPost) return;
+
+            document.getElementById('modal-title').textContent = selectedPost.title || selectedPost.template_type || 'Post Details';
+            document.getElementById('modal-content').innerHTML = `<pre class="whitespace-pre-wrap font-sans text-gray-700">${selectedPost.content}</pre>`;
+
+            const date = new Date(selectedPost.created_at).toLocaleString();
+            let meta = `Created: ${date}`;
+            if (selectedPost.agency_target) meta += ` | Agency: ${selectedPost.agency_target}`;
+            if (selectedPost.template_type) meta += ` | Template: ${selectedPost.template_type}`;
+            document.getElementById('modal-meta').textContent = meta;
+
+            // Update favorite button
+            const favBtn = document.getElementById('btn-favorite');
+            if (selectedPost.is_favorite) {
+                favBtn.innerHTML = '<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>';
+                favBtn.className = 'px-4 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 rounded-lg font-medium transition';
+            } else {
+                favBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>';
+                favBtn.className = 'px-4 py-3 bg-yellow-100 hover:bg-yellow-200 text-yellow-700 rounded-lg font-medium transition';
+            }
+
+            document.getElementById('view-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('view-modal').classList.add('hidden');
+            selectedPost = null;
+        }
+
+        function copyPost() {
+            if (!selectedPost) return;
+
+            let text = selectedPost.content;
+            if (selectedPost.hashtags && selectedPost.hashtags.length > 0) {
+                text += '\n\n' + selectedPost.hashtags.join(' ');
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Post copied to clipboard!');
+            });
+        }
+
+        function schedulePost() {
+            if (!selectedPost) return;
+            // Navigate to calendar with post pre-selected
+            localStorage.setItem('schedule_post_id', selectedPost.id);
+            window.location.href = '/calendar';
+        }
+
+        async function toggleFavorite() {
+            if (!selectedPost) return;
+
+            try {
+                const response = await fetch(`/api/content-library/${selectedPost.id}/favorite`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    selectedPost.is_favorite = !selectedPost.is_favorite;
+                    const postIndex = posts.findIndex(p => p.id === selectedPost.id);
+                    if (postIndex !== -1) {
+                        posts[postIndex].is_favorite = selectedPost.is_favorite;
+                    }
+                    applyFilter();
+                    updateStats();
+                    viewPost(selectedPost.id); // Refresh modal
+                }
+            } catch (error) {
+                console.error('Error toggling favorite:', error);
+            }
+        }
+
+        async function deletePost() {
+            if (!selectedPost) return;
+            if (!confirm('Are you sure you want to delete this post?')) return;
+
+            try {
+                const response = await fetch(`/api/content-library/${selectedPost.id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    posts = posts.filter(p => p.id !== selectedPost.id);
+                    applyFilter();
+                    updateStats();
+                    closeModal();
+                }
+            } catch (error) {
+                console.error('Error deleting post:', error);
+            }
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            if (query.length < 2) {
+                applyFilter();
+                return;
+            }
+
+            filteredPosts = posts.filter(p => {
+                return p.content.toLowerCase().includes(query) ||
+                    (p.title && p.title.toLowerCase().includes(query)) ||
+                    (p.agency_target && p.agency_target.toLowerCase().includes(query));
+            });
+
+            if (currentFilter === 'favorites') {
+                filteredPosts = filteredPosts.filter(p => p.is_favorite);
+            }
+
+            renderPosts();
+        });
+
+        function logout() {
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('user_id');
+            window.location.href = '/';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadPosts);
+    </script>
+</body>
+</html>

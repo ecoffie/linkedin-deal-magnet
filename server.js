@@ -11,10 +11,14 @@ const session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 
+// Database connection and models (Supabase)
+const { supabase, testConnection, User, CompanyProfile, ContentLibrary } = require('./db/supabase');
+
 // Knowledge base path
 const KB_PATH = path.join(__dirname, 'bootcamp', 'agencies');
 const KB_INDEX_PATH = path.join(KB_PATH, 'index.json');
 const VIRAL_HOOKS_PATH = path.join(__dirname, 'bootcamp', 'viral-hooks.json');
+const NOTION_CONTENT_PATH = path.join(__dirname, 'bootcamp', 'notion-viral-content.json');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -163,6 +167,16 @@ app.get('/content-generator', (req, res) => {
     res.sendFile(path.join(__dirname, 'content-generator.html'));
 });
 
+// Serve the Content Calendar page
+app.get('/calendar', (req, res) => {
+    res.sendFile(path.join(__dirname, 'calendar.html'));
+});
+
+// Serve the Content Library page
+app.get('/library', (req, res) => {
+    res.sendFile(path.join(__dirname, 'library.html'));
+});
+
 // Get available post templates
 app.get('/api/content-generator/templates', (req, res) => {
     const templatesList = Object.entries(POST_TEMPLATES).map(([key, template]) => ({
@@ -173,13 +187,159 @@ app.get('/api/content-generator/templates', (req, res) => {
     res.json({ success: true, templates: templatesList });
 });
 
+// API endpoint to get all available agencies from knowledge base
+app.get('/api/agencies', (req, res) => {
+    try {
+        // Load main agency index
+        const indexPath = path.join(__dirname, 'bootcamp', 'agencies', 'index.json');
+        const indexData = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+
+        // Load extended DoD command info
+        const dodCommandPath = path.join(__dirname, 'bootcamp', 'dod-command-info.json');
+        let dodCommands = {};
+        try {
+            const dodData = JSON.parse(fs.readFileSync(dodCommandPath, 'utf8'));
+            dodCommands = dodData.commands || {};
+        } catch (e) {
+            console.log('DoD command info not available');
+        }
+
+        // Build agencies from index
+        const agencies = Object.entries(indexData.agencies).map(([name, data]) => ({
+            name: name,
+            shortCode: data.aliases?.[0] || name,
+            aliases: data.aliases || [],
+            file: data.file,
+            source: 'index'
+        }));
+
+        // Add DoD commands that aren't already in the index
+        const existingNames = new Set(agencies.map(a => a.name.toLowerCase()));
+        const existingShortCodes = new Set(agencies.map(a => a.shortCode.toLowerCase()));
+
+        Object.entries(dodCommands).forEach(([name, data]) => {
+            const abbrev = data.abbreviation || name;
+            if (!existingNames.has(name.toLowerCase()) && !existingShortCodes.has(abbrev.toLowerCase())) {
+                agencies.push({
+                    name: data.fullName || name,
+                    shortCode: abbrev,
+                    aliases: [abbrev, name],
+                    parentAgency: data.parentAgency || null,
+                    source: 'dod-commands'
+                });
+            }
+        });
+
+        // Categorize agencies
+        const categorized = {
+            navy: agencies.filter(a =>
+                a.parentAgency === 'Department of the Navy' ||
+                a.file === 'navy.json' ||
+                a.file === 'navfac.json' ||
+                a.name.includes('Navy') ||
+                a.name.includes('Naval') ||
+                ['NAVFAC', 'NAVSEA', 'NAVAIR', 'NAVWAR', 'NAVSUP', 'MSC', 'NSWC', 'SSP', 'NECC', 'CNIC', 'NETC', 'ONI', 'NPC', 'NUWC', 'NAWC'].includes(a.shortCode)
+            ),
+            army: agencies.filter(a =>
+                a.parentAgency === 'Department of the Army' ||
+                a.name.includes('Army') ||
+                a.file === 'usace.json' ||
+                ['USACE', 'TRADOC', 'ARCYBER', 'SDDC', 'FORSCOM', 'TACOM', 'AMCOM', 'CECOM'].includes(a.shortCode) ||
+                a.shortCode.startsWith('PEO ')
+            ),
+            airForce: agencies.filter(a =>
+                a.parentAgency === 'Department of the Air Force' ||
+                a.file === 'air-force.json' ||
+                a.name.includes('Air Force') ||
+                ['AFMC', 'AFSC', 'ACC', 'AETC', 'AFGSC', 'AFRC', 'AFSOC', 'AMC AF', 'PACAF', 'AFLCMC', 'SMC', 'AFNWC', 'AFDW', 'AFCEC'].includes(a.shortCode)
+            ),
+            spaceForce: agencies.filter(a =>
+                a.name.includes('Space') ||
+                ['SSC', 'Space Systems Command'].includes(a.shortCode)
+            ),
+            dodWide: agencies.filter(a =>
+                (a.file === 'dod.json' || a.parentAgency === 'Department of Defense' ||
+                ['DLA', 'DISA', 'MDA', 'DARPA', 'DHA', 'DCMA', 'DFAS', 'DTRA', 'NGA', 'NSA', 'DIA', 'WHS'].includes(a.shortCode)) &&
+                !a.name.includes('Army') && !a.name.includes('Navy') && !a.name.includes('Air Force')
+            ),
+            marineCorps: agencies.filter(a =>
+                a.name.includes('Marine') ||
+                ['MCSC'].includes(a.shortCode)
+            ),
+            civilian: agencies.filter(a => {
+                const defenseIndicators = ['dod.json', 'navy.json', 'air-force.json', 'usace.json', 'navfac.json'];
+                const isDefense = defenseIndicators.includes(a.file) ||
+                    a.parentAgency?.includes('Defense') ||
+                    a.parentAgency?.includes('Navy') ||
+                    a.parentAgency?.includes('Army') ||
+                    a.parentAgency?.includes('Air Force') ||
+                    a.name.includes('Defense') ||
+                    a.name.includes('Army') ||
+                    a.name.includes('Navy') ||
+                    a.name.includes('Air Force') ||
+                    a.name.includes('Marine') ||
+                    a.name.includes('Naval');
+                return !isDefense;
+            })
+        };
+
+        res.json({
+            success: true,
+            agencies: agencies,
+            categorized: categorized,
+            totalCount: agencies.length
+        });
+    } catch (error) {
+        console.error('Error loading agencies:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// API endpoint for viral content knowledge base (hooks, frameworks, topics)
+app.get('/api/content-generator/viral-content', (req, res) => {
+    try {
+        const notionData = loadNotionContent();
+        if (!notionData) {
+            return res.status(404).json({ success: false, error: 'Viral content not found' });
+        }
+
+        // Return organized content for frontend
+        res.json({
+            success: true,
+            viralTopics: notionData.viral_topics,
+            govconViralTopics: notionData.govcon_viral_topics,
+            carouselHooks: notionData.carousel_hooks,
+            govconCarouselHooks: notionData.govcon_carousel_hooks,
+            postFrameworks: notionData.post_frameworks,
+            govconPostFrameworks: notionData.govcon_post_frameworks
+        });
+    } catch (error) {
+        console.error('Error loading viral content:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Legacy route redirect for backwards compatibility
 app.get('/contract-finder', (req, res) => {
     res.redirect(301, '/opportunity-scout');
 });
 
-// In-memory user data storage (for MVP - replace with database later)
+// In-memory user data storage (fallback if database is unavailable)
 const usersData = new Map();
+let dbAvailable = false;
+
+// Test database connection on startup
+testConnection().then(connected => {
+    dbAvailable = connected;
+    if (connected) {
+        console.log('[Server] Database connected - using PostgreSQL for data storage');
+    } else {
+        console.warn('[Server] Database unavailable - using in-memory storage (data will not persist)');
+    }
+}).catch(err => {
+    console.warn('[Server] Database connection failed:', err.message);
+    dbAvailable = false;
+});
 
 // Post Template Definitions
 const POST_TEMPLATES = {
@@ -394,9 +554,10 @@ const POST_TEMPLATES = {
 // Content Generator API: 3-Step Prompt Chain with Template System
 app.post('/api/content-generator/generate', async (req, res) => {
     try {
-        const { userId, targetAgencies, numPosts = 3, geoBoost = true, templates = [] } = req.body;
+        const { userId, targetAgencies, numPosts = 3, geoBoost = true, templates = [], useFineTuned = false, companyProfile = {} } = req.body;
 
-        console.log(`[Content Generator] Request for user: ${userId}`);
+        console.log(`[Content Generator] Request for user: ${userId}, useFineTuned: ${useFineTuned}`);
+        console.log(`[Content Generator] Company Profile:`, companyProfile);
 
         // Get user data
         let userData = usersData.get(userId);
@@ -406,12 +567,25 @@ app.post('/api/content-generator/generate', async (req, res) => {
             userData = req.body.userData;
         }
 
+        // Create minimal userData if not found (allow guest usage with company profile)
         if (!userData) {
-            return res.status(404).json({
-                success: false,
-                error: 'User data not found. Please complete onboarding first.'
-            });
+            userData = {
+                linkedinData: { name: companyProfile.userRole || 'Government Contractor' },
+                company: {}
+            };
         }
+
+        // Merge company profile into userData for enhanced personalization
+        const enhancedCompanyData = {
+            companyName: companyProfile.companyName || userData.company?.companyName || '',
+            userRole: companyProfile.userRole || '',
+            coreServices: companyProfile.coreServices || userData.company?.capabilitiesStatement || '',
+            differentiators: companyProfile.differentiators || '',
+            certifications: companyProfile.certifications || userData.company?.certifications?.join(', ') || '',
+            contractVehicles: companyProfile.contractVehicles || '',
+            pastPerformance: companyProfile.pastPerformance || '',
+            naicsCodes: userData.company?.naicsCodes || []
+        };
 
         // STEP 1: Identify agency pain points
         console.log('[Step 1] Identifying agency pain points...');
@@ -449,8 +623,24 @@ app.post('/api/content-generator/generate', async (req, res) => {
         // STEP 2: Inject stats/sources + GEO techniques
         console.log('[Step 2] Injecting stats and GEO optimization...');
         const viralHooksFormatted = formatViralHooksForPrompt('general', 10);
+        const notionContentFormatted = formatNotionContentForPrompt('govcon');
 
-        const step2Prompt = `You are a government contracting expert creating LinkedIn content.
+        // Build company profile section for prompts
+        const companyProfileSection = `
+COMPANY PROFILE (Use this to personalize content):
+${enhancedCompanyData.companyName ? `- Company: ${enhancedCompanyData.companyName}` : ''}
+${enhancedCompanyData.userRole ? `- Author Role: ${enhancedCompanyData.userRole}` : ''}
+${enhancedCompanyData.coreServices ? `- Core Services: ${enhancedCompanyData.coreServices}` : ''}
+${enhancedCompanyData.differentiators ? `- Differentiators: ${enhancedCompanyData.differentiators}` : ''}
+${enhancedCompanyData.certifications ? `- Certifications: ${enhancedCompanyData.certifications}` : ''}
+${enhancedCompanyData.contractVehicles ? `- Contract Vehicles: ${enhancedCompanyData.contractVehicles}` : ''}
+${enhancedCompanyData.pastPerformance ? `- Past Performance: ${enhancedCompanyData.pastPerformance}` : ''}
+${enhancedCompanyData.naicsCodes?.length ? `- NAICS Codes: ${enhancedCompanyData.naicsCodes.join(', ')}` : ''}
+`.trim();
+
+        const step2Prompt = `You are a government contracting expert creating LinkedIn content for a SPECIFIC COMPANY.
+
+${companyProfileSection}
 
 AGENCY PAIN POINTS & PRIORITIES:
 ${agencyPainPoints.map(ap => `
@@ -465,25 +655,24 @@ Market Insights:
 ${ap.insights.slice(0, 3).map(i => `- ${i}`).join('\n')}
 `).join('\n---\n')}
 
-USER CAPABILITIES:
-- NAICS Codes: ${userData.company?.naicsCodes?.join(', ')}
-- Certifications: ${userData.company?.certifications?.join(', ')}
-- Capabilities: ${userData.company?.capabilitiesStatement?.substring(0, 500)}
-
 ${viralHooksFormatted}
 
-TASK: Create content angles that:
-1. Connect the user's capabilities to specific agency pain points
-2. Include exact statistics and sources from the pain points
-3. Use authoritative language ("According to GAO...", "DoD reports...", etc.)
-4. Structure information clearly with bullet points or numbered lists
-${geoBoost ? `5. Optimize for AI/search with clear questions and answers (GEO technique)` : ''}
+${notionContentFormatted}
+
+TASK: Create PERSONALIZED content angles that:
+1. DIRECTLY connect the company's specific services (${enhancedCompanyData.coreServices || 'their capabilities'}) to agency pain points
+2. Highlight the company's differentiators: ${enhancedCompanyData.differentiators || 'unique value proposition'}
+3. Reference certifications (${enhancedCompanyData.certifications || 'relevant certs'}) when addressing small business opportunities
+4. Include exact statistics and sources from the pain points
+5. Use authoritative language ("According to GAO...", "DoD reports...", etc.)
+${enhancedCompanyData.pastPerformance ? `6. Weave in relevant past performance examples where appropriate` : ''}
+${geoBoost ? `7. Optimize for AI/search with clear questions and answers (GEO technique)` : ''}
 
 Generate ${numPosts} distinct content angles. For each angle, provide:
-- Main theme/hook (use viral hook patterns from above as inspiration - adapt them naturally to fit the pain point and capability)
+- Main theme/hook (use viral hook patterns - adapt naturally to fit the company and pain point)
 - Key pain point to address
 - 2-3 relevant statistics with sources
-- How the user's certification/capability solves this
+- How THIS SPECIFIC COMPANY'S capabilities solve this (be specific, not generic)
 - Suggested structure (question format, list format, story format, etc.)
 
 Output as JSON array with this structure:
@@ -492,12 +681,12 @@ Output as JSON array with this structure:
     "angle": "theme description",
     "painPoint": "specific pain point",
     "stats": ["stat 1 with source", "stat 2 with source"],
-    "solution": "how user helps",
+    "solution": "how THIS COMPANY specifically helps (reference their actual services/differentiators)",
     "structure": "suggested format"
   }
 ]`;
 
-        const contentAngles = await callGrokAPI(step2Prompt);
+        const contentAngles = await generateContent(step2Prompt, null, useFineTuned);
         let angles;
         try {
             // Extract JSON from response
@@ -541,7 +730,16 @@ Output as JSON array with this structure:
             const template = POST_TEMPLATES[templateKey];
 
             const viralHooksForStep3 = formatViralHooksForPrompt('general', 8);
-            const step3Prompt = `${voiceAnalysis}Write a LinkedIn post as ${userData.linkedinData?.name || 'a government contractor'}.
+            const notionContentForStep3 = formatNotionContentForPrompt('govcon');
+
+            // Build author identity for personalized posts
+            const authorIdentity = enhancedCompanyData.companyName
+                ? `${enhancedCompanyData.userRole || 'a leader'} at ${enhancedCompanyData.companyName}`
+                : (userData.linkedinData?.name || 'a government contractor');
+
+            const step3Prompt = `${voiceAnalysis}Write a LinkedIn post as ${authorIdentity}.
+
+${companyProfileSection}
 
 CONTENT ANGLE:
 Theme: ${angle.angle}
@@ -554,6 +752,16 @@ ${template.prompt}
 
 ${viralHooksForStep3}
 
+${notionContentForStep3}
+
+PERSONALIZATION REQUIREMENTS (CRITICAL - Make this post unique to this company):
+${enhancedCompanyData.companyName ? `- Write from the perspective of someone at ${enhancedCompanyData.companyName}` : ''}
+${enhancedCompanyData.coreServices ? `- Reference the company's specific services: ${enhancedCompanyData.coreServices}` : ''}
+${enhancedCompanyData.differentiators ? `- Weave in their differentiators naturally: ${enhancedCompanyData.differentiators}` : ''}
+${enhancedCompanyData.certifications ? `- Mention relevant certifications when appropriate: ${enhancedCompanyData.certifications}` : ''}
+${enhancedCompanyData.contractVehicles ? `- Reference contract vehicles if relevant: ${enhancedCompanyData.contractVehicles}` : ''}
+${enhancedCompanyData.pastPerformance ? `- Include a subtle reference to past performance when it fits: ${enhancedCompanyData.pastPerformance}` : ''}
+
 ADDITIONAL REQUIREMENTS:
 ${voiceAnalysis ? '- Match the writing style, tone, and voice from the sample posts above' : '- Use a professional, conversational tone'}
 - Include specific statistics with sources from the pain point data
@@ -562,11 +770,12 @@ ${voiceAnalysis ? '- Match the writing style, tone, and voice from the sample po
 - The hook should be the FIRST LINE and must be engaging and attention-grabbing
 ${geoBoost && templateKey !== 'question-based' ? '- Optimize for AI search with clear structure and authoritative sources' : ''}
 - End with a clear call-to-action or engagement prompt
+- DO NOT be generic - every post should feel like it could ONLY come from THIS company
 - Include 3-5 relevant hashtags at the end
 
 Output ONLY the post text, followed by hashtags on separate lines.`;
 
-            const postContent = await callGrokAPI(step3Prompt);
+            const postContent = await generateContent(step3Prompt, null, useFineTuned);
 
             // Extract hashtags
             const hashtagMatch = postContent.match(/#[\w]+/g);
@@ -592,7 +801,9 @@ Output ONLY the post text, followed by hashtags on separate lines.`;
             metadata: {
                 targetAgencies: targetAgencies,
                 userCertifications: userData.company?.certifications || [],
-                geoOptimized: geoBoost
+                geoOptimized: geoBoost,
+                model: useFineTuned ? 'fine-tuned' : 'grok',
+                modelId: useFineTuned ? FINE_TUNED_MODEL : GROK_MODEL
             }
         });
 
@@ -606,7 +817,7 @@ Output ONLY the post text, followed by hashtags on separate lines.`;
 });
 
 // Onboarding API: Save user data
-app.post('/api/onboarding/save', (req, res) => {
+app.post('/api/onboarding/save', async (req, res) => {
     try {
         const { linkedin, company } = req.body;
 
@@ -617,10 +828,45 @@ app.post('/api/onboarding/save', (req, res) => {
             });
         }
 
-        // Generate a simple user ID (in production, use proper UUID)
-        const userId = linkedin.email || `user_${Date.now()}`;
+        // Try database first, fallback to in-memory
+        if (dbAvailable) {
+            try {
+                // Create or update user in database
+                const user = await User.create({
+                    linkedinId: linkedin.id || linkedin.email,
+                    email: linkedin.email,
+                    name: linkedin.name,
+                    headline: linkedin.headline,
+                    pictureUrl: linkedin.picture,
+                    accessToken: linkedin.accessToken
+                });
 
-        // Store user data
+                // Create or update company profile
+                await CompanyProfile.upsert(user.id, {
+                    naicsCodes: company.naicsCodes || [],
+                    certifications: company.certifications || [],
+                    pastAgencies: company.agencies || [],
+                    capabilitiesStatement: company.capabilitiesStatement || '',
+                    otherCertifications: company.otherCertifications || ''
+                });
+
+                // Mark onboarding complete
+                await User.markOnboardingComplete(user.id);
+
+                console.log(`[Onboarding] User data saved to database for: ${user.id}`);
+
+                return res.json({
+                    success: true,
+                    userId: user.id,
+                    message: 'User data saved successfully'
+                });
+            } catch (dbError) {
+                console.error('[Onboarding] Database error, falling back to in-memory:', dbError.message);
+            }
+        }
+
+        // Fallback: In-memory storage
+        const userId = linkedin.email || `user_${Date.now()}`;
         const userData = {
             userId,
             linkedinId: linkedin.id || userId,
@@ -643,8 +889,7 @@ app.post('/api/onboarding/save', (req, res) => {
         };
 
         usersData.set(userId, userData);
-
-        console.log(`[Onboarding] User data saved for: ${userId}`);
+        console.log(`[Onboarding] User data saved to memory for: ${userId}`);
 
         res.json({
             success: true,
@@ -662,10 +907,44 @@ app.post('/api/onboarding/save', (req, res) => {
 });
 
 // Onboarding API: Get user data
-app.get('/api/onboarding/user/:userId', (req, res) => {
+app.get('/api/onboarding/user/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
 
+        // Try database first
+        if (dbAvailable) {
+            try {
+                const user = await User.getWithProfile(userId);
+                if (user) {
+                    // Format response to match existing structure
+                    const userData = {
+                        userId: user.id,
+                        linkedinId: user.linkedin_id,
+                        linkedinData: {
+                            name: user.name,
+                            email: user.email,
+                            headline: user.headline,
+                            posts: []
+                        },
+                        company: {
+                            naicsCodes: user.naics_codes || [],
+                            certifications: user.certifications || [],
+                            pastAgencies: user.past_agencies || [],
+                            capabilitiesStatement: user.capabilities_statement || '',
+                            otherCertifications: user.other_certifications || ''
+                        },
+                        createdAt: user.created_at,
+                        lastUpdated: user.updated_at,
+                        onboardingComplete: user.onboarding_complete
+                    };
+                    return res.json({ success: true, data: userData });
+                }
+            } catch (dbError) {
+                console.error('[Onboarding] Database error:', dbError.message);
+            }
+        }
+
+        // Fallback: In-memory
         if (!usersData.has(userId)) {
             return res.status(404).json({
                 success: false,
@@ -674,11 +953,7 @@ app.get('/api/onboarding/user/:userId', (req, res) => {
         }
 
         const userData = usersData.get(userId);
-
-        res.json({
-            success: true,
-            data: userData
-        });
+        res.json({ success: true, data: userData });
 
     } catch (error) {
         console.error('[Onboarding] Error fetching user data:', error);
@@ -690,11 +965,51 @@ app.get('/api/onboarding/user/:userId', (req, res) => {
 });
 
 // Onboarding API: Update user data
-app.put('/api/onboarding/user/:userId', (req, res) => {
+app.put('/api/onboarding/user/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         const updates = req.body;
 
+        // Try database first
+        if (dbAvailable) {
+            try {
+                const user = await User.findById(userId);
+                if (user) {
+                    // Update user fields if provided
+                    if (updates.linkedinData) {
+                        await User.update(userId, {
+                            name: updates.linkedinData.name,
+                            email: updates.linkedinData.email,
+                            headline: updates.linkedinData.headline
+                        });
+                    }
+
+                    // Update company profile if provided
+                    if (updates.company) {
+                        await CompanyProfile.upsert(userId, {
+                            naicsCodes: updates.company.naicsCodes,
+                            certifications: updates.company.certifications,
+                            pastAgencies: updates.company.pastAgencies,
+                            capabilitiesStatement: updates.company.capabilitiesStatement,
+                            otherCertifications: updates.company.otherCertifications
+                        });
+                    }
+
+                    const updatedUser = await User.getWithProfile(userId);
+                    console.log(`[Onboarding] User data updated in database for: ${userId}`);
+
+                    return res.json({
+                        success: true,
+                        data: updatedUser,
+                        message: 'User data updated successfully'
+                    });
+                }
+            } catch (dbError) {
+                console.error('[Onboarding] Database error:', dbError.message);
+            }
+        }
+
+        // Fallback: In-memory
         if (!usersData.has(userId)) {
             return res.status(404).json({
                 success: false,
@@ -710,8 +1025,7 @@ app.put('/api/onboarding/user/:userId', (req, res) => {
         };
 
         usersData.set(userId, updatedData);
-
-        console.log(`[Onboarding] User data updated for: ${userId}`);
+        console.log(`[Onboarding] User data updated in memory for: ${userId}`);
 
         res.json({
             success: true,
@@ -729,12 +1043,19 @@ app.put('/api/onboarding/user/:userId', (req, res) => {
 });
 
 // Grok API configuration
-const GROK_API_KEY = process.env.GROK_API_KEY;
+const GROK_API_KEY = process.env.GROK_API_KEY?.trim();
 if (!GROK_API_KEY) {
     console.warn('Warning: GROK_API_KEY environment variable not set');
 }
 const GROK_API_URL = 'https://api.x.ai/v1/chat/completions';
 const GROK_MODEL = process.env.GROK_MODEL || 'grok-2-1212'; // Use grok-4-latest if available
+
+// OpenAI Fine-tuned Model configuration
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
+const FINE_TUNED_MODEL = process.env.FINE_TUNED_MODEL || 'ft:gpt-4o-mini-2024-07-18:gcg:govcon-linkedin:CtWXEc0l';
+if (!OPENAI_API_KEY) {
+    console.warn('Warning: OPENAI_API_KEY environment variable not set - fine-tuned model unavailable');
+}
 
 // Helper function to call Grok API
 async function callGrokAPI(prompt, systemPrompt = null) {
@@ -769,6 +1090,57 @@ async function callGrokAPI(prompt, systemPrompt = null) {
     } catch (error) {
         console.error('Grok API Error:', error.response?.data || error.message);
         throw new Error('Failed to generate content with Grok API');
+    }
+}
+
+// Helper function to call OpenAI Fine-tuned Model API
+async function callFineTunedAPI(prompt, systemPrompt = null) {
+    if (!OPENAI_API_KEY) {
+        throw new Error('OpenAI API key not configured - fine-tuned model unavailable');
+    }
+
+    try {
+        const messages = [];
+
+        if (systemPrompt) {
+            messages.push({
+                role: 'system',
+                content: systemPrompt
+            });
+        }
+
+        messages.push({
+            role: 'user',
+            content: prompt
+        });
+
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+            model: FINE_TUNED_MODEL,
+            messages: messages,
+            temperature: 0.7,
+            max_tokens: 2000
+        }, {
+            headers: {
+                'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data.choices[0].message.content;
+    } catch (error) {
+        console.error('Fine-tuned API Error:', error.response?.data || error.message);
+        throw new Error('Failed to generate content with fine-tuned model');
+    }
+}
+
+// Unified content generation function - supports both models
+async function generateContent(prompt, systemPrompt = null, useFineTuned = false) {
+    if (useFineTuned && OPENAI_API_KEY) {
+        console.log('[Content Gen] Using fine-tuned model:', FINE_TUNED_MODEL);
+        return await callFineTunedAPI(prompt, systemPrompt);
+    } else {
+        console.log('[Content Gen] Using Grok model:', GROK_MODEL);
+        return await callGrokAPI(prompt, systemPrompt);
     }
 }
 
@@ -974,6 +1346,78 @@ function loadViralHooks() {
         console.error('Error loading viral hooks:', error.message);
         return null;
     }
+}
+
+// Load Notion viral content (hooks, frameworks, topics)
+function loadNotionContent() {
+    try {
+        if (!fs.existsSync(NOTION_CONTENT_PATH)) {
+            console.warn('Notion content file not found:', NOTION_CONTENT_PATH);
+            return null;
+        }
+        const notionData = JSON.parse(fs.readFileSync(NOTION_CONTENT_PATH, 'utf8'));
+        return notionData;
+    } catch (error) {
+        console.error('Error loading Notion content:', error.message);
+        return null;
+    }
+}
+
+// Format Notion content for prompt injection
+function formatNotionContentForPrompt(contentType = 'govcon') {
+    const notionData = loadNotionContent();
+    if (!notionData) {
+        return '';
+    }
+
+    // Select appropriate content based on type
+    const topics = contentType === 'govcon'
+        ? notionData.govcon_viral_topics
+        : notionData.viral_topics;
+
+    const carouselHooks = contentType === 'govcon'
+        ? notionData.govcon_carousel_hooks
+        : notionData.carousel_hooks;
+
+    const frameworks = contentType === 'govcon'
+        ? [...notionData.post_frameworks, ...notionData.govcon_post_frameworks]
+        : notionData.post_frameworks;
+
+    // Format topics
+    const topicsFormatted = topics.map(t => t.topic).join(', ');
+
+    // Format carousel hooks (limit to 10)
+    const hooksFormatted = carouselHooks.slice(0, 10).map((h, idx) =>
+        `${idx + 1}. "${h.hook}" [${h.tag}]`
+    ).join('\n');
+
+    // Format frameworks (limit to 8)
+    const frameworksFormatted = frameworks.slice(0, 8).map((f, idx) =>
+        `${idx + 1}. **${f.name}**: ${f.description}
+   Structure: ${f.structure.join(' → ')}
+   Example hook: "${f.example_hook}"`
+    ).join('\n\n');
+
+    return `
+=== VIRAL CONTENT TEMPLATES (from Tobi Oluwole & Top LinkedIn Creators) ===
+
+VIRAL TOPICS (content around these always performs well):
+${topicsFormatted}
+
+CAROUSEL/LIST HOOKS (proven engagement drivers):
+${hooksFormatted}
+
+POST FRAMEWORKS (storytelling structures that drive engagement):
+${frameworksFormatted}
+
+FRAMEWORK USAGE TIPS:
+- Always start with a scroll-stopping hook
+- Use numbers and specifics for credibility
+- Follow Freytag's Pyramid: hook → rising action → climax → resolution → takeaway
+- End with a clear takeaway or call to action
+- Keep paragraphs short (1-2 sentences)
+- Use line breaks for readability
+`;
 }
 
 // Format viral hooks for prompt injection based on content type
@@ -1440,6 +1884,7 @@ async function generateContentWithGrok(content, numPosts, contentStyle) {
     const painPoints = loadAgencyPainPoints(mentionedAgencies);
     const painPointsFormatted = formatPainPointsForPrompt(painPoints, 12);
     const viralHooksFormatted = formatViralHooksForPrompt('general', 12);
+    const notionContentFormatted = formatNotionContentForPrompt('govcon');
 
     const prompt = `You are a LinkedIn content strategist specializing in creating engaging posts for B2B companies and government contractors.
 
@@ -1474,7 +1919,9 @@ Use these agency pain points to create content that addresses real government ch
 
 ${viralHooksFormatted}
 
-IMPORTANT: Use the viral hooks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the company's voice while leveraging proven patterns from top LinkedIn creators. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility).
+${notionContentFormatted}
+
+IMPORTANT: Use the viral hooks and post frameworks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the company's voice while leveraging proven patterns from top LinkedIn creators like Tobi Oluwole. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility). Use the post frameworks to structure your content for maximum engagement.
 
 Output in JSON format:
 {
@@ -1650,6 +2097,7 @@ app.post('/api/generate-content', async (req, res) => {
         const painPoints = loadAgencyPainPoints(mentionedAgencies);
         const painPointsFormatted = formatPainPointsForPrompt(painPoints, 10);
         const viralHooksFormatted = formatViralHooksForPrompt('general', 12);
+        const notionContentFormatted = formatNotionContentForPrompt('govcon');
 
         // Generate 4 LinkedIn posts using Grok
         const prompt = `You are a LinkedIn content strategist specializing in government contracting.
@@ -1682,7 +2130,9 @@ Use these agency pain points to create content that addresses real government ch
 
 ${viralHooksFormatted}
 
-IMPORTANT: Use the viral hooks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the professional's voice while leveraging proven patterns from top LinkedIn creators. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility).
+${notionContentFormatted}
+
+IMPORTANT: Use the viral hooks and post frameworks above as inspiration for creating engaging opening lines. Each post MUST start with a compelling hook that captures attention. Adapt these hooks naturally - don't use them formulaically. The hook should feel authentic to the professional's voice while leveraging proven patterns from top LinkedIn creators like Tobi Oluwole. For government contractors, prioritize proof-driven hooks (with metrics), pattern/trend hooks (showing insights), and authority hooks (establishing credibility). Use the post frameworks to structure your content for maximum engagement.
 
 For each post, provide:
 - The full post text
@@ -4323,6 +4773,638 @@ function formatCurrency(amount) {
     }
     return amount.toLocaleString();
 }
+
+// =============================================
+// CONTENT LIBRARY API ENDPOINTS
+// =============================================
+
+// Save content to library
+app.post('/api/content-library/save', async (req, res) => {
+    try {
+        const { userId, content, title, templateType, agencyTarget, painPoint, hashtags, geoOptimized } = req.body;
+
+        if (!userId || !content) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields: userId and content'
+            });
+        }
+
+        if (dbAvailable) {
+            try {
+                const savedContent = await ContentLibrary.create(userId, {
+                    title: title || `Post - ${new Date().toLocaleDateString()}`,
+                    content,
+                    templateType,
+                    agencyTarget,
+                    painPoint,
+                    hashtags: hashtags || [],
+                    geoOptimized: geoOptimized || false
+                });
+
+                return res.json({
+                    success: true,
+                    data: savedContent,
+                    message: 'Content saved to library'
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+                return res.status(500).json({
+                    success: false,
+                    error: 'Failed to save content to database'
+                });
+            }
+        }
+
+        // Fallback for no database
+        res.status(503).json({
+            success: false,
+            error: 'Database not available. Content cannot be saved permanently.'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error saving content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to save content'
+        });
+    }
+});
+
+// Get all content for user
+app.get('/api/content-library/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50, offset = 0, status } = req.query;
+
+        if (dbAvailable) {
+            try {
+                const content = await ContentLibrary.findByUserId(userId, {
+                    limit: parseInt(limit),
+                    offset: parseInt(offset),
+                    status
+                });
+
+                const count = await ContentLibrary.getCount(userId);
+
+                return res.json({
+                    success: true,
+                    data: content,
+                    total: count,
+                    limit: parseInt(limit),
+                    offset: parseInt(offset)
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error fetching content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch content'
+        });
+    }
+});
+
+// Get single content item
+app.get('/api/content-library/item/:contentId', async (req, res) => {
+    try {
+        const { contentId } = req.params;
+
+        if (dbAvailable) {
+            try {
+                const content = await ContentLibrary.findById(contentId);
+
+                if (!content) {
+                    return res.status(404).json({
+                        success: false,
+                        error: 'Content not found'
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    data: content
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error fetching content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch content'
+        });
+    }
+});
+
+// Update content
+app.put('/api/content-library/:contentId', async (req, res) => {
+    try {
+        const { contentId } = req.params;
+        const updates = req.body;
+
+        if (dbAvailable) {
+            try {
+                const updatedContent = await ContentLibrary.update(contentId, updates);
+
+                if (!updatedContent) {
+                    return res.status(404).json({
+                        success: false,
+                        error: 'Content not found'
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    data: updatedContent,
+                    message: 'Content updated successfully'
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error updating content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to update content'
+        });
+    }
+});
+
+// Toggle favorite
+app.post('/api/content-library/:contentId/favorite', async (req, res) => {
+    try {
+        const { contentId } = req.params;
+
+        if (dbAvailable) {
+            try {
+                const updatedContent = await ContentLibrary.toggleFavorite(contentId);
+
+                return res.json({
+                    success: true,
+                    data: updatedContent,
+                    message: updatedContent.is_favorite ? 'Added to favorites' : 'Removed from favorites'
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error toggling favorite:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to toggle favorite'
+        });
+    }
+});
+
+// Delete content
+app.delete('/api/content-library/:contentId', async (req, res) => {
+    try {
+        const { contentId } = req.params;
+
+        if (dbAvailable) {
+            try {
+                const deletedContent = await ContentLibrary.delete(contentId);
+
+                if (!deletedContent) {
+                    return res.status(404).json({
+                        success: false,
+                        error: 'Content not found'
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    message: 'Content deleted successfully'
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error deleting content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete content'
+        });
+    }
+});
+
+// Search content
+app.get('/api/content-library/:userId/search', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { q } = req.query;
+
+        if (!q) {
+            return res.status(400).json({
+                success: false,
+                error: 'Search query required'
+            });
+        }
+
+        if (dbAvailable) {
+            try {
+                const content = await ContentLibrary.search(userId, q);
+
+                return res.json({
+                    success: true,
+                    data: content,
+                    query: q
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error searching content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to search content'
+        });
+    }
+});
+
+// Get favorites
+app.get('/api/content-library/:userId/favorites', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (dbAvailable) {
+            try {
+                const favorites = await ContentLibrary.getFavorites(userId);
+
+                return res.json({
+                    success: true,
+                    data: favorites
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error fetching favorites:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch favorites'
+        });
+    }
+});
+
+// Get content library with query param (for calendar)
+app.get('/api/content-library', async (req, res) => {
+    try {
+        const { userId, limit = 50, offset = 0 } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                error: 'userId is required'
+            });
+        }
+
+        if (dbAvailable) {
+            try {
+                const content = await ContentLibrary.findByUserId(userId, {
+                    limit: parseInt(limit),
+                    offset: parseInt(offset)
+                });
+
+                return res.json({
+                    success: true,
+                    posts: content
+                });
+            } catch (dbError) {
+                console.error('[Content Library] Database error:', dbError.message);
+            }
+        }
+
+        res.status(503).json({
+            success: false,
+            error: 'Database not available'
+        });
+
+    } catch (error) {
+        console.error('[Content Library] Error fetching content:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch content'
+        });
+    }
+});
+
+// =============================================
+// CALENDAR / SCHEDULED POSTS API ENDPOINTS
+// =============================================
+
+// In-memory storage for scheduled posts (fallback if no DB)
+const scheduledPostsCache = new Map();
+
+// Get all scheduled posts for a user
+app.get('/api/calendar/posts', async (req, res) => {
+    try {
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                error: 'userId is required'
+            });
+        }
+
+        if (dbAvailable && supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('scheduled_posts')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .order('scheduled_date', { ascending: true });
+
+                if (error) throw error;
+
+                return res.json({
+                    success: true,
+                    posts: data || []
+                });
+            } catch (dbError) {
+                console.error('[Calendar] Database error:', dbError.message);
+                // Fall through to cache
+            }
+        }
+
+        // Fallback to in-memory cache
+        const userPosts = scheduledPostsCache.get(userId) || [];
+        res.json({
+            success: true,
+            posts: userPosts
+        });
+
+    } catch (error) {
+        console.error('[Calendar] Error fetching scheduled posts:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch scheduled posts'
+        });
+    }
+});
+
+// Schedule a new post
+app.post('/api/calendar/schedule', async (req, res) => {
+    try {
+        const { userId, title, content, scheduled_date, library_id } = req.body;
+
+        if (!userId || !content || !scheduled_date) {
+            return res.status(400).json({
+                success: false,
+                error: 'userId, content, and scheduled_date are required'
+            });
+        }
+
+        const postData = {
+            user_id: userId,
+            title: title || 'Scheduled Post',
+            content,
+            scheduled_date,
+            library_id: library_id || null,
+            status: 'scheduled',
+            created_at: new Date().toISOString()
+        };
+
+        if (dbAvailable && supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('scheduled_posts')
+                    .insert(postData)
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                return res.json({
+                    success: true,
+                    post: data
+                });
+            } catch (dbError) {
+                console.error('[Calendar] Database error:', dbError.message);
+                // Fall through to cache
+            }
+        }
+
+        // Fallback to in-memory cache
+        const id = 'local_' + Date.now();
+        postData.id = id;
+
+        const userPosts = scheduledPostsCache.get(userId) || [];
+        userPosts.push(postData);
+        scheduledPostsCache.set(userId, userPosts);
+
+        res.json({
+            success: true,
+            post: postData
+        });
+
+    } catch (error) {
+        console.error('[Calendar] Error scheduling post:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to schedule post'
+        });
+    }
+});
+
+// Update a scheduled post
+app.put('/api/calendar/posts/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const updates = req.body;
+
+        // Remove fields that shouldn't be updated directly
+        delete updates.id;
+        delete updates.user_id;
+        delete updates.created_at;
+
+        updates.updated_at = new Date().toISOString();
+
+        if (dbAvailable && supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('scheduled_posts')
+                    .update(updates)
+                    .eq('id', postId)
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                return res.json({
+                    success: true,
+                    post: data
+                });
+            } catch (dbError) {
+                console.error('[Calendar] Database error:', dbError.message);
+            }
+        }
+
+        // Fallback: update in cache
+        for (const [userId, posts] of scheduledPostsCache.entries()) {
+            const postIndex = posts.findIndex(p => p.id === postId);
+            if (postIndex !== -1) {
+                posts[postIndex] = { ...posts[postIndex], ...updates };
+                return res.json({
+                    success: true,
+                    post: posts[postIndex]
+                });
+            }
+        }
+
+        res.status(404).json({
+            success: false,
+            error: 'Post not found'
+        });
+
+    } catch (error) {
+        console.error('[Calendar] Error updating post:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to update post'
+        });
+    }
+});
+
+// Delete a scheduled post
+app.delete('/api/calendar/posts/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+
+        if (dbAvailable && supabase) {
+            try {
+                const { error } = await supabase
+                    .from('scheduled_posts')
+                    .delete()
+                    .eq('id', postId);
+
+                if (error) throw error;
+
+                return res.json({
+                    success: true,
+                    deleted: postId
+                });
+            } catch (dbError) {
+                console.error('[Calendar] Database error:', dbError.message);
+            }
+        }
+
+        // Fallback: delete from cache
+        for (const [userId, posts] of scheduledPostsCache.entries()) {
+            const postIndex = posts.findIndex(p => p.id === postId);
+            if (postIndex !== -1) {
+                posts.splice(postIndex, 1);
+                return res.json({
+                    success: true,
+                    deleted: postId
+                });
+            }
+        }
+
+        res.status(404).json({
+            success: false,
+            error: 'Post not found'
+        });
+
+    } catch (error) {
+        console.error('[Calendar] Error deleting post:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete post'
+        });
+    }
+});
+
+// Database health check endpoint
+app.get('/api/db/health', async (req, res) => {
+    try {
+        const { supabase, testConnection } = require('./db/supabase');
+
+        if (!supabase) {
+            return res.json({
+                success: true,
+                database: {
+                    available: false,
+                    type: 'Supabase',
+                    configured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
+                    error: 'Supabase client not initialized'
+                }
+            });
+        }
+
+        const isConnected = await testConnection();
+
+        res.json({
+            success: true,
+            database: {
+                available: isConnected,
+                type: 'Supabase',
+                configured: true
+            }
+        });
+    } catch (error) {
+        res.json({
+            success: true,
+            database: {
+                available: false,
+                configured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
+                error: error.message
+            }
+        });
+    }
+});
 
 // Start server (only for local development)
 if (process.env.NODE_ENV !== 'production') {
