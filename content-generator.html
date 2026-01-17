@@ -53,7 +53,7 @@
                     </label>
                     <p class="text-sm text-gray-600 mb-3">Which agencies do you want to create content about?</p>
 
-                    <!-- Your Agencies (from onboarding/Opportunity Scout) -->
+                    <!-- Your Agencies (from onboarding/Opportunity Hunter) -->
                     <div id="your-agencies-section" class="hidden mb-4">
                         <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-3">
                             <div class="flex items-center justify-between mb-3">
@@ -419,7 +419,7 @@
         }
 
         function renderAgencies() {
-            // Check for target agencies from Opportunity Scout report
+            // Check for target agencies from Opportunity Hunter report
             const targetAgencies = userData?.targetAgencies || [];
 
             // If user has target agencies from the report, show those prominently
@@ -432,7 +432,7 @@
                 // Update the section title to indicate these are from the report
                 const sectionTitle = yourSection.querySelector('p');
                 if (sectionTitle) {
-                    sectionTitle.innerHTML = `<span class="text-green-800 font-semibold">Your Target Agencies</span> <span class="text-green-600">(from your Opportunity Scout report)</span>`;
+                    sectionTitle.innerHTML = `<span class="text-green-800 font-semibold">Your Target Agencies</span> <span class="text-green-600">(from your Opportunity Hunter report)</span>`;
                 }
 
                 yourContainer.innerHTML = targetAgencies.map(agency => `

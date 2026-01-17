@@ -147,9 +147,14 @@ app.get('/onboarding', (req, res) => {
     res.sendFile(path.join(__dirname, 'onboarding.html'));
 });
 
-// Serve the Opportunity Scout page
-app.get('/opportunity-scout', (req, res) => {
+// Serve the Opportunity Hunter page
+app.get('/opportunity-hunter', (req, res) => {
     res.sendFile(path.join(__dirname, 'content-engine-test.html'));
+});
+
+// Redirect old opportunity-scout URL to opportunity-hunter
+app.get('/opportunity-scout', (req, res) => {
+    res.redirect(301, '/opportunity-hunter');
 });
 
 // Serve the Target Market Report page
@@ -321,7 +326,7 @@ app.get('/api/content-generator/viral-content', (req, res) => {
 
 // Legacy route redirect for backwards compatibility
 app.get('/contract-finder', (req, res) => {
-    res.redirect(301, '/opportunity-scout');
+    res.redirect(301, '/opportunity-hunter');
 });
 
 // In-memory user data storage (fallback if database is unavailable)
