@@ -1583,20 +1583,10 @@ Use these hooks as inspiration for creating engaging opening lines. Adapt them t
 
 // Analyze profile with Grok
 async function analyzeWithGrok(profileData) {
-    // Extract agency mentions from profile
-    const profileText = [
-        profileData.headline,
-        profileData.about,
-        ...profileData.experience.map(e => `${e.title} ${e.company}`)
-    ].join(' ');
-
-    const mentionedAgencies = extractAgenciesFromText(profileText);
-    const painPoints = loadAgencyPainPoints(mentionedAgencies);
-    const painPointsFormatted = formatPainPointsForPrompt(painPoints, 8);
     const prompt = `You are a LinkedIn optimization expert. Analyze this LinkedIn profile and provide:
 
 1. A score from 0-100 (be realistic, most profiles score 40-70)
-2. An improved, catchy headline that includes value proposition
+2. An improved, catchy headline that includes a clear value proposition
 3. 20 specific, actionable fixes with:
    - Title/category
    - Description of the issue
@@ -1624,24 +1614,24 @@ Provide the response in JSON format:
   ]
 }
 
-Focus on:
-- Banner optimization
-- Profile picture quality
-- Headline catchiness and value
-- About section (personal + professional blend)
-- Experience details
-- Social proof (endorsements, recommendations)
-- Features section
-- Call-to-action
-- Content strategy
-- Engagement strategy
+Score based on these criteria:
+- Headline clarity and value proposition (does it say who you help and how?)
+- About section storytelling (personal + professional blend, metrics, CTA)
+- Experience section impact (accomplishments vs. job descriptions)
+- Visual elements (banner/billboard, profile photo quality)
+- Social proof (endorsements, recommendations, featured section)
+- Content strategy (posting frequency, engagement)
+- Call-to-action (how easy is it to work with/contact this person?)
+- Network engagement signals
 
-Be specific and actionable. Make recommendations based on what actually drives results for government contractors.
+Make recommendations focused on:
+- Attracting ideal clients and opportunities
+- Career visibility and thought leadership
+- Personal branding and authenticity
+- Growing a high-value professional network
+- Converting profile visitors into connections and leads
 
-AGENCY PAIN POINTS (for context on government needs):
-${painPointsFormatted}
-
-Use these agency pain points to help suggest content that addresses real government challenges and needs. This will make recommendations more relevant for government contractors.`;
+Be specific and actionable. Every fix should be something the user can implement today.`;
 
     try {
         const response = await axios.post(
@@ -1651,7 +1641,7 @@ Use these agency pain points to help suggest content that addresses real governm
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a LinkedIn optimization expert specializing in helping government contractors and B2B professionals. Provide detailed, actionable recommendations.'
+                        content: 'You are a LinkedIn optimization expert who helps professionals attract clients, grow their network, and build their personal brand. Provide detailed, actionable recommendations.'
                     },
                     {
                         role: 'user',
@@ -1779,7 +1769,7 @@ function generateDefaultFixes(profile) {
 
     // Add more default fixes to reach 20
     const additionalFixes = [
-        { title: 'Content Strategy', description: 'Start posting regularly to build authority.', priority: 'high', tips: 'Post 3-5 times per week. Share industry news, contract wins, and educational content.' },
+        { title: 'Content Strategy', description: 'Start posting regularly to build authority.', priority: 'high', tips: 'Post 3-5 times per week. Share insights, wins, and educational content relevant to your audience.' },
         { title: 'Engagement Strategy', description: 'Comment on others\' posts before posting your own.', priority: 'high', tips: 'Spend 30 min - 1 hour daily commenting on posts from your target audience.' },
         { title: 'Personal Connection', description: 'Add personal elements to your about section.', priority: 'medium', tips: 'Share hobbies, interests, or background. People want to connect with YOU, not just your business.' },
         { title: 'Call-to-Action', description: 'Tell people how to connect or work with you.', priority: 'high', tips: 'Include a clear call-to-action in your about section - website, calendar link, or how to reach you.' },
@@ -1787,8 +1777,8 @@ function generateDefaultFixes(profile) {
         { title: 'Certifications', description: 'Display all relevant certifications.', priority: 'medium', tips: 'Add certifications and licenses to add credibility.' },
         { title: 'Location Optimization', description: 'Make sure your location is accurate.', priority: 'low', tips: 'Update your location to help local connections find you.' },
         { title: 'Engage with Own Posts', description: 'Like and comment on your own posts.', priority: 'medium', tips: 'Be the first to like your post and add a comment to start engagement.' },
-        { title: 'Network Building', description: 'Connect with your target audience strategically.', priority: 'high', tips: 'Connect with decision-makers, government officials, and other entrepreneurs in your industry.' },
-        { title: 'Case Studies', description: 'Share contract wins and success stories.', priority: 'high', tips: 'Post case studies showing results. You don\'t always need to name the client.' }
+        { title: 'Network Building', description: 'Connect with your target audience strategically.', priority: 'high', tips: 'Connect with decision-makers, potential clients, and thought leaders in your industry.' },
+        { title: 'Case Studies', description: 'Share wins and success stories.', priority: 'high', tips: 'Post case studies showing results. You don\'t always need to name the client.' }
     ];
 
     return [...fixes, ...additionalFixes].slice(0, 20);

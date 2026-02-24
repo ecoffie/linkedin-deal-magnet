@@ -50,6 +50,57 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Score circle */
+        .score-ring {
+            transform: rotate(-90deg);
+        }
+        .score-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+        .score-ring-fill {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        /* Priority badges */
+        .badge-high {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+        .badge-medium {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fcd34d;
+        }
+        .badge-low {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        /* Loading steps */
+        .loading-step {
+            opacity: 0.4;
+            transition: opacity 0.5s;
+        }
+        .loading-step.active {
+            opacity: 1;
+        }
+        .loading-step.done {
+            opacity: 0.7;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -89,12 +140,12 @@
                 <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-1"></div>
                 <div class="flex flex-col items-center flex-1">
                     <div id="step-2-circle" class="step-circle">2</div>
-                    <p class="text-sm font-medium mt-2 text-gray-700">Company Info</p>
+                    <p class="text-sm font-medium mt-2 text-gray-700">Profile URL</p>
                 </div>
                 <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-2"></div>
                 <div class="flex flex-col items-center flex-1">
                     <div id="step-3-circle" class="step-circle">3</div>
-                    <p class="text-sm font-medium mt-2 text-gray-700">Find Opportunities</p>
+                    <p class="text-sm font-medium mt-2 text-gray-700">Your Score</p>
                 </div>
             </div>
         </div>
@@ -117,15 +168,15 @@
                     <h3 class="font-semibold text-gray-900 mb-3">What we'll access:</h3>
                     <ul class="space-y-2 text-gray-700">
                         <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-green-600 mt-1">&#10003;</span>
                             <span>Your name, headline, and profile picture</span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-green-600 mt-1">&#10003;</span>
                             <span>Your last 10 public posts (to learn your writing style)</span>
                         </li>
                         <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">✓</span>
+                            <span class="text-green-600 mt-1">&#10003;</span>
                             <span>Your email address (for account creation)</span>
                         </li>
                     </ul>
@@ -147,168 +198,146 @@
             </div>
         </div>
 
-        <!-- Step 2: Company Information -->
+        <!-- Step 2: LinkedIn Profile URL -->
         <div id="step-2" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
             <div class="max-w-2xl mx-auto">
-                <div class="text-center mb-8">
-                    <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🏢</span>
+                <!-- Input State -->
+                <div id="profile-input-state">
+                    <div class="text-center mb-8">
+                        <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Analyze Your LinkedIn Profile</h2>
+                        <p class="text-gray-600">
+                            Paste your LinkedIn profile URL and we'll give you a personalized readiness score with actionable fixes.
+                        </p>
                     </div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Tell Us About Your Business</h2>
-                    <p class="text-gray-600">
-                        This helps us match you with the right government agencies and create targeted content.
-                    </p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                LinkedIn Profile URL <span class="text-red-500">*</span>
+                            </label>
+                            <input type="url" id="linkedin-url" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent text-lg" placeholder="https://linkedin.com/in/your-name" autocomplete="url">
+                            <p id="url-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid LinkedIn profile URL (e.g. linkedin.com/in/username)</p>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-gray-700">
+                            <p class="font-medium mb-1">How to find your profile URL:</p>
+                            <ol class="list-decimal list-inside space-y-1 text-gray-600">
+                                <li>Go to your LinkedIn profile</li>
+                                <li>Copy the URL from your browser's address bar</li>
+                                <li>It should look like: <code class="bg-white px-1 rounded">linkedin.com/in/your-name</code></li>
+                            </ol>
+                        </div>
+
+                        <div class="flex gap-4 pt-4">
+                            <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-6 py-3 rounded-lg transition">
+                                Back
+                            </button>
+                            <button type="button" onclick="analyzeProfile()" id="analyze-btn" class="flex-1 bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
+                                Analyze My Profile
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <form id="company-info-form" class="space-y-6">
-                    <!-- NAICS Codes -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            NAICS Codes <span class="text-red-500">*</span>
-                        </label>
-                        <p class="text-sm text-gray-600 mb-3">
-                            Select up to 5 NAICS codes that describe your business (primary code first)
-                        </p>
-                        <div id="naics-container" class="space-y-2">
-                            <input type="text" class="naics-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="e.g., 541330 (Engineering Services)" required>
+                <!-- Loading State -->
+                <div id="profile-loading-state" class="hidden">
+                    <div class="text-center mb-8">
+                        <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-purple-600 spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
                         </div>
-                        <button type="button" onclick="addNaicsField()" class="mt-2 text-linkedin-blue hover:text-linkedin-dark text-sm font-medium">
-                            + Add another NAICS code
-                        </button>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Analyzing Your Profile...</h2>
+                        <p class="text-gray-600">This usually takes 15-30 seconds</p>
                     </div>
 
-                    <!-- Certifications -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Certifications
-                        </label>
-                        <p class="text-sm text-gray-600 mb-3">Select all that apply</p>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                                <input type="checkbox" name="certifications" value="8a" class="w-5 h-5 text-linkedin-blue">
-                                <span class="font-medium">8(a)</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                                <input type="checkbox" name="certifications" value="wosb" class="w-5 h-5 text-linkedin-blue">
-                                <span class="font-medium">WOSB/EDWOSB</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                                <input type="checkbox" name="certifications" value="vosb" class="w-5 h-5 text-linkedin-blue">
-                                <span class="font-medium">VOSB/SDVOSB</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-3 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-linkedin-blue transition">
-                                <input type="checkbox" name="certifications" value="hubzone" class="w-5 h-5 text-linkedin-blue">
-                                <span class="font-medium">HUBZone</span>
-                            </label>
+                    <div class="space-y-4 max-w-md mx-auto">
+                        <div id="loading-step-1" class="loading-step active flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                            <div class="w-8 h-8 rounded-full bg-linkedin-blue flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-800">Scraping your profile...</span>
                         </div>
-                        <input type="text" id="other-certifications" class="mt-2 w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Other certifications (optional)">
-                    </div>
-
-                    <!-- Past Agencies -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Past Agencies (if any)
-                        </label>
-                        <p class="text-sm text-gray-600 mb-3">Which agencies have you worked with before?</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="DoD" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">Department of Defense</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="VA" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">Veterans Affairs</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="DHS" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">Homeland Security</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="GSA" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">GSA</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="NASA" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">NASA</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" name="agencies" value="DOE" class="w-4 h-4 text-linkedin-blue">
-                                <span class="text-sm">Energy</span>
-                            </label>
+                        <div id="loading-step-2" class="loading-step flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+                                <span class="text-white text-sm font-bold">2</span>
+                            </div>
+                            <span class="font-medium text-gray-800">Analyzing with AI...</span>
                         </div>
-                        <input type="text" id="other-agencies" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Other agencies (comma-separated)">
-                    </div>
-
-                    <!-- Capabilities Statement -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Capabilities Statement <span class="text-red-500">*</span>
-                        </label>
-                        <p class="text-sm text-gray-600 mb-3">
-                            Upload your capabilities statement PDF or paste the text
-                        </p>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-linkedin-blue transition">
-                            <input type="file" id="capabilities-pdf" accept=".pdf" class="hidden" onchange="handleFileUpload(event)">
-                            <label for="capabilities-pdf" class="cursor-pointer">
-                                <div class="text-4xl mb-2">📄</div>
-                                <p class="text-linkedin-blue font-medium mb-1">Upload PDF</p>
-                                <p class="text-sm text-gray-500">or drag and drop here</p>
-                            </label>
+                        <div id="loading-step-3" class="loading-step flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+                                <span class="text-white text-sm font-bold">3</span>
+                            </div>
+                            <span class="font-medium text-gray-800">Generating your score...</span>
                         </div>
-                        <div class="mt-3 text-center text-gray-500">— OR —</div>
-                        <textarea id="capabilities-text" rows="6" class="mt-3 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent" placeholder="Paste your capabilities statement text here (500-2000 characters recommended)"></textarea>
                     </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="flex gap-4 pt-4">
-                        <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-6 py-3 rounded-lg transition">
-                            Back
-                        </button>
-                        <button type="submit" class="flex-1 bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
-                            Continue to Opportunities
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
 
-        <!-- Step 3: Opportunity Hunter (Embedded) -->
+        <!-- Step 3: Your LinkedIn Readiness Score -->
         <div id="step-3" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
-            <div class="text-center mb-8">
-                <div class="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                    <span class="text-4xl">🎯</span>
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Your LinkedIn Readiness Score</h2>
+                    <p class="text-gray-600">Here's how your profile stacks up, with actionable steps to improve it.</p>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Discover Your Opportunities</h2>
-                <p class="text-gray-600">
-                    Based on your business profile, here are agencies actively awarding contracts in your space.
-                </p>
-            </div>
 
-            <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
-                <h3 class="font-semibold text-gray-900 mb-2">What's Next?</h3>
-                <p class="text-gray-700">
-                    After you explore opportunities, we'll help you create LinkedIn content that resonates with these agencies and their decision-makers.
-                </p>
-            </div>
+                <!-- Score Circle -->
+                <div class="flex justify-center mb-8">
+                    <div class="relative w-48 h-48">
+                        <svg class="w-48 h-48 score-ring" viewBox="0 0 120 120">
+                            <circle class="score-ring-bg" cx="60" cy="60" r="52"/>
+                            <circle id="score-ring-fill" class="score-ring-fill" cx="60" cy="60" r="52"
+                                stroke-dasharray="326.73"
+                                stroke-dashoffset="326.73"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="score-number" class="text-5xl font-bold text-gray-900">0</span>
+                            <span id="score-label" class="text-sm font-medium text-gray-500 mt-1">--</span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Quick Actions -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
-                <a href="/opportunity-hunter" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                    <div class="text-2xl mb-2">🎯</div>
-                    <div>Find Opportunities</div>
-                    <p class="text-xs text-blue-100 mt-1">Search for contracts</p>
-                </a>
-                <a href="/content-generator" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 rounded-lg transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                    <div class="text-2xl mb-2">✍️</div>
-                    <div>Generate Content</div>
-                    <p class="text-xs text-purple-100 mt-1">Create LinkedIn posts</p>
-                </a>
-            </div>
+                <!-- AI Headline Suggestion -->
+                <div id="headline-section" class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 hidden">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900 mb-1">Suggested Headline</h3>
+                            <p id="ai-headline" class="text-gray-800 text-lg"></p>
+                        </div>
+                        <button onclick="copyHeadline()" id="copy-headline-btn" class="flex-shrink-0 bg-white hover:bg-gray-50 text-linkedin-blue border border-linkedin-blue px-3 py-2 rounded-lg text-sm font-medium transition">
+                            Copy
+                        </button>
+                    </div>
+                </div>
 
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <button onclick="completeOnboarding()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
-                    Complete Setup & Go to Dashboard
-                </button>
+                <!-- Fixes List -->
+                <div id="fixes-section" class="mb-8 hidden">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Prioritized Fixes</h3>
+                    <div id="fixes-list" class="space-y-3"></div>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div id="score-cta" class="hidden border-t border-gray-200 pt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="/content-generator" class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-4 rounded-lg transition shadow-lg text-center">
+                            Generate Content
+                            <p class="text-xs text-blue-100 mt-1 font-normal">Create LinkedIn posts that convert</p>
+                        </a>
+                        <button onclick="completeOnboarding()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-4 rounded-lg transition shadow-lg">
+                            Complete Setup
+                            <p class="text-xs text-green-100 mt-1 font-normal">Go to your dashboard</p>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -318,28 +347,25 @@
         let currentStep = 1;
         let userData = {
             linkedin: null,
-            company: null
+            audit: null
         };
 
         // Step navigation
         function goToStep(step) {
-            // Hide all steps
             document.getElementById('step-1').classList.add('hidden');
             document.getElementById('step-2').classList.add('hidden');
             document.getElementById('step-3').classList.add('hidden');
 
-            // Show current step
             document.getElementById(`step-${step}`).classList.remove('hidden');
             document.getElementById(`step-${step}`).classList.add('fade-in');
 
-            // Update progress indicators
             for (let i = 1; i <= 3; i++) {
                 const circle = document.getElementById(`step-${i}-circle`);
                 circle.classList.remove('active', 'completed');
 
                 if (i < step) {
                     circle.classList.add('completed');
-                    circle.innerHTML = '✓';
+                    circle.innerHTML = '&#10003;';
                 } else if (i === step) {
                     circle.classList.add('active');
                     circle.innerHTML = i;
@@ -348,7 +374,6 @@
                 }
             }
 
-            // Update progress lines
             if (step > 1) {
                 document.getElementById('progress-line-1').classList.add('bg-green-500');
                 document.getElementById('progress-line-1').classList.remove('bg-gray-300');
@@ -359,14 +384,11 @@
             }
 
             currentStep = step;
-
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // LinkedIn OAuth Connection
         function connectLinkedIn() {
-            // Redirect to LinkedIn OAuth
             window.location.href = '/auth/linkedin';
         }
 
@@ -375,21 +397,14 @@
             const urlParams = new URLSearchParams(window.location.search);
 
             if (urlParams.get('linkedin_connected') === 'true') {
-                // Fetch LinkedIn profile data
                 try {
                     const response = await fetch('/api/linkedin/profile');
                     const data = await response.json();
 
                     if (data.success) {
                         userData.linkedin = data.profile;
-
-                        // Show success message
                         alert('LinkedIn connected successfully!');
-
-                        // Move to next step
                         goToStep(2);
-
-                        // Clean up URL
                         window.history.replaceState({}, document.title, '/onboarding');
                     }
                 } catch (error) {
@@ -402,89 +417,221 @@
             }
         }
 
-        // Add NAICS field
-        let naicsCount = 1;
-        function addNaicsField() {
-            if (naicsCount >= 5) {
-                alert('Maximum 5 NAICS codes allowed');
-                return;
-            }
-
-            const container = document.getElementById('naics-container');
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'naics-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent';
-            input.placeholder = 'e.g., 541511 (Custom Computer Programming)';
-            container.appendChild(input);
-            naicsCount++;
+        // Validate LinkedIn URL
+        function isValidLinkedInUrl(url) {
+            return /linkedin\.com\/in\/[\w-]+/i.test(url);
         }
 
-        // Handle file upload
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.querySelector('label[for="capabilities-pdf"] p.text-linkedin-blue').textContent = `Selected: ${file.name}`;
-                // TODO: Actually parse PDF using existing PDF parser
-            }
-        }
-
-        // Company info form submission
-        document.getElementById('company-info-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Collect form data
-            const naicsCodes = Array.from(document.querySelectorAll('.naics-input'))
-                .map(input => input.value.trim())
-                .filter(val => val);
-
-            const certifications = Array.from(document.querySelectorAll('input[name="certifications"]:checked'))
-                .map(cb => cb.value);
-
-            const agencies = Array.from(document.querySelectorAll('input[name="agencies"]:checked'))
-                .map(cb => cb.value);
-
-            const otherAgencies = document.getElementById('other-agencies').value
-                .split(',')
-                .map(a => a.trim())
-                .filter(a => a);
-
-            const capabilitiesText = document.getElementById('capabilities-text').value.trim();
+        // Analyze profile
+        async function analyzeProfile() {
+            const urlInput = document.getElementById('linkedin-url');
+            const url = urlInput.value.trim();
+            const errorEl = document.getElementById('url-error');
 
             // Validate
-            if (naicsCodes.length === 0) {
-                alert('Please enter at least one NAICS code');
+            if (!url || !isValidLinkedInUrl(url)) {
+                errorEl.classList.remove('hidden');
+                urlInput.classList.add('border-red-500');
                 return;
             }
+            errorEl.classList.add('hidden');
+            urlInput.classList.remove('border-red-500');
 
-            if (!capabilitiesText && !document.getElementById('capabilities-pdf').files[0]) {
-                alert('Please provide your capabilities statement');
-                return;
+            // Switch to loading state
+            document.getElementById('profile-input-state').classList.add('hidden');
+            document.getElementById('profile-loading-state').classList.remove('hidden');
+
+            // Animate loading steps
+            simulateLoadingSteps();
+
+            try {
+                const response = await fetch('/api/audit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.message || 'Failed to analyze profile');
+                }
+
+                const result = await response.json();
+                userData.audit = result;
+
+                // Finish loading animation then show results
+                finishLoadingSteps(() => {
+                    goToStep(3);
+                    renderScore(result);
+                });
+
+            } catch (error) {
+                console.error('Profile analysis error:', error);
+                alert('Failed to analyze profile: ' + error.message + '. Please try again.');
+
+                // Reset to input state
+                document.getElementById('profile-loading-state').classList.add('hidden');
+                document.getElementById('profile-input-state').classList.remove('hidden');
+            }
+        }
+
+        // Simulate loading step progression
+        function simulateLoadingSteps() {
+            const steps = [
+                document.getElementById('loading-step-1'),
+                document.getElementById('loading-step-2'),
+                document.getElementById('loading-step-3')
+            ];
+
+            // Step 1 is already active
+            setTimeout(() => {
+                steps[0].classList.remove('active');
+                steps[0].classList.add('done');
+                steps[0].querySelector('div').classList.add('bg-green-500');
+                steps[0].querySelector('div').classList.remove('bg-linkedin-blue');
+                steps[0].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+
+                steps[1].classList.add('active');
+                steps[1].querySelector('div').classList.add('bg-linkedin-blue');
+                steps[1].querySelector('div').classList.remove('bg-gray-300');
+                steps[1].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+            }, 3000);
+
+            setTimeout(() => {
+                steps[1].classList.remove('active');
+                steps[1].classList.add('done');
+                steps[1].querySelector('div').classList.add('bg-green-500');
+                steps[1].querySelector('div').classList.remove('bg-linkedin-blue');
+                steps[1].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+
+                steps[2].classList.add('active');
+                steps[2].querySelector('div').classList.add('bg-linkedin-blue');
+                steps[2].querySelector('div').classList.remove('bg-gray-300');
+                steps[2].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+            }, 8000);
+        }
+
+        // Finish loading and transition
+        function finishLoadingSteps(callback) {
+            const steps = [
+                document.getElementById('loading-step-1'),
+                document.getElementById('loading-step-2'),
+                document.getElementById('loading-step-3')
+            ];
+
+            // Mark all as done
+            steps.forEach(step => {
+                step.classList.remove('active');
+                step.classList.add('done');
+                const dot = step.querySelector('div');
+                dot.className = 'w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0';
+                dot.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+            });
+
+            setTimeout(callback, 500);
+        }
+
+        // Render score on Step 3
+        function renderScore(result) {
+            const score = result.score || 0;
+            const circumference = 326.73; // 2 * PI * 52
+
+            // Determine color and label
+            let color, label;
+            if (score >= 80) {
+                color = '#16a34a'; label = 'Excellent';
+            } else if (score >= 60) {
+                color = '#22c55e'; label = 'Looking Good';
+            } else if (score >= 40) {
+                color = '#f59e0b'; label = 'Getting There';
+            } else {
+                color = '#dc2626'; label = 'Needs Work';
             }
 
-            // Store data
-            userData.company = {
-                naicsCodes,
-                certifications,
-                agencies: [...agencies, ...otherAgencies],
-                capabilitiesStatement: capabilitiesText,
-                otherCertifications: document.getElementById('other-certifications').value.trim()
-            };
+            // Animate score ring
+            const ring = document.getElementById('score-ring-fill');
+            ring.style.stroke = color;
+            const offset = circumference - (score / 100) * circumference;
+            // Trigger animation after a tick
+            requestAnimationFrame(() => {
+                ring.style.strokeDashoffset = offset;
+            });
 
-            // Save to server (TODO: implement API endpoint)
-            saveUserData();
+            // Animate score number counting up
+            const scoreEl = document.getElementById('score-number');
+            const labelEl = document.getElementById('score-label');
+            labelEl.textContent = label;
+            labelEl.style.color = color;
 
-            // Move to next step
-            goToStep(3);
-        });
+            let current = 0;
+            const duration = 1500;
+            const stepTime = duration / score;
+            const counter = setInterval(() => {
+                current++;
+                scoreEl.textContent = current;
+                if (current >= score) {
+                    clearInterval(counter);
+                    scoreEl.textContent = score;
+                }
+            }, stepTime);
+
+            // Show AI headline
+            if (result.aiHeadline) {
+                document.getElementById('headline-section').classList.remove('hidden');
+                document.getElementById('ai-headline').textContent = result.aiHeadline;
+            }
+
+            // Render fixes
+            if (result.fixes && result.fixes.length > 0) {
+                document.getElementById('fixes-section').classList.remove('hidden');
+                const fixesList = document.getElementById('fixes-list');
+                fixesList.innerHTML = '';
+
+                // Sort by priority: high > medium > low
+                const priorityOrder = { high: 0, medium: 1, low: 2 };
+                const sortedFixes = [...result.fixes].sort((a, b) =>
+                    (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2)
+                );
+
+                sortedFixes.forEach(fix => {
+                    const badgeClass = fix.priority === 'high' ? 'badge-high' :
+                                       fix.priority === 'medium' ? 'badge-medium' : 'badge-low';
+                    const card = document.createElement('div');
+                    card.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition';
+                    card.innerHTML = `
+                        <div class="flex items-start gap-3">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${badgeClass} flex-shrink-0 mt-0.5">${fix.priority}</span>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-900">${fix.title}</h4>
+                                <p class="text-sm text-gray-600 mt-1">${fix.description}</p>
+                                ${fix.tips ? `<p class="text-sm text-linkedin-blue mt-2 font-medium">${fix.tips}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    fixesList.appendChild(card);
+                });
+            }
+
+            // Show CTA
+            document.getElementById('score-cta').classList.remove('hidden');
+        }
+
+        // Copy headline
+        function copyHeadline() {
+            const headline = document.getElementById('ai-headline').textContent;
+            navigator.clipboard.writeText(headline).then(() => {
+                const btn = document.getElementById('copy-headline-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+        }
 
         // Save user data to server
         async function saveUserData() {
             try {
                 const response = await fetch('/api/onboarding/save', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData)
                 });
 
@@ -498,20 +645,16 @@
 
         // Complete onboarding
         function completeOnboarding() {
-            // Mark onboarding as complete
             localStorage.setItem('onboarding_complete', 'true');
             localStorage.setItem('user_data', JSON.stringify(userData));
-
-            // Redirect to main app/dashboard
+            saveUserData();
             window.location.href = '/';
         }
 
         // Check if returning user and LinkedIn connection status
         window.addEventListener('DOMContentLoaded', function() {
-            // Check LinkedIn connection on page load
             checkLinkedInConnection();
 
-            // Check if returning user
             const onboardingComplete = localStorage.getItem('onboarding_complete');
             if (onboardingComplete === 'true') {
                 if (confirm('You\'ve already completed onboarding. Would you like to go to the dashboard?')) {
