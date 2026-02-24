@@ -24,10 +24,10 @@
 - [ ] Agency matching UI/display
 
 ### Export Functionality
-- [ ] Copy to clipboard (one-click per variant)
-- [ ] Download as text (.txt)
-- [ ] Save to library (requires database)
-- [ ] Content library UI (search/filter saved posts)
+- [x] Copy to clipboard (one-click per variant)
+- [x] Download as text (.txt)
+- [x] Save to library (requires database)
+- [x] Content library UI (search/filter saved posts)
 
 ### Content Generator Polish
 - [ ] Content quality validation checks

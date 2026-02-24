@@ -688,6 +688,10 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                                 Save to Library
                             </button>
+                            <button id="download-btn-${index}" onclick="downloadPost(${index})" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Download
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -726,6 +730,43 @@
                 console.error('Failed to copy:', err);
                 alert('Failed to copy to clipboard');
             });
+        }
+
+        function downloadPost(index) {
+            const post = generatedPosts[index];
+            if (!post) return;
+
+            let fullText = post.content;
+            if (post.hashtags && post.hashtags.length > 0) {
+                fullText += '\n\n' + post.hashtags.join(' ');
+            }
+
+            const blob = new Blob([fullText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const template = (post.template || post.angle || 'post').replace(/\s+/g, '-').toLowerCase();
+            const date = new Date().toISOString().split('T')[0];
+            a.href = url;
+            a.download = `linkedin-post-${template}-${date}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            const button = document.getElementById(`download-btn-${index}`);
+            const originalHTML = button.innerHTML;
+            button.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Downloaded!
+            `;
+            button.classList.remove('bg-teal-600', 'hover:bg-teal-700');
+            button.classList.add('bg-green-600', 'hover:bg-green-700');
+
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                button.classList.add('bg-teal-600', 'hover:bg-teal-700');
+            }, 2000);
         }
 
         async function savePost(index) {
