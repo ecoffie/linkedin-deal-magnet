@@ -4,104 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Started - LinkedIn Deal Magnet</title>
+    <meta name="description" content="Get your free LinkedIn Readiness Score. AI-powered profile analysis with actionable fixes to attract more clients and opportunities.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .step-indicator {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .step-indicator::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background: #e5e7eb;
-            z-index: -1;
-        }
-        .step-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            background: white;
-            border: 3px solid #e5e7eb;
-            transition: all 0.3s;
-        }
-        .step-circle.active {
-            background: #0077B5;
-            border-color: #0077B5;
-            color: white;
-        }
-        .step-circle.completed {
-            background: #10b981;
-            border-color: #10b981;
-            color: white;
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Score circle */
-        .score-ring {
-            transform: rotate(-90deg);
-        }
-        .score-ring-bg {
-            fill: none;
-            stroke: #e5e7eb;
-            stroke-width: 8;
-        }
-        .score-ring-fill {
-            fill: none;
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 1.5s ease-out;
-        }
-
-        /* Priority badges */
-        .badge-high {
-            background: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fca5a5;
-        }
-        .badge-medium {
-            background: #fef3c7;
-            color: #d97706;
-            border: 1px solid #fcd34d;
-        }
-        .badge-low {
-            background: #f3f4f6;
-            color: #6b7280;
-            border: 1px solid #d1d5db;
-        }
-
-        /* Loading steps */
-        .loading-step {
-            opacity: 0.4;
-            transition: opacity 0.5s;
-        }
-        .loading-step.active {
-            opacity: 1;
-        }
-        .loading-step.done {
-            opacity: 0.7;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script>
         tailwind.config = {
             theme: {
@@ -116,239 +21,593 @@
             }
         }
     </script>
+    <style>
+        /* Step progress */
+        .step-circle {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; background: white; border: 3px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        .step-circle.active { background: #0077B5; border-color: #0077B5; color: white; }
+        .step-circle.completed { background: #10b981; border-color: #10b981; color: white; }
+
+        /* Score circle */
+        .score-ring { transform: rotate(-90deg); }
+        .score-ring-bg { fill: none; stroke: #e5e7eb; stroke-width: 8; }
+        .score-ring-fill {
+            fill: none; stroke-width: 8; stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        /* Loading steps */
+        .loading-step { opacity: 0.4; transition: opacity 0.5s; }
+        .loading-step.active { opacity: 1; }
+        .loading-step.done { opacity: 0.7; }
+        @keyframes spinIcon { to { transform: rotate(360deg); } }
+        .spin-icon { animation: spinIcon 1s linear infinite; }
+
+        /* Score pulse */
+        @keyframes scorePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+        .score-pulse { animation: scorePulse 2s ease-in-out infinite; }
+
+        /* Smooth transitions for onboarding steps */
+        .onboarding-step { transition: opacity 0.4s, transform 0.4s; }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-white to-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="flex items-center justify-center gap-3 mb-4">
-                <svg class="w-12 h-12 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                <h1 class="text-4xl font-bold text-gray-900">LinkedIn Deal Magnet</h1>
-            </div>
-            <p class="text-lg text-gray-600">Let's set up your account in 3 quick steps</p>
-        </div>
-
-        <!-- Progress Indicator -->
-        <div class="mb-12">
-            <div class="flex justify-between items-center max-w-2xl mx-auto px-8">
-                <div class="flex flex-col items-center flex-1">
-                    <div id="step-1-circle" class="step-circle active">1</div>
-                    <p class="text-sm font-medium mt-2 text-gray-700">Connect</p>
-                </div>
-                <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-1"></div>
-                <div class="flex flex-col items-center flex-1">
-                    <div id="step-2-circle" class="step-circle">2</div>
-                    <p class="text-sm font-medium mt-2 text-gray-700">Profile URL</p>
-                </div>
-                <div class="flex-1 h-0.5 bg-gray-300 mx-2" id="progress-line-2"></div>
-                <div class="flex flex-col items-center flex-1">
-                    <div id="step-3-circle" class="step-circle">3</div>
-                    <p class="text-sm font-medium mt-2 text-gray-700">Your Score</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 1: LinkedIn Connection -->
-        <div id="step-1" class="bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
-            <div class="text-center max-w-2xl mx-auto">
-                <div class="bg-linkedin-blue/10 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+<body class="bg-gradient-to-b from-blue-50 via-white to-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="w-8 h-8 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
+                    <span class="ml-2 text-xl font-bold text-gray-900">Deal Magnet</span>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Connect Your LinkedIn Profile</h2>
-                <p class="text-gray-600 mb-6">
-                    We'll analyze your profile and past posts to understand your unique voice and style.
-                    This helps us generate content that sounds authentically like you.
-                </p>
-
-                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-left">
-                    <h3 class="font-semibold text-gray-900 mb-3">What we'll access:</h3>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">&#10003;</span>
-                            <span>Your name, headline, and profile picture</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">&#10003;</span>
-                            <span>Your last 10 public posts (to learn your writing style)</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-green-600 mt-1">&#10003;</span>
-                            <span>Your email address (for account creation)</span>
-                        </li>
-                    </ul>
-                    <p class="text-sm text-gray-600 mt-4 italic">
-                        We never post without your permission. Your data is private and secure.
-                    </p>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/#features" class="text-gray-600 hover:text-linkedin-blue transition">Features</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-linkedin-blue transition">How It Works</a>
+                    <a href="#testimonials" class="text-gray-600 hover:text-linkedin-blue transition">Success Stories</a>
+                    <a href="/content-generator" class="text-gray-600 hover:text-linkedin-blue transition">Content Generator</a>
                 </div>
-
-                <button onclick="connectLinkedIn()" class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-md">
-                    <span class="flex items-center justify-center gap-2">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                        Connect with LinkedIn
-                    </span>
-                </button>
-
-                <p class="text-sm text-gray-500 mt-4">Takes less than 30 seconds</p>
             </div>
         </div>
+    </nav>
 
-        <!-- Step 2: LinkedIn Profile URL -->
-        <div id="step-2" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
-            <div class="max-w-2xl mx-auto">
-                <!-- Input State -->
-                <div id="profile-input-state">
-                    <div class="text-center mb-8">
-                        <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    <!-- Hero Section with Onboarding -->
+    <section class="relative overflow-hidden pt-16 pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
+                    Get Your
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-linkedin-blue to-purple-600">
+                        LinkedIn Readiness Score
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
+                    Find out exactly what's holding your profile back. Get a personalized score
+                    and 20+ AI-powered fixes to attract more clients and opportunities.
+                </p>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">3,200+</div>
+                        <div class="text-gray-600">Profiles Analyzed</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">20+</div>
+                        <div class="text-gray-600">Personalized Fixes</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                        <div class="text-4xl font-bold text-linkedin-blue mb-2">60s</div>
+                        <div class="text-gray-600">AI-Powered Results</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="mb-10 max-w-2xl mx-auto px-8" id="progress-bar">
+                <div class="flex justify-between items-center">
+                    <div class="flex flex-col items-center flex-1">
+                        <div id="step-1-circle" class="step-circle active">1</div>
+                        <p class="text-sm font-semibold mt-2 text-gray-700">Connect</p>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-2 rounded-full" id="progress-line-1">
+                        <div class="h-full bg-green-500 rounded-full transition-all duration-500" style="width: 0%" id="progress-fill-1"></div>
+                    </div>
+                    <div class="flex flex-col items-center flex-1">
+                        <div id="step-2-circle" class="step-circle">2</div>
+                        <p class="text-sm font-semibold mt-2 text-gray-700">Profile URL</p>
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-2 rounded-full" id="progress-line-2">
+                        <div class="h-full bg-green-500 rounded-full transition-all duration-500" style="width: 0%" id="progress-fill-2"></div>
+                    </div>
+                    <div class="flex flex-col items-center flex-1">
+                        <div id="step-3-circle" class="step-circle">3</div>
+                        <p class="text-sm font-semibold mt-2 text-gray-700">Your Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== STEP 1: Connect LinkedIn ========== -->
+            <div id="step-1" class="onboarding-step fade-in">
+                <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 max-w-2xl mx-auto border border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-linkedin-blue to-purple-600"></div>
+
+                    <div class="text-center pt-4">
+                        <div class="w-20 h-20 bg-gradient-to-br from-linkedin-blue to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                         </div>
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Analyze Your LinkedIn Profile</h2>
-                        <p class="text-gray-600">
-                            Paste your LinkedIn profile URL and we'll give you a personalized readiness score with actionable fixes.
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Connect Your LinkedIn Profile</h2>
+                        <p class="text-gray-600 mb-6 text-lg">
+                            We'll analyze your profile and past posts to understand your unique voice and style.
                         </p>
+
+                        <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 mb-8 text-left border border-blue-100">
+                            <h3 class="font-bold text-gray-900 mb-4">What we'll access:</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </div>
+                                    <span>Your name, headline, and profile picture</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </div>
+                                    <span>Your last 10 public posts (to learn your writing style)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </div>
+                                    <span>Your email address (for account creation)</span>
+                                </li>
+                            </ul>
+                            <p class="text-sm text-gray-500 mt-4 italic">
+                                We never post without your permission. Your data is private and secure.
+                            </p>
+                        </div>
+
+                        <button onclick="connectLinkedIn()" class="w-full max-w-md bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <span class="flex items-center justify-center gap-3">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                                Connect with LinkedIn
+                            </span>
+                        </button>
+                        <p class="text-sm text-gray-500 mt-4">Takes less than 30 seconds</p>
                     </div>
+                </div>
+            </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                LinkedIn Profile URL <span class="text-red-500">*</span>
-                            </label>
-                            <input type="url" id="linkedin-url" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent text-lg" placeholder="https://linkedin.com/in/your-name" autocomplete="url">
-                            <p id="url-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid LinkedIn profile URL (e.g. linkedin.com/in/username)</p>
-                        </div>
+            <!-- ========== STEP 2: Profile URL ========== -->
+            <div id="step-2" class="hidden onboarding-step fade-in">
+                <!-- Input State -->
+                <div id="profile-input-state">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 max-w-2xl mx-auto border border-gray-200 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-600 to-pink-500"></div>
 
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-gray-700">
-                            <p class="font-medium mb-1">How to find your profile URL:</p>
-                            <ol class="list-decimal list-inside space-y-1 text-gray-600">
-                                <li>Go to your LinkedIn profile</li>
-                                <li>Copy the URL from your browser's address bar</li>
-                                <li>It should look like: <code class="bg-white px-1 rounded">linkedin.com/in/your-name</code></li>
-                            </ol>
-                        </div>
+                        <div class="pt-4">
+                            <div class="text-center mb-8">
+                                <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                </div>
+                                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Analyze Your LinkedIn Profile</h2>
+                                <p class="text-gray-600 text-lg">
+                                    Paste your profile URL and get a personalized readiness score with actionable fixes.
+                                </p>
+                            </div>
 
-                        <div class="flex gap-4 pt-4">
-                            <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-6 py-3 rounded-lg transition">
-                                Back
-                            </button>
-                            <button type="button" onclick="analyzeProfile()" id="analyze-btn" class="flex-1 bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-3 rounded-lg transition shadow-lg">
-                                Analyze My Profile
-                            </button>
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        LinkedIn Profile URL <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="url" id="linkedin-url" class="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg transition" placeholder="https://linkedin.com/in/your-name" autocomplete="url">
+                                    <p id="url-error" class="text-red-500 text-sm mt-2 hidden">Please enter a valid LinkedIn profile URL (e.g. linkedin.com/in/username)</p>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-purple-50 to-white rounded-xl p-5 border border-purple-100">
+                                    <p class="font-semibold text-gray-800 mb-2">How to find your profile URL:</p>
+                                    <ol class="list-decimal list-inside space-y-1 text-gray-600 text-sm">
+                                        <li>Go to your LinkedIn profile</li>
+                                        <li>Copy the URL from your browser's address bar</li>
+                                        <li>It should look like: <code class="bg-white px-2 py-0.5 rounded border text-purple-700">linkedin.com/in/your-name</code></li>
+                                    </ol>
+                                </div>
+
+                                <div class="flex gap-4 pt-2">
+                                    <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-4 rounded-lg transition border border-gray-200">
+                                        Back
+                                    </button>
+                                    <button type="button" onclick="analyzeProfile()" id="analyze-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold px-6 py-4 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                        Analyze My Profile
+                                    </button>
+                                </div>
+
+                                <p class="text-sm text-gray-500 text-center">
+                                    &#10003; No credit card required &nbsp; &#10003; Results in 60 seconds &nbsp; &#10003; 100% free
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Loading State -->
                 <div id="profile-loading-state" class="hidden">
-                    <div class="text-center mb-8">
-                        <div class="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-10 h-10 text-purple-600 spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Analyzing Your Profile...</h2>
-                        <p class="text-gray-600">This usually takes 15-30 seconds</p>
-                    </div>
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 max-w-2xl mx-auto border border-gray-200 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-600 to-pink-500"></div>
 
-                    <div class="space-y-4 max-w-md mx-auto">
-                        <div id="loading-step-1" class="loading-step active flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                            <div class="w-8 h-8 rounded-full bg-linkedin-blue flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <div class="text-center mb-10 pt-4">
+                            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                                <svg class="w-10 h-10 text-white spin-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                 </svg>
                             </div>
-                            <span class="font-medium text-gray-800">Scraping your profile...</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Analyzing Your Profile...</h2>
+                            <p class="text-gray-600 text-lg">This usually takes 15-30 seconds</p>
                         </div>
-                        <div id="loading-step-2" class="loading-step flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
-                                <span class="text-white text-sm font-bold">2</span>
+
+                        <div class="space-y-4 max-w-md mx-auto">
+                            <div id="loading-step-1" class="loading-step active flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-white border border-blue-100">
+                                <div class="w-10 h-10 rounded-xl bg-linkedin-blue flex items-center justify-center flex-shrink-0 shadow">
+                                    <svg class="w-5 h-5 text-white spin-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                </div>
+                                <span class="font-semibold text-gray-800">Scraping your profile...</span>
                             </div>
-                            <span class="font-medium text-gray-800">Analyzing with AI...</span>
-                        </div>
-                        <div id="loading-step-3" class="loading-step flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
-                                <span class="text-white text-sm font-bold">3</span>
+                            <div id="loading-step-2" class="loading-step flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-white border border-purple-100">
+                                <div class="w-10 h-10 rounded-xl bg-gray-300 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white text-sm font-bold">2</span>
+                                </div>
+                                <span class="font-semibold text-gray-800">Analyzing with AI...</span>
                             </div>
-                            <span class="font-medium text-gray-800">Generating your score...</span>
+                            <div id="loading-step-3" class="loading-step flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-green-50 to-white border border-green-100">
+                                <div class="w-10 h-10 rounded-xl bg-gray-300 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white text-sm font-bold">3</span>
+                                </div>
+                                <span class="font-semibold text-gray-800">Generating your score...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Step 3: Your LinkedIn Readiness Score -->
-        <div id="step-3" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-6 fade-in">
-            <div class="max-w-2xl mx-auto">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Your LinkedIn Readiness Score</h2>
-                    <p class="text-gray-600">Here's how your profile stacks up, with actionable steps to improve it.</p>
-                </div>
+            <!-- ========== STEP 3: Your Score ========== -->
+            <div id="step-3" class="hidden onboarding-step fade-in">
+                <!-- Score Header -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 max-w-3xl mx-auto border border-gray-200 relative overflow-hidden mb-8">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 to-emerald-400"></div>
 
-                <!-- Score Circle -->
-                <div class="flex justify-center mb-8">
-                    <div class="relative w-48 h-48">
-                        <svg class="w-48 h-48 score-ring" viewBox="0 0 120 120">
-                            <circle class="score-ring-bg" cx="60" cy="60" r="52"/>
-                            <circle id="score-ring-fill" class="score-ring-fill" cx="60" cy="60" r="52"
-                                stroke-dasharray="326.73"
-                                stroke-dashoffset="326.73"/>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="score-number" class="text-5xl font-bold text-gray-900">0</span>
-                            <span id="score-label" class="text-sm font-medium text-gray-500 mt-1">--</span>
+                    <div class="text-center pt-4">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Your LinkedIn Readiness Score</h2>
+                        <p class="text-gray-600 text-lg mb-8">Here's how your profile stacks up</p>
+
+                        <!-- Score Circle -->
+                        <div class="flex justify-center mb-6">
+                            <div class="relative w-52 h-52 score-pulse">
+                                <svg class="w-52 h-52 score-ring" viewBox="0 0 120 120">
+                                    <circle class="score-ring-bg" cx="60" cy="60" r="52"/>
+                                    <circle id="score-ring-fill" class="score-ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span id="score-number" class="text-6xl font-extrabold text-gray-900">0</span>
+                                    <span id="score-label" class="text-sm font-bold mt-1 uppercase tracking-wider">--</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- AI Headline Suggestion -->
-                <div id="headline-section" class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 hidden">
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-900 mb-1">Suggested Headline</h3>
-                            <p id="ai-headline" class="text-gray-800 text-lg"></p>
+                <div id="headline-section" class="hidden max-w-3xl mx-auto mb-6">
+                    <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl shadow-lg p-6 border border-blue-100 hover:shadow-xl transition">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="w-8 h-8 bg-linkedin-blue rounded-lg flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                                    </div>
+                                    <h3 class="font-bold text-gray-900 text-lg">Suggested Headline</h3>
+                                </div>
+                                <p id="ai-headline" class="text-gray-800 text-lg pl-10"></p>
+                            </div>
+                            <button onclick="copyHeadline()" id="copy-headline-btn" class="flex-shrink-0 bg-linkedin-blue hover:bg-linkedin-dark text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow hover:shadow-lg">
+                                Copy
+                            </button>
                         </div>
-                        <button onclick="copyHeadline()" id="copy-headline-btn" class="flex-shrink-0 bg-white hover:bg-gray-50 text-linkedin-blue border border-linkedin-blue px-3 py-2 rounded-lg text-sm font-medium transition">
-                            Copy
-                        </button>
                     </div>
                 </div>
 
                 <!-- Fixes List -->
-                <div id="fixes-section" class="mb-8 hidden">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Prioritized Fixes</h3>
-                    <div id="fixes-list" class="space-y-3"></div>
+                <div id="fixes-section" class="hidden max-w-3xl mx-auto mb-8">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                            </div>
+                            Prioritized Fixes
+                        </h3>
+                        <div id="fixes-list" class="space-y-3"></div>
+                    </div>
                 </div>
 
-                <!-- CTA Buttons -->
-                <div id="score-cta" class="hidden border-t border-gray-200 pt-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="/content-generator" class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-6 py-4 rounded-lg transition shadow-lg text-center">
-                            Generate Content
-                            <p class="text-xs text-blue-100 mt-1 font-normal">Create LinkedIn posts that convert</p>
+                <!-- CTA Cards -->
+                <div id="score-cta" class="hidden max-w-3xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <a href="/content-generator" class="block bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-lg p-8 border border-purple-100 hover:shadow-xl transition transform hover:-translate-y-1 text-center group">
+                            <div class="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Generate Content</h3>
+                            <p class="text-gray-600">Create LinkedIn posts that convert visitors into clients</p>
                         </a>
-                        <button onclick="completeOnboarding()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-4 rounded-lg transition shadow-lg">
-                            Complete Setup
-                            <p class="text-xs text-green-100 mt-1 font-normal">Go to your dashboard</p>
+                        <button onclick="completeOnboarding()" class="bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-lg p-8 border border-green-100 hover:shadow-xl transition transform hover:-translate-y-1 text-center group">
+                            <div class="w-16 h-16 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Complete Setup</h3>
+                            <p class="text-gray-600">Go to your dashboard and start optimizing</p>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Decorative elements -->
+        <div class="absolute top-0 left-0 w-72 h-72 bg-linkedin-blue opacity-5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 opacity-5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    </section>
+
+    <!-- What You'll Get Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    What You'll Get
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    A complete LinkedIn profile analysis powered by AI, with everything you need to level up.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 shadow-lg border border-blue-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-linkedin-blue rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Readiness Score (0-100)</h3>
+                    <p class="text-gray-600">
+                        See exactly where your profile stands with a clear, color-coded score. Know if you're ready to attract opportunities.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 shadow-lg border border-purple-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">AI-Optimized Headline</h3>
+                    <p class="text-gray-600">
+                        Get a professionally crafted headline suggestion that communicates your value and attracts the right people.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">20+ Prioritized Fixes</h3>
+                    <p class="text-gray-600">
+                        Get a ranked list of exactly what to fix — from high-impact headline changes to engagement strategies.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-yellow-50 to-white rounded-2xl p-8 shadow-lg border border-yellow-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-yellow-500 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Attract More Clients</h3>
+                    <p class="text-gray-600">
+                        Optimize your profile so ideal clients find you and reach out. Turn your LinkedIn into a lead generation machine.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg border border-red-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Build Thought Leadership</h3>
+                    <p class="text-gray-600">
+                        Get content strategy recommendations that position you as the go-to expert in your industry.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-lg border border-indigo-100 hover:shadow-xl transition">
+                    <div class="w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Results in 60 Seconds</h3>
+                    <p class="text-gray-600">
+                        No waiting, no back-and-forth. Paste your URL and get your complete analysis in under a minute.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    How It Works
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get a complete LinkedIn optimization in 3 simple steps
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-linkedin-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
+                        1
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Connect Your LinkedIn</h3>
+                    <p class="text-gray-600">One-click OAuth connection. We learn your writing style from your posts.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
+                        2
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Paste Your Profile URL</h3>
+                    <p class="text-gray-600">Our AI scrapes and analyzes your profile against best practices.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold shadow-lg">
+                        3
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Get Your Score & Fixes</h3>
+                    <p class="text-gray-600">Readiness score, optimized headline, and 20+ prioritized action items.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="bg-linkedin-blue hover:bg-linkedin-dark text-white font-bold px-8 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-block">
+                    Get Started Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Real Results from Real Professionals
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    See what happens when you optimize your LinkedIn with AI
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-linkedin-blue rounded-full flex items-center justify-center text-white font-bold">
+                            JD
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">John Davis</div>
+                            <div class="text-sm text-gray-600">HVAC Contractor</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Got my first federal contract within 2 weeks of optimizing my profile. A prime found me on LinkedIn!"
+                    </p>
+                    <div class="text-linkedin-blue font-bold">$250K contract won</div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            SM
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">Sarah Martinez</div>
+                            <div class="text-sm text-gray-600">IT Services</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Went from zero inbound leads to 3-5 quality opportunities per month. LinkedIn is now my #1 lead source."
+                    </p>
+                    <div class="text-linkedin-blue font-bold">3x more opportunities</div>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                            MW
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-900">Mike Williams</div>
+                            <div class="text-sm text-gray-600">Construction</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "The AI recommendations were spot-on. Fixed my headline and about section, and now clients are reaching out."
+                    </p>
+                    <div class="text-linkedin-blue font-bold">$1.2M in new deals</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 bg-gradient-to-r from-linkedin-blue to-linkedin-dark text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Ready to Level Up Your LinkedIn?
+            </h2>
+            <p class="text-xl mb-8 text-blue-100">
+                Get your free readiness score and see exactly what's holding you back
+            </p>
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="bg-white text-linkedin-blue font-bold px-10 py-4 rounded-lg transition duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:bg-gray-100 inline-block">
+                Get Your Free Score
+            </a>
+            <p class="text-sm text-blue-200 mt-4">No credit card required &middot; Results in 60 seconds</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-linkedin-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-bold text-white">Deal Magnet</span>
+                </div>
+                <p class="mb-4">&copy; 2026 LinkedIn Deal Magnet. All rights reserved.</p>
+                <div class="flex justify-center space-x-6 text-sm">
+                    <a href="/privacy-policy" class="hover:text-white transition">Privacy</a>
+                    <a href="#" class="hover:text-white transition">Terms</a>
+                    <a href="#" class="hover:text-white transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // State management
         let currentStep = 1;
-        let userData = {
-            linkedin: null,
-            audit: null
-        };
+        let userData = { linkedin: null, audit: null };
 
         // Step navigation
         function goToStep(step) {
@@ -362,10 +621,9 @@
             for (let i = 1; i <= 3; i++) {
                 const circle = document.getElementById(`step-${i}-circle`);
                 circle.classList.remove('active', 'completed');
-
                 if (i < step) {
                     circle.classList.add('completed');
-                    circle.innerHTML = '&#10003;';
+                    circle.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
                 } else if (i === step) {
                     circle.classList.add('active');
                     circle.innerHTML = i;
@@ -374,33 +632,25 @@
                 }
             }
 
-            if (step > 1) {
-                document.getElementById('progress-line-1').classList.add('bg-green-500');
-                document.getElementById('progress-line-1').classList.remove('bg-gray-300');
-            }
-            if (step > 2) {
-                document.getElementById('progress-line-2').classList.add('bg-green-500');
-                document.getElementById('progress-line-2').classList.remove('bg-gray-300');
-            }
+            document.getElementById('progress-fill-1').style.width = step > 1 ? '100%' : '0%';
+            document.getElementById('progress-fill-2').style.width = step > 2 ? '100%' : '0%';
 
             currentStep = step;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // LinkedIn OAuth Connection
+        // LinkedIn OAuth
         function connectLinkedIn() {
             window.location.href = '/auth/linkedin';
         }
 
-        // Check if LinkedIn connection was successful (from callback)
+        // Check LinkedIn connection callback
         async function checkLinkedInConnection() {
             const urlParams = new URLSearchParams(window.location.search);
-
             if (urlParams.get('linkedin_connected') === 'true') {
                 try {
                     const response = await fetch('/api/linkedin/profile');
                     const data = await response.json();
-
                     if (data.success) {
                         userData.linkedin = data.profile;
                         alert('LinkedIn connected successfully!');
@@ -428,7 +678,6 @@
             const url = urlInput.value.trim();
             const errorEl = document.getElementById('url-error');
 
-            // Validate
             if (!url || !isValidLinkedInUrl(url)) {
                 errorEl.classList.remove('hidden');
                 urlInput.classList.add('border-red-500');
@@ -437,11 +686,8 @@
             errorEl.classList.add('hidden');
             urlInput.classList.remove('border-red-500');
 
-            // Switch to loading state
             document.getElementById('profile-input-state').classList.add('hidden');
             document.getElementById('profile-loading-state').classList.remove('hidden');
-
-            // Animate loading steps
             simulateLoadingSteps();
 
             try {
@@ -459,23 +705,19 @@
                 const result = await response.json();
                 userData.audit = result;
 
-                // Finish loading animation then show results
                 finishLoadingSteps(() => {
                     goToStep(3);
                     renderScore(result);
                 });
-
             } catch (error) {
                 console.error('Profile analysis error:', error);
                 alert('Failed to analyze profile: ' + error.message + '. Please try again.');
-
-                // Reset to input state
                 document.getElementById('profile-loading-state').classList.add('hidden');
                 document.getElementById('profile-input-state').classList.remove('hidden');
             }
         }
 
-        // Simulate loading step progression
+        // Loading step animations
         function simulateLoadingSteps() {
             const steps = [
                 document.getElementById('loading-step-1'),
@@ -483,128 +725,99 @@
                 document.getElementById('loading-step-3')
             ];
 
-            // Step 1 is already active
             setTimeout(() => {
-                steps[0].classList.remove('active');
-                steps[0].classList.add('done');
-                steps[0].querySelector('div').classList.add('bg-green-500');
-                steps[0].querySelector('div').classList.remove('bg-linkedin-blue');
-                steps[0].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-
-                steps[1].classList.add('active');
-                steps[1].querySelector('div').classList.add('bg-linkedin-blue');
-                steps[1].querySelector('div').classList.remove('bg-gray-300');
-                steps[1].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+                markLoadingStepDone(steps[0]);
+                activateLoadingStep(steps[1], 'bg-purple-600');
             }, 3000);
 
             setTimeout(() => {
-                steps[1].classList.remove('active');
-                steps[1].classList.add('done');
-                steps[1].querySelector('div').classList.add('bg-green-500');
-                steps[1].querySelector('div').classList.remove('bg-linkedin-blue');
-                steps[1].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-
-                steps[2].classList.add('active');
-                steps[2].querySelector('div').classList.add('bg-linkedin-blue');
-                steps[2].querySelector('div').classList.remove('bg-gray-300');
-                steps[2].querySelector('div').innerHTML = '<svg class="w-4 h-4 text-white spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+                markLoadingStepDone(steps[1]);
+                activateLoadingStep(steps[2], 'bg-green-600');
             }, 8000);
         }
 
-        // Finish loading and transition
+        function activateLoadingStep(step, bgClass) {
+            step.classList.add('active');
+            const dot = step.querySelector('div');
+            dot.className = `w-10 h-10 rounded-xl ${bgClass} flex items-center justify-center flex-shrink-0 shadow`;
+            dot.innerHTML = '<svg class="w-5 h-5 text-white spin-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
+        }
+
+        function markLoadingStepDone(step) {
+            step.classList.remove('active');
+            step.classList.add('done');
+            const dot = step.querySelector('div');
+            dot.className = 'w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center flex-shrink-0 shadow';
+            dot.innerHTML = '<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+        }
+
         function finishLoadingSteps(callback) {
-            const steps = [
-                document.getElementById('loading-step-1'),
-                document.getElementById('loading-step-2'),
-                document.getElementById('loading-step-3')
-            ];
-
-            // Mark all as done
-            steps.forEach(step => {
-                step.classList.remove('active');
-                step.classList.add('done');
-                const dot = step.querySelector('div');
-                dot.className = 'w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0';
-                dot.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-            });
-
+            [document.getElementById('loading-step-1'),
+             document.getElementById('loading-step-2'),
+             document.getElementById('loading-step-3')].forEach(s => markLoadingStepDone(s));
             setTimeout(callback, 500);
         }
 
-        // Render score on Step 3
+        // Render score
         function renderScore(result) {
             const score = result.score || 0;
-            const circumference = 326.73; // 2 * PI * 52
+            const circumference = 326.73;
 
-            // Determine color and label
             let color, label;
-            if (score >= 80) {
-                color = '#16a34a'; label = 'Excellent';
-            } else if (score >= 60) {
-                color = '#22c55e'; label = 'Looking Good';
-            } else if (score >= 40) {
-                color = '#f59e0b'; label = 'Getting There';
-            } else {
-                color = '#dc2626'; label = 'Needs Work';
-            }
+            if (score >= 80) { color = '#16a34a'; label = 'Excellent'; }
+            else if (score >= 60) { color = '#22c55e'; label = 'Looking Good'; }
+            else if (score >= 40) { color = '#f59e0b'; label = 'Getting There'; }
+            else { color = '#dc2626'; label = 'Needs Work'; }
 
-            // Animate score ring
             const ring = document.getElementById('score-ring-fill');
             ring.style.stroke = color;
-            const offset = circumference - (score / 100) * circumference;
-            // Trigger animation after a tick
             requestAnimationFrame(() => {
-                ring.style.strokeDashoffset = offset;
+                ring.style.strokeDashoffset = circumference - (score / 100) * circumference;
             });
 
-            // Animate score number counting up
             const scoreEl = document.getElementById('score-number');
             const labelEl = document.getElementById('score-label');
             labelEl.textContent = label;
             labelEl.style.color = color;
 
             let current = 0;
-            const duration = 1500;
-            const stepTime = duration / score;
+            const stepTime = 1500 / Math.max(score, 1);
             const counter = setInterval(() => {
                 current++;
                 scoreEl.textContent = current;
-                if (current >= score) {
-                    clearInterval(counter);
-                    scoreEl.textContent = score;
-                }
+                if (current >= score) { clearInterval(counter); scoreEl.textContent = score; }
             }, stepTime);
 
-            // Show AI headline
             if (result.aiHeadline) {
                 document.getElementById('headline-section').classList.remove('hidden');
                 document.getElementById('ai-headline').textContent = result.aiHeadline;
             }
 
-            // Render fixes
             if (result.fixes && result.fixes.length > 0) {
                 document.getElementById('fixes-section').classList.remove('hidden');
                 const fixesList = document.getElementById('fixes-list');
                 fixesList.innerHTML = '';
 
-                // Sort by priority: high > medium > low
                 const priorityOrder = { high: 0, medium: 1, low: 2 };
-                const sortedFixes = [...result.fixes].sort((a, b) =>
-                    (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2)
-                );
+                const sorted = [...result.fixes].sort((a, b) => (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2));
 
-                sortedFixes.forEach(fix => {
-                    const badgeClass = fix.priority === 'high' ? 'badge-high' :
-                                       fix.priority === 'medium' ? 'badge-medium' : 'badge-low';
+                const colors = {
+                    high: { bg: 'from-red-50', border: 'border-red-100', badge: 'bg-red-100 text-red-700 border-red-200' },
+                    medium: { bg: 'from-yellow-50', border: 'border-yellow-100', badge: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
+                    low: { bg: 'from-gray-50', border: 'border-gray-100', badge: 'bg-gray-100 text-gray-600 border-gray-200' }
+                };
+
+                sorted.forEach(fix => {
+                    const c = colors[fix.priority] || colors.low;
                     const card = document.createElement('div');
-                    card.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition';
+                    card.className = `fix-card bg-gradient-to-r ${c.bg} to-white rounded-xl p-5 border ${c.border}`;
                     card.innerHTML = `
                         <div class="flex items-start gap-3">
-                            <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${badgeClass} flex-shrink-0 mt-0.5">${fix.priority}</span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${c.badge} border flex-shrink-0 mt-0.5 uppercase">${fix.priority}</span>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-gray-900">${fix.title}</h4>
+                                <h4 class="font-bold text-gray-900">${fix.title}</h4>
                                 <p class="text-sm text-gray-600 mt-1">${fix.description}</p>
-                                ${fix.tips ? `<p class="text-sm text-linkedin-blue mt-2 font-medium">${fix.tips}</p>` : ''}
+                                ${fix.tips ? `<p class="text-sm text-purple-700 mt-2 font-medium bg-purple-50 rounded-lg px-3 py-2">${fix.tips}</p>` : ''}
                             </div>
                         </div>
                     `;
@@ -612,7 +825,6 @@
                 });
             }
 
-            // Show CTA
             document.getElementById('score-cta').classList.remove('hidden');
         }
 
@@ -622,22 +834,24 @@
             navigator.clipboard.writeText(headline).then(() => {
                 const btn = document.getElementById('copy-headline-btn');
                 btn.textContent = 'Copied!';
-                setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+                btn.classList.add('bg-green-600');
+                btn.classList.remove('bg-linkedin-blue');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('bg-green-600');
+                    btn.classList.add('bg-linkedin-blue');
+                }, 2000);
             });
         }
 
-        // Save user data to server
+        // Save user data
         async function saveUserData() {
             try {
-                const response = await fetch('/api/onboarding/save', {
+                await fetch('/api/onboarding/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData)
                 });
-
-                if (!response.ok) {
-                    console.error('Failed to save user data');
-                }
             } catch (error) {
                 console.error('Error saving user data:', error);
             }
@@ -651,10 +865,9 @@
             window.location.href = '/';
         }
 
-        // Check if returning user and LinkedIn connection status
+        // Init
         window.addEventListener('DOMContentLoaded', function() {
             checkLinkedInConnection();
-
             const onboardingComplete = localStorage.getItem('onboarding_complete');
             if (onboardingComplete === 'true') {
                 if (confirm('You\'ve already completed onboarding. Would you like to go to the dashboard?')) {
