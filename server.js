@@ -1154,6 +1154,21 @@ if (!OPENAI_API_KEY) {
     console.warn('Warning: OPENAI_API_KEY environment variable not set - fine-tuned model unavailable');
 }
 
+// Anthropic Claude configuration
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY?.trim();
+const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
+let Anthropic;
+if (ANTHROPIC_API_KEY) {
+    try {
+        Anthropic = require('@anthropic-ai/sdk');
+        console.log('Anthropic SDK loaded - Claude available as primary AI');
+    } catch (e) {
+        console.warn('Anthropic SDK not installed');
+    }
+} else {
+    console.warn('Warning: ANTHROPIC_API_KEY not set - Claude unavailable');
+}
+
 // Helper function to call Grok API
 async function callGrokAPI(prompt, systemPrompt = null) {
     try {
@@ -1581,8 +1596,10 @@ ${strategyInfo}
 Use these hooks as inspiration for creating engaging opening lines. Adapt them to sound natural and authentic - never use them formulaically.`;
 }
 
-// Analyze profile with Grok
+// Analyze profile with AI (Claude primary, OpenAI fallback)
 async function analyzeWithGrok(profileData) {
+    const systemPrompt = 'You are a LinkedIn optimization expert who helps professionals attract clients, grow their network, and build their personal brand. Provide detailed, actionable recommendations. Always respond with valid JSON only - no markdown, no explanation, just the JSON object.';
+
     const prompt = `You are a LinkedIn optimization expert. Analyze this LinkedIn profile and provide:
 
 1. A score from 0-100 (be realistic, most profiles score 40-70)
@@ -1633,20 +1650,52 @@ Make recommendations focused on:
 
 Be specific and actionable. Every fix should be something the user can implement today.`;
 
+    // Helper to parse JSON from AI response
+    function parseAIResponse(content) {
+        try {
+            // Extract JSON from markdown code blocks if present
+            const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
+            return JSON.parse(jsonMatch ? jsonMatch[1] || jsonMatch[0] : content);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // Try Claude first (primary)
+    if (ANTHROPIC_API_KEY && Anthropic) {
+        try {
+            console.log('Using Claude for analysis...');
+            const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+
+            const response = await anthropic.messages.create({
+                model: CLAUDE_MODEL,
+                max_tokens: 4000,
+                system: systemPrompt,
+                messages: [{ role: 'user', content: prompt }]
+            });
+
+            const content = response.content[0].text;
+            const jsonData = parseAIResponse(content);
+
+            if (jsonData && jsonData.score && jsonData.fixes) {
+                console.log('Claude analysis successful');
+                return jsonData;
+            }
+        } catch (claudeError) {
+            console.error('Claude API error:', claudeError.message);
+        }
+    }
+
+    // Try Grok second
     try {
+        console.log('Trying Grok for analysis...');
         const response = await axios.post(
             GROK_API_URL,
             {
                 model: GROK_MODEL,
                 messages: [
-                    {
-                        role: 'system',
-                        content: 'You are a LinkedIn optimization expert who helps professionals attract clients, grow their network, and build their personal brand. Provide detailed, actionable recommendations.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: prompt }
                 ],
                 temperature: 0.7,
                 max_tokens: 4000
@@ -1661,26 +1710,67 @@ Be specific and actionable. Every fix should be something the user can implement
         );
 
         const content = response.data.choices[0].message.content;
-        
-        // Try to parse JSON from the response
-        let jsonData;
-        try {
-            // Extract JSON from markdown code blocks if present
-            const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
-            jsonData = JSON.parse(jsonMatch ? jsonMatch[1] || jsonMatch[0] : content);
-        } catch (e) {
-            // If parsing fails, create a structured response from text
-            jsonData = {
-                score: 55,
-                aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
-                fixes: generateDefaultFixes(profileData)
-            };
+        const jsonData = parseAIResponse(content);
+
+        if (jsonData && jsonData.score && jsonData.fixes) {
+            console.log('Grok analysis successful');
+            return jsonData;
+        }
+    } catch (grokError) {
+        console.error('Grok API error:', grokError.response?.data || grokError.message);
+
+        // Fallback to OpenAI if Grok fails
+        if (OPENAI_API_KEY) {
+            console.log('Falling back to OpenAI...');
+            try {
+                const openaiResponse = await axios.post(
+                    'https://api.openai.com/v1/chat/completions',
+                    {
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a LinkedIn optimization expert who helps professionals attract clients, grow their network, and build their personal brand. Provide detailed, actionable recommendations. Always respond with valid JSON.'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 4000
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 60000
+                    }
+                );
+
+                const content = openaiResponse.data.choices[0].message.content;
+
+                // Try to parse JSON from the response
+                let jsonData;
+                try {
+                    const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
+                    jsonData = JSON.parse(jsonMatch ? jsonMatch[1] || jsonMatch[0] : content);
+                } catch (e) {
+                    jsonData = {
+                        score: 55,
+                        aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
+                        fixes: generateDefaultFixes(profileData)
+                    };
+                }
+
+                return jsonData;
+            } catch (openaiError) {
+                console.error('OpenAI fallback error:', openaiError.response?.data || openaiError.message);
+            }
         }
 
-        return jsonData;
-    } catch (error) {
-        console.error('Grok API error:', error.response?.data || error.message);
-        // Return default analysis if API fails
+        // Return default analysis if both APIs fail
         return {
             score: 55,
             aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
@@ -1786,55 +1876,239 @@ function generateDefaultFixes(profile) {
 
 // API Routes
 
-// Audit endpoint
+// Audit endpoint - supports both URL scraping and manual profile data
 app.post('/api/audit', async (req, res) => {
     try {
-        const { url } = req.body;
+        const { url, profileData: manualProfileData, email, referrer } = req.body;
 
-        if (!url || !url.includes('linkedin.com')) {
+        // Validate input - need either URL or manual profile data
+        if (!url && !manualProfileData) {
+            return res.status(400).json({ error: 'Please provide either a LinkedIn URL or profile data' });
+        }
+
+        if (url && !url.includes('linkedin.com')) {
             return res.status(400).json({ error: 'Invalid LinkedIn URL' });
         }
 
-        scrapingStats.total++;
+        let profileData;
 
-        // Scrape profile
-        console.log('Scraping profile:', url);
-        const profileData = await scrapeLinkedInProfile(url);
+        // Option 1: Use manual profile data if provided (fallback for when scraping fails)
+        if (manualProfileData && (manualProfileData.headline || manualProfileData.about)) {
+            console.log('Using manual profile data...');
+            profileData = {
+                name: manualProfileData.name || 'Profile User',
+                headline: manualProfileData.headline || '',
+                about: manualProfileData.about || '',
+                experience: manualProfileData.experience || [],
+                location: manualProfileData.location || '',
+                connections: manualProfileData.connections || '',
+                manualInput: true
+            };
+        } else {
+            // Option 2: Try to scrape from URL
+            scrapingStats.total++;
+            console.log('Scraping profile:', url);
+            profileData = await scrapeLinkedInProfile(url);
+        }
 
-        // Analyze with Grok
-        console.log('Analyzing with Grok...');
+        // Analyze with Grok (falls back to OpenAI if Grok fails)
+        console.log('Analyzing profile...');
         const analysis = await analyzeWithGrok(profileData);
+
+        // Generate score label
+        let scoreLabel = 'Needs Work';
+        if (analysis.score >= 80) scoreLabel = 'Excellent';
+        else if (analysis.score >= 60) scoreLabel = 'Looking Good';
+        else if (analysis.score >= 40) scoreLabel = 'Getting There';
 
         // Combine results
         const result = {
+            success: true,
             score: analysis.score,
-            currentHeadline: profileData.headline,
+            scoreLabel: scoreLabel,
+            currentHeadline: profileData.headline || '',
             aiHeadline: analysis.aiHeadline,
             fixes: analysis.fixes || generateDefaultFixes(profileData),
-            sessionId: Date.now().toString() // Simple session ID
+            profileData: {
+                name: profileData.name,
+                headline: profileData.headline,
+                aboutLength: (profileData.about || '').length,
+                experienceCount: (profileData.experience || []).length,
+                scrapingFailed: profileData.scrapingFailed || false,
+                manualInput: profileData.manualInput || false
+            },
+            sessionId: Date.now().toString()
         };
+
+        // Save audit to database if email provided (for future retrieval)
+        if (email && supabase) {
+            try {
+                const { Audit } = require('./db/supabase');
+                await Audit.create({
+                    email: email,
+                    linkedin_url: url || null,
+                    score: analysis.score,
+                    score_label: scoreLabel,
+                    ai_headline: analysis.aiHeadline,
+                    fixes: analysis.fixes || generateDefaultFixes(profileData),
+                    profile_data: profileData,
+                    referrer: referrer || null
+                });
+                console.log('Audit saved for:', email);
+            } catch (dbError) {
+                console.error('Failed to save audit:', dbError.message);
+                // Don't fail the request if DB save fails
+            }
+        }
 
         res.json(result);
     } catch (error) {
         console.error('Audit error:', error);
-        res.status(500).json({ error: 'Failed to analyze profile', message: error.message });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to analyze profile',
+            message: error.message,
+            tip: 'If scraping failed, try providing your profile data manually using the profileData field'
+        });
+    }
+});
+
+// Manual profile audit endpoint (no scraping, user-provided data)
+app.post('/api/audit-manual', async (req, res) => {
+    try {
+        const {
+            email,
+            profileUrl,
+            headline,
+            about,
+            experience,
+            skills,
+            hasPhoto,
+            hasBanner,
+            connectionCount,
+            referrer
+        } = req.body;
+
+        // Validation
+        if (!email || !email.includes('@')) {
+            return res.status(400).json({ success: false, error: 'Valid email is required' });
+        }
+        if (!profileUrl || !profileUrl.includes('linkedin.com')) {
+            return res.status(400).json({ success: false, error: 'Valid LinkedIn profile URL is required' });
+        }
+        if (!headline || headline.trim().length === 0) {
+            return res.status(400).json({ success: false, error: 'Headline is required' });
+        }
+        if (!about || about.trim().length < 50) {
+            return res.status(400).json({ success: false, error: 'About section must be at least 50 characters' });
+        }
+        if (!experience || experience.length < 2) {
+            return res.status(400).json({ success: false, error: 'At least 2 work experiences are required' });
+        }
+
+        // Build profile data object
+        const profileData = {
+            name: email.split('@')[0], // Extract name from email as fallback
+            headline: headline.trim(),
+            about: about.trim(),
+            experience: experience,
+            skills: skills || [],
+            hasPhoto: hasPhoto || false,
+            hasBanner: hasBanner || false,
+            connectionCount: connectionCount || '0-50',
+            manualInput: true
+        };
+
+        console.log('Analyzing manually-provided profile for:', email);
+
+        // Analyze with Claude (primary) or fallback to Grok/OpenAI
+        const analysis = await analyzeWithGrok(profileData);
+
+        // Generate score label
+        let scoreLabel = 'Needs Work';
+        if (analysis.score >= 80) scoreLabel = 'Excellent';
+        else if (analysis.score >= 60) scoreLabel = 'Looking Good';
+        else if (analysis.score >= 40) scoreLabel = 'Getting There';
+
+        // Combine results
+        const result = {
+            success: true,
+            score: analysis.score,
+            scoreLabel: scoreLabel,
+            currentHeadline: headline,
+            aiHeadline: analysis.aiHeadline,
+            fixes: analysis.fixes || generateDefaultFixes(profileData),
+            profileData: {
+                headline: headline,
+                aboutLength: about.length,
+                experienceCount: experience.length,
+                hasPhoto: hasPhoto,
+                hasBanner: hasBanner,
+                connectionCount: connectionCount,
+                skillsCount: (skills || []).length,
+                manualInput: true
+            },
+            sessionId: Date.now().toString()
+        };
+
+        // Save audit to database
+        if (supabase) {
+            try {
+                const { data, error } = await supabase
+                    .from('audits')
+                    .insert({
+                        email: email,
+                        linkedin_url: profileUrl,
+                        score: analysis.score,
+                        score_label: scoreLabel,
+                        ai_headline: analysis.aiHeadline,
+                        fixes: analysis.fixes || generateDefaultFixes(profileData),
+                        profile_data: profileData,
+                        is_paid: false,
+                        referrer: referrer || null
+                    })
+                    .select()
+                    .single();
+
+                if (error) {
+                    console.error('Failed to save audit:', error.message);
+                } else {
+                    console.log('Audit saved successfully for:', email);
+                    result.auditId = data.id;
+                }
+            } catch (dbError) {
+                console.error('Database error:', dbError.message);
+                // Don't fail the request if DB save fails
+            }
+        }
+
+        res.json(result);
+    } catch (error) {
+        console.error('Manual audit error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to analyze profile',
+            message: error.message
+        });
     }
 });
 
 // Stripe checkout session
 app.post('/api/create-checkout-session', async (req, res) => {
     try {
-        const { priceId, mode, successUrl, cancelUrl } = req.body;
+        const { priceId, mode, successUrl, cancelUrl, referrer, email } = req.body;
 
         // Map price IDs (replace with your actual Stripe price IDs)
         const priceMap = {
             'price_full_fix': process.env.STRIPE_PRICE_FULL_FIX || 'price_full_fix',
-            'price_content_engine': process.env.STRIPE_PRICE_CONTENT_ENGINE || 'price_content_engine'
+            'price_content_engine': process.env.STRIPE_PRICE_CONTENT_ENGINE || 'price_content_engine',
+            'price_pro_monthly': process.env.STRIPE_PRICE_PRO_MONTHLY || 'price_pro_monthly'
         };
 
         const actualPriceId = priceMap[priceId] || priceId;
 
-        const session = await stripe.checkout.sessions.create({
+        // Build session options
+        const sessionOptions = {
             mode: mode || 'payment',
             line_items: [
                 {
@@ -1844,7 +2118,29 @@ app.post('/api/create-checkout-session', async (req, res) => {
             ],
             success_url: successUrl || `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: cancelUrl || `${req.headers.origin}?canceled=true`,
-        });
+            // Track referrer/affiliate in metadata for revenue share
+            metadata: {
+                referrer: referrer || 'direct',
+                source: 'deal_magnet_onboarding'
+            }
+        };
+
+        // Pre-fill customer email if provided
+        if (email) {
+            sessionOptions.customer_email = email;
+        }
+
+        // For subscriptions, also add metadata to the subscription
+        if (mode === 'subscription') {
+            sessionOptions.subscription_data = {
+                metadata: {
+                    referrer: referrer || 'direct',
+                    source: 'deal_magnet_pro'
+                }
+            };
+        }
+
+        const session = await stripe.checkout.sessions.create(sessionOptions);
 
         res.json({ url: session.url });
     } catch (error) {
@@ -1861,6 +2157,87 @@ app.get('/success', (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Affiliate/Referrer Stats API
+// Usage: GET /api/affiliate/stats?ref=kumud&secret=YOUR_ADMIN_SECRET
+app.get('/api/affiliate/stats', async (req, res) => {
+    try {
+        const { ref, secret } = req.query;
+
+        // Simple admin secret check (in production, use proper auth)
+        const adminSecret = process.env.ADMIN_SECRET || 'admin123';
+        if (secret !== adminSecret) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        if (!supabase) {
+            return res.status(500).json({ error: 'Database not configured' });
+        }
+
+        // Get audit stats by referrer
+        let query = supabase
+            .from('audits')
+            .select('referrer, email, score, created_at, is_paid');
+
+        if (ref) {
+            query = query.eq('referrer', ref.toLowerCase());
+        }
+
+        const { data: audits, error } = await query.order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Affiliate stats error:', error);
+            return res.status(500).json({ error: error.message });
+        }
+
+        // Calculate stats
+        const stats = {};
+        const referrers = ref ? [ref.toLowerCase()] : [...new Set(audits.map(a => a.referrer).filter(Boolean))];
+
+        for (const referrer of referrers) {
+            const refAudits = audits.filter(a => a.referrer === referrer);
+            stats[referrer] = {
+                totalAudits: refAudits.length,
+                uniqueEmails: [...new Set(refAudits.map(a => a.email))].length,
+                paidConversions: refAudits.filter(a => a.is_paid).length,
+                avgScore: refAudits.length > 0
+                    ? Math.round(refAudits.reduce((sum, a) => sum + (a.score || 0), 0) / refAudits.length)
+                    : 0,
+                recentAudits: refAudits.slice(0, 10).map(a => ({
+                    email: a.email?.replace(/(.{2}).*(@.*)/, '$1***$2'), // Mask email
+                    score: a.score,
+                    date: a.created_at
+                }))
+            };
+        }
+
+        // Revenue share tiers
+        // Partners (launch partners with large audiences): 60% of $19 = $11.40/mo
+        // Affiliates (everyone else): 20% of $19 = $3.80/mo
+        const PARTNERS = ['kumud', 'sibel', 'olga']; // Launch partners get higher rev share
+        const PARTNER_REV_SHARE = 11.40;  // 60% of $19
+        const AFFILIATE_REV_SHARE = 3.80; // 20% of $19
+
+        for (const referrer of referrers) {
+            const isPartner = PARTNERS.includes(referrer.toLowerCase());
+            const revShareRate = isPartner ? PARTNER_REV_SHARE : AFFILIATE_REV_SHARE;
+            stats[referrer].tier = isPartner ? 'partner' : 'affiliate';
+            stats[referrer].revShareRate = revShareRate;
+            stats[referrer].revSharePercent = isPartner ? '60%' : '20%';
+            stats[referrer].estimatedRevShare = (stats[referrer].paidConversions * revShareRate).toFixed(2);
+        }
+
+        res.json({
+            success: true,
+            period: 'all_time',
+            stats: ref ? stats[ref.toLowerCase()] : stats,
+            generatedAt: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Affiliate stats error:', error);
+        res.status(500).json({ error: 'Failed to get affiliate stats' });
+    }
 });
 
 // Content Engine Test - Generate content from URLs/content

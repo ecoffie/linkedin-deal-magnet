@@ -61,7 +61,24 @@ create table if not exists content_library (
 );
 
 -- =============================================
--- 4. SCHEDULED POSTS TABLE
+-- 4. AUDITS TABLE (Phase 1 LinkedIn Optimizer)
+-- =============================================
+create table if not exists audits (
+    id uuid primary key default gen_random_uuid(),
+    email text,
+    linkedin_url text,
+    score integer,
+    score_label text,
+    ai_headline text,
+    fixes jsonb default '[]',
+    profile_data jsonb default '{}',
+    is_paid boolean default false,
+    referrer text,
+    created_at timestamptz default now()
+);
+
+-- =============================================
+-- 5. SCHEDULED POSTS TABLE
 -- =============================================
 create table if not exists scheduled_posts (
     id uuid primary key default gen_random_uuid(),

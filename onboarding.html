@@ -113,14 +113,14 @@
                 <div class="flex justify-between items-center">
                     <div class="flex flex-col items-center flex-1">
                         <div id="step-1-circle" class="step-circle active">1</div>
-                        <p class="text-sm font-semibold mt-2 text-gray-700">Connect</p>
+                        <p class="text-sm font-semibold mt-2 text-gray-700">Start</p>
                     </div>
                     <div class="flex-1 h-1 bg-gray-200 mx-2 rounded-full" id="progress-line-1">
                         <div class="h-full bg-green-500 rounded-full transition-all duration-500" style="width: 0%" id="progress-fill-1"></div>
                     </div>
                     <div class="flex flex-col items-center flex-1">
                         <div id="step-2-circle" class="step-circle">2</div>
-                        <p class="text-sm font-semibold mt-2 text-gray-700">Profile URL</p>
+                        <p class="text-sm font-semibold mt-2 text-gray-700">Profile</p>
                     </div>
                     <div class="flex-1 h-1 bg-gray-200 mx-2 rounded-full" id="progress-line-2">
                         <div class="h-full bg-green-500 rounded-full transition-all duration-500" style="width: 0%" id="progress-fill-2"></div>
@@ -184,11 +184,17 @@
                             </span>
                         </button>
                         <p class="text-sm text-gray-500 mt-4">Takes less than 30 seconds</p>
+
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <button onclick="goToStep(2)" class="text-gray-600 hover:text-linkedin-blue transition font-medium">
+                                Skip for now - enter profile manually
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ========== STEP 2: Profile URL ========== -->
+            <!-- ========== STEP 2: Profile Input ========== -->
             <div id="step-2" class="hidden onboarding-step fade-in">
                 <!-- Input State -->
                 <div id="profile-input-state">
@@ -202,43 +208,205 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                     </svg>
                                 </div>
-                                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Analyze Your LinkedIn Profile</h2>
+                                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Tell Us About Your Profile</h2>
                                 <p class="text-gray-600 text-lg">
-                                    Paste your profile URL and get a personalized readiness score with actionable fixes.
+                                    Get a personalized readiness score with actionable fixes.
                                 </p>
                             </div>
 
-                            <div class="space-y-5">
+                            <!-- Input Method Toggle -->
+                            <div class="flex mb-6 bg-gray-100 rounded-xl p-1">
+                                <button type="button" id="tab-manual" onclick="switchInputTab('manual')" class="flex-1 py-3 px-4 rounded-lg font-semibold transition bg-white text-gray-900 shadow">
+                                    Enter Manually
+                                </button>
+                                <button type="button" id="tab-url" onclick="switchInputTab('url')" class="flex-1 py-3 px-4 rounded-lg font-semibold transition text-gray-600">
+                                    Paste URL
+                                </button>
+                            </div>
+
+                            <!-- Manual Input Form -->
+                            <div id="manual-input-form" class="space-y-6">
+                                <!-- Helper text -->
+                                <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                                    <p class="text-sm text-gray-700">
+                                        <strong>Quick tip:</strong> Open your LinkedIn profile in another tab, then copy and paste the information below. Takes about 2 minutes.
+                                    </p>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="bg-gradient-to-br from-purple-50 to-white rounded-xl p-5 border-2 border-purple-200">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                        <label class="block text-sm font-bold text-gray-900">
+                                            Enter Your Email to Get Your Results <span class="text-red-500">*</span>
+                                        </label>
+                                    </div>
+                                    <input type="email" id="user-email" class="w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition bg-white" placeholder="you@example.com" autocomplete="email" required>
+                                    <div class="mt-3 space-y-2">
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="checkbox" id="weekly-tips" class="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" checked>
+                                            <span class="text-sm text-gray-700">Send me weekly LinkedIn optimization tips</span>
+                                        </label>
+                                        <p class="text-xs text-gray-500 italic">
+                                            Your email is required to receive your personalized audit. We respect your privacy.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- LinkedIn Profile URL -->
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-2">
                                         LinkedIn Profile URL <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="url" id="linkedin-url" class="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg transition" placeholder="https://linkedin.com/in/your-name" autocomplete="url">
-                                    <p id="url-error" class="text-red-500 text-sm mt-2 hidden">Please enter a valid LinkedIn profile URL (e.g. linkedin.com/in/username)</p>
+                                    <input type="url" id="profile-url" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="https://linkedin.com/in/your-name" required>
+                                    <p class="text-xs text-gray-500 mt-1">For validation purposes only</p>
                                 </div>
 
-                                <div class="bg-gradient-to-br from-purple-50 to-white rounded-xl p-5 border border-purple-100">
-                                    <p class="font-semibold text-gray-800 mb-2">How to find your profile URL:</p>
+                                <!-- Current Headline -->
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        Current Headline <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <textarea id="profile-headline" rows="2" maxlength="220" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none" placeholder="Software Engineer | Helping startups scale from 0 to 1M users" required></textarea>
+                                        <div class="absolute bottom-2 right-2 text-xs text-gray-400">
+                                            <span id="headline-count">0</span>/220
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Copy your current LinkedIn headline</p>
+                                </div>
+
+                                <!-- About Section -->
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        About Section <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <textarea id="profile-about" rows="6" maxlength="2600" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none" placeholder="Paste your LinkedIn About section here..." required></textarea>
+                                        <div class="absolute bottom-2 right-2 text-xs text-gray-400">
+                                            <span id="about-count">0</span>/2600
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Copy your entire About section from LinkedIn</p>
+                                </div>
+
+                                <!-- Experience Section -->
+                                <div class="border-t border-gray-200 pt-6">
+                                    <h3 class="text-lg font-bold text-gray-900 mb-4">Recent Experience (Last 2-3 Roles)</h3>
+                                    <p class="text-sm text-gray-600 mb-4">This helps us give you better recommendations</p>
+
+                                    <!-- Experience Role 1 -->
+                                    <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+                                        <h4 class="font-semibold text-gray-900 mb-3">Current or Most Recent Role <span class="text-red-500">*</span></h4>
+                                        <div class="space-y-3">
+                                            <input type="text" id="exp1-title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Job Title (e.g., Senior Product Manager)" required>
+                                            <input type="text" id="exp1-company" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Company Name" required>
+                                            <input type="text" id="exp1-duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Duration (e.g., Jan 2022 - Present)" required>
+                                            <textarea id="exp1-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none" placeholder="Copy the role description from your LinkedIn experience section..." required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Experience Role 2 -->
+                                    <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+                                        <h4 class="font-semibold text-gray-900 mb-3">Previous Role <span class="text-red-500">*</span></h4>
+                                        <div class="space-y-3">
+                                            <input type="text" id="exp2-title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Job Title" required>
+                                            <input type="text" id="exp2-company" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Company Name" required>
+                                            <input type="text" id="exp2-duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Duration (e.g., May 2019 - Dec 2021)" required>
+                                            <textarea id="exp2-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none" placeholder="Copy the role description..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Experience Role 3 (Optional) -->
+                                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                        <h4 class="font-semibold text-gray-900 mb-3">Earlier Role (Optional)</h4>
+                                        <div class="space-y-3">
+                                            <input type="text" id="exp3-title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Job Title">
+                                            <input type="text" id="exp3-company" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Company Name">
+                                            <input type="text" id="exp3-duration" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="Duration">
+                                            <textarea id="exp3-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none" placeholder="Copy the role description..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Profile Completeness -->
+                                <div class="border-t border-gray-200 pt-6">
+                                    <h3 class="text-lg font-bold text-gray-900 mb-4">Profile Completeness</h3>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center gap-3 cursor-pointer">
+                                            <input type="checkbox" id="has-photo" class="w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-gray-700">I have a professional profile photo</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 cursor-pointer">
+                                            <input type="checkbox" id="has-banner" class="w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-gray-700">I have a custom banner image</span>
+                                        </label>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Connection Count</label>
+                                            <select id="connection-count" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                                                <option value="0-50">0-50 connections</option>
+                                                <option value="50-500">50-500 connections</option>
+                                                <option value="500+">500+ connections</option>
+                                                <option value="500+ shown">500+ connections (shown publicly)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Skills (Optional) -->
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        Skills (Optional)
+                                    </label>
+                                    <input type="text" id="profile-skills" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="e.g., Product Management, Data Analysis, Public Speaking">
+                                    <p class="text-xs text-gray-500 mt-1">Comma-separated list of your top skills</p>
+                                </div>
+                            </div>
+
+                            <!-- URL Input Form (hidden by default) -->
+                            <div id="url-input-form" class="hidden space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        Your Email <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="email" id="user-email-url" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="you@example.com" autocomplete="email">
+                                    <p class="text-xs text-gray-500 mt-1">We'll send your results here</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                                        LinkedIn Profile URL <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="url" id="linkedin-url" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition" placeholder="https://linkedin.com/in/your-name" autocomplete="url">
+                                    <p id="url-error" class="text-red-500 text-sm mt-2 hidden">Please enter a valid LinkedIn profile URL</p>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-purple-50 to-white rounded-xl p-4 border border-purple-100">
+                                    <p class="font-semibold text-gray-800 mb-2 text-sm">How to find your profile URL:</p>
                                     <ol class="list-decimal list-inside space-y-1 text-gray-600 text-sm">
                                         <li>Go to your LinkedIn profile</li>
-                                        <li>Copy the URL from your browser's address bar</li>
-                                        <li>It should look like: <code class="bg-white px-2 py-0.5 rounded border text-purple-700">linkedin.com/in/your-name</code></li>
+                                        <li>Copy the URL from your browser</li>
+                                        <li>It should look like: <code class="bg-white px-2 py-0.5 rounded border text-purple-700 text-xs">linkedin.com/in/your-name</code></li>
                                     </ol>
                                 </div>
-
-                                <div class="flex gap-4 pt-2">
-                                    <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-4 rounded-lg transition border border-gray-200">
-                                        Back
-                                    </button>
-                                    <button type="button" onclick="analyzeProfile()" id="analyze-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold px-6 py-4 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                                        Analyze My Profile
-                                    </button>
-                                </div>
-
-                                <p class="text-sm text-gray-500 text-center">
-                                    &#10003; No credit card required &nbsp; &#10003; Results in 60 seconds &nbsp; &#10003; 100% free
-                                </p>
                             </div>
+
+                            <p id="form-error" class="text-red-500 text-sm mt-4 hidden text-center"></p>
+
+                            <div class="flex gap-4 pt-6">
+                                <button type="button" onclick="goToStep(1)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-4 rounded-lg transition border border-gray-200">
+                                    Back
+                                </button>
+                                <button type="button" onclick="analyzeProfile()" id="analyze-btn" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold px-6 py-4 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                    Get My Score
+                                </button>
+                            </div>
+
+                            <p class="text-sm text-gray-500 text-center mt-4">
+                                100% free - No credit card required
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -263,7 +431,7 @@
                                 <div class="w-10 h-10 rounded-xl bg-linkedin-blue flex items-center justify-center flex-shrink-0 shadow">
                                     <svg class="w-5 h-5 text-white spin-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 </div>
-                                <span class="font-semibold text-gray-800">Scraping your profile...</span>
+                                <span class="font-semibold text-gray-800">Processing your profile...</span>
                             </div>
                             <div id="loading-step-2" class="loading-step flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-white border border-purple-100">
                                 <div class="w-10 h-10 rounded-xl bg-gray-300 flex items-center justify-center flex-shrink-0">
@@ -338,6 +506,64 @@
                             Prioritized Fixes
                         </h3>
                         <div id="fixes-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <!-- Profile Rewrite CTA -->
+                <div id="pro-upgrade-cta" class="hidden max-w-3xl mx-auto mb-8">
+                    <div class="bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl shadow-2xl p-8 md:p-10 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Done-For-You</span>
+                                <span class="text-emerald-100 text-sm">Save 4+ Hours of Work</span>
+                            </div>
+                            <h3 class="text-3xl md:text-4xl font-bold mb-4">Love Your Fixes But Don't Have Time?</h3>
+                            <p class="text-xl text-emerald-100 mb-6">We'll professionally rewrite your profile for you.</p>
+
+                            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6 border border-white/20">
+                                <h4 class="font-bold text-lg mb-4">What's Included:</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-6 h-6 text-yellow-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        <div>
+                                            <span class="font-semibold">Optimized headline</span>
+                                            <span class="text-emerald-100 text-sm block">Under 220 characters, tailored to your goals</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-6 h-6 text-yellow-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        <div>
+                                            <span class="font-semibold">Complete About section rewrite</span>
+                                            <span class="text-emerald-100 text-sm block">Up to 2,600 characters with storytelling & metrics</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-6 h-6 text-yellow-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        <div>
+                                            <span class="font-semibold">Top 3 experience descriptions rewritten</span>
+                                            <span class="text-emerald-100 text-sm block">With impact statements and quantifiable results</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <svg class="w-6 h-6 text-yellow-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        <div>
+                                            <span class="font-semibold">Delivered in 24-48 hours</span>
+                                            <span class="text-emerald-100 text-sm block">With 1 round of revisions included</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row items-center gap-4">
+                                <button onclick="purchaseProfileRewrite()" class="w-full sm:w-auto bg-white text-emerald-600 font-bold px-10 py-5 rounded-xl hover:bg-gray-100 transition shadow-lg hover:shadow-2xl transform hover:-translate-y-0.5 text-lg">
+                                    Get Your Profile Professionally Rewritten - $97
+                                </button>
+                            </div>
+                            <p class="text-emerald-100 text-sm text-center mt-4">
+                                One-time payment • No subscription • Money-back guarantee
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -608,6 +834,47 @@
         // State management
         let currentStep = 1;
         let userData = { linkedin: null, audit: null };
+        let inputMethod = 'manual'; // 'manual' or 'url'
+        let referrer = null; // Affiliate tracking
+
+        // Capture referrer from URL on page load
+        function captureReferrer() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+            if (ref) {
+                referrer = ref.toLowerCase();
+                localStorage.setItem('deal_magnet_ref', referrer);
+                console.log('Referrer captured:', referrer);
+            } else {
+                // Check localStorage for previously captured referrer
+                referrer = localStorage.getItem('deal_magnet_ref');
+            }
+        }
+
+        // Input method toggle
+        function switchInputTab(method) {
+            inputMethod = method;
+            const manualTab = document.getElementById('tab-manual');
+            const urlTab = document.getElementById('tab-url');
+            const manualForm = document.getElementById('manual-input-form');
+            const urlForm = document.getElementById('url-input-form');
+
+            if (method === 'manual') {
+                manualTab.classList.add('bg-white', 'text-gray-900', 'shadow');
+                manualTab.classList.remove('text-gray-600');
+                urlTab.classList.remove('bg-white', 'text-gray-900', 'shadow');
+                urlTab.classList.add('text-gray-600');
+                manualForm.classList.remove('hidden');
+                urlForm.classList.add('hidden');
+            } else {
+                urlTab.classList.add('bg-white', 'text-gray-900', 'shadow');
+                urlTab.classList.remove('text-gray-600');
+                manualTab.classList.remove('bg-white', 'text-gray-900', 'shadow');
+                manualTab.classList.add('text-gray-600');
+                urlForm.classList.remove('hidden');
+                manualForm.classList.add('hidden');
+            }
+        }
 
         // Step navigation
         function goToStep(step) {
@@ -674,27 +941,142 @@
 
         // Analyze profile
         async function analyzeProfile() {
-            const urlInput = document.getElementById('linkedin-url');
-            const url = urlInput.value.trim();
-            const errorEl = document.getElementById('url-error');
+            const formError = document.getElementById('form-error');
+            formError.classList.add('hidden');
 
-            if (!url || !isValidLinkedInUrl(url)) {
-                errorEl.classList.remove('hidden');
-                urlInput.classList.add('border-red-500');
-                return;
+            let requestBody = {};
+
+            if (inputMethod === 'manual') {
+                // Manual input validation
+                const email = document.getElementById('user-email').value.trim();
+                const profileUrl = document.getElementById('profile-url').value.trim();
+                const headline = document.getElementById('profile-headline').value.trim();
+                const about = document.getElementById('profile-about').value.trim();
+                const skills = document.getElementById('profile-skills').value.trim();
+
+                // Experience fields
+                const exp1Title = document.getElementById('exp1-title').value.trim();
+                const exp1Company = document.getElementById('exp1-company').value.trim();
+                const exp1Duration = document.getElementById('exp1-duration').value.trim();
+                const exp1Description = document.getElementById('exp1-description').value.trim();
+
+                const exp2Title = document.getElementById('exp2-title').value.trim();
+                const exp2Company = document.getElementById('exp2-company').value.trim();
+                const exp2Duration = document.getElementById('exp2-duration').value.trim();
+                const exp2Description = document.getElementById('exp2-description').value.trim();
+
+                const exp3Title = document.getElementById('exp3-title').value.trim();
+                const exp3Company = document.getElementById('exp3-company').value.trim();
+                const exp3Duration = document.getElementById('exp3-duration').value.trim();
+                const exp3Description = document.getElementById('exp3-description').value.trim();
+
+                // Profile completeness
+                const hasPhoto = document.getElementById('has-photo').checked;
+                const hasBanner = document.getElementById('has-banner').checked;
+                const connectionCount = document.getElementById('connection-count').value;
+
+                // Validation
+                if (!email || !email.includes('@')) {
+                    formError.textContent = 'Please enter a valid email address';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!profileUrl || !isValidLinkedInUrl(profileUrl)) {
+                    formError.textContent = 'Please enter a valid LinkedIn profile URL';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!headline) {
+                    formError.textContent = 'Please enter your current LinkedIn headline';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!about) {
+                    formError.textContent = 'Please paste your About section';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!exp1Title || !exp1Company || !exp1Duration || !exp1Description) {
+                    formError.textContent = 'Please fill out your most recent work experience';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!exp2Title || !exp2Company || !exp2Duration) {
+                    formError.textContent = 'Please fill out at least 2 work experiences';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+
+                // Build experience array
+                const experience = [
+                    {
+                        title: exp1Title,
+                        company: exp1Company,
+                        duration: exp1Duration,
+                        description: exp1Description
+                    },
+                    {
+                        title: exp2Title,
+                        company: exp2Company,
+                        duration: exp2Duration,
+                        description: exp2Description || ''
+                    }
+                ];
+
+                // Add optional 3rd experience if provided
+                if (exp3Title && exp3Company) {
+                    experience.push({
+                        title: exp3Title,
+                        company: exp3Company,
+                        duration: exp3Duration || '',
+                        description: exp3Description || ''
+                    });
+                }
+
+                requestBody = {
+                    email: email,
+                    profileUrl: profileUrl,
+                    headline: headline,
+                    about: about,
+                    experience: experience,
+                    skills: skills ? skills.split(',').map(s => s.trim()).filter(s => s) : [],
+                    hasPhoto: hasPhoto,
+                    hasBanner: hasBanner,
+                    connectionCount: connectionCount,
+                    referrer: referrer
+                };
+            } else {
+                // URL input validation
+                const email = document.getElementById('user-email-url').value.trim();
+                const urlInput = document.getElementById('linkedin-url');
+                const url = urlInput.value.trim();
+                const errorEl = document.getElementById('url-error');
+
+                if (!email || !email.includes('@')) {
+                    formError.textContent = 'Please enter a valid email address';
+                    formError.classList.remove('hidden');
+                    return;
+                }
+                if (!url || !isValidLinkedInUrl(url)) {
+                    errorEl.classList.remove('hidden');
+                    urlInput.classList.add('border-red-500');
+                    return;
+                }
+                errorEl.classList.add('hidden');
+                urlInput.classList.remove('border-red-500');
+
+                requestBody = { email: email, url: url, referrer: referrer };
             }
-            errorEl.classList.add('hidden');
-            urlInput.classList.remove('border-red-500');
 
             document.getElementById('profile-input-state').classList.add('hidden');
             document.getElementById('profile-loading-state').classList.remove('hidden');
             simulateLoadingSteps();
 
             try {
-                const response = await fetch('/api/audit', {
+                const response = await fetch('/api/audit-manual', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
+                    body: JSON.stringify(requestBody)
                 });
 
                 if (!response.ok) {
@@ -704,6 +1086,7 @@
 
                 const result = await response.json();
                 userData.audit = result;
+                userData.email = requestBody.email;
 
                 finishLoadingSteps(() => {
                     goToStep(3);
@@ -711,7 +1094,8 @@
                 });
             } catch (error) {
                 console.error('Profile analysis error:', error);
-                alert('Failed to analyze profile: ' + error.message + '. Please try again.');
+                formError.textContent = 'Failed to analyze profile: ' + error.message;
+                formError.classList.remove('hidden');
                 document.getElementById('profile-loading-state').classList.add('hidden');
                 document.getElementById('profile-input-state').classList.remove('hidden');
             }
@@ -825,7 +1209,64 @@
                 });
             }
 
+            document.getElementById('pro-upgrade-cta').classList.remove('hidden');
             document.getElementById('score-cta').classList.remove('hidden');
+        }
+
+        // Upgrade to Pro
+        async function upgradeToPro() {
+            try {
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        priceId: 'price_pro_monthly',
+                        mode: 'subscription',
+                        successUrl: window.location.origin + '/success?session_id={CHECKOUT_SESSION_ID}&upgraded=true',
+                        cancelUrl: window.location.origin + '/onboarding?canceled=true',
+                        referrer: referrer,
+                        email: userData.email
+                    })
+                });
+
+                const data = await response.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Failed to start checkout. Please try again.');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Failed to start checkout. Please try again.');
+            }
+        }
+
+        // Purchase Profile Rewrite ($97 one-time)
+        async function purchaseProfileRewrite() {
+            try {
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        priceId: process.env.STRIPE_PRICE_FULL_FIX || 'price_1SedI3K5zyiZ50PBOx0luGnq',
+                        mode: 'payment',
+                        successUrl: window.location.origin + '/success?session_id={CHECKOUT_SESSION_ID}&rewrite=true',
+                        cancelUrl: window.location.origin + '/onboarding?canceled=true',
+                        referrer: referrer,
+                        email: userData.email
+                    })
+                });
+
+                const data = await response.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Failed to start checkout. Please try again.');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Failed to start checkout. Please try again.');
+            }
         }
 
         // Copy headline
@@ -865,9 +1306,45 @@
             window.location.href = '/';
         }
 
+        // Character counters
+        function setupCharacterCounters() {
+            const headlineInput = document.getElementById('profile-headline');
+            const headlineCount = document.getElementById('headline-count');
+            const aboutInput = document.getElementById('profile-about');
+            const aboutCount = document.getElementById('about-count');
+
+            if (headlineInput && headlineCount) {
+                headlineInput.addEventListener('input', function() {
+                    headlineCount.textContent = this.value.length;
+                    if (this.value.length > 200) {
+                        headlineCount.classList.add('text-orange-500');
+                    } else if (this.value.length >= 220) {
+                        headlineCount.classList.add('text-red-500');
+                    } else {
+                        headlineCount.classList.remove('text-orange-500', 'text-red-500');
+                    }
+                });
+            }
+
+            if (aboutInput && aboutCount) {
+                aboutInput.addEventListener('input', function() {
+                    aboutCount.textContent = this.value.length;
+                    if (this.value.length > 2400) {
+                        aboutCount.classList.add('text-orange-500');
+                    } else if (this.value.length >= 2600) {
+                        aboutCount.classList.add('text-red-500');
+                    } else {
+                        aboutCount.classList.remove('text-orange-500', 'text-red-500');
+                    }
+                });
+            }
+        }
+
         // Init
         window.addEventListener('DOMContentLoaded', function() {
+            captureReferrer();
             checkLinkedInConnection();
+            setupCharacterCounters();
             const onboardingComplete = localStorage.getItem('onboarding_complete');
             if (onboardingComplete === 'true') {
                 if (confirm('You\'ve already completed onboarding. Would you like to go to the dashboard?')) {

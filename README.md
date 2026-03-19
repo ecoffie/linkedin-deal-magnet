@@ -1,106 +1,179 @@
 # LinkedIn Deal Magnet
 
-Turn Your LinkedIn Into a Deal Magnet - AI-powered LinkedIn optimization SaaS for government contractors.
+AI-powered LinkedIn optimization tools for professionals seeking career growth.
+
+**Live URL:** https://linkedin-deal-magnet.vercel.app
+
+## What Is This?
+
+A suite of tools to help job seekers, career changers, and professionals optimize their LinkedIn presence:
+
+1. **LinkedIn Profile Optimizer** (Phase 1) - Get a Readiness Score and 20+ AI-powered fixes
+2. **Pro Subscription** ($19/mo) - Full access to all features
+3. **Job Board** (Phase 2) - Curated job listings with email alerts
+
+## Target Audience
+
+- Job seekers looking to stand out
+- Career changers starting fresh
+- Professionals building personal brands
+- Women reentering the workforce
 
 ## Features
 
-- **Free LinkedIn Profile Audit** - Get AI-powered analysis of your LinkedIn profile
-- **Score & Recommendations** - Receive a 0-100 score and 20+ personalized fixes
-- **Headline Optimization** - See your current headline vs AI-optimized version
-- **Stripe Integration** - One-time payments ($97) and subscriptions ($47/mo)
-- **Beautiful UI** - Modern, responsive design built with Tailwind CSS
+### Phase 1: Profile Optimizer (MVP COMPLETE - March 2026)
+- **Free Audit**: Readiness Score (0-100) + AI headline + 15-20 prioritized fixes
+- **Manual Input**: User provides profile data (no scraping - LinkedIn ToS compliant)
+- **Email Capture**: Required before showing results
+- **Claude AI**: Primary analysis engine with Grok/OpenAI fallbacks
+- **Monetization**: $97 profile rewrite service (done-for-you)
 
-## 🚀 MVP Development
+### Partner Program
+- Partners (Kumud, Sibel, Olga): 60% revenue share ($11.40/conversion)
+- Affiliates: 20% revenue share ($3.80/conversion)
+- Tracking via `?ref=` URL parameter
 
-**See [MVP_FEATURE_PRIORITY.md](./MVP_FEATURE_PRIORITY.md) for the complete 4-6 week MVP roadmap:**
-- Onboarding flow (LinkedIn connection, company info, capabilities)
-- Agency matching engine (USASpending API integration)
-- Content generator (AI-powered LinkedIn posts with agency pain points)
-- GEO booster (optimize for AI engine visibility)
-- Save/schedule/export functionality
+### Phase 2: Job Board (Coming Soon)
+- Job search with filters (remote, salary, industry)
+- Email alerts for new listings
+- Integration with Profile Optimizer
+- Niche focus: "Fresh Start Careers"
 
 ## Tech Stack
 
-- **Frontend**: HTML, CSS (Tailwind), Vanilla JavaScript
-- **Backend**: Node.js, Express
-- **AI**: Grok API (xAI)
+- **Backend**: Node.js + Express.js
+- **Frontend**: HTML + Tailwind CSS + Vanilla JS
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: LinkedIn OAuth 2.0
+- **AI**: Claude (Primary) + Grok + OpenAI (Fallbacks)
 - **Payments**: Stripe
-- **Scraping**: Cheerio + AllOrigins proxy
+- **Deployment**: Vercel
 
-## Setup
+## Quick Start
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+# Install dependencies
+npm install
 
-2. **Set environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add:
-   - `GROK_API_KEY` - Your Grok API key
-   - `STRIPE_SECRET_KEY` - Your Stripe secret key
-   - `STRIPE_PRICE_FULL_FIX` - Stripe price ID for $97 one-time
-   - `STRIPE_PRICE_CONTENT_ENGINE` - Stripe price ID for $47/mo subscription
+# Set up environment
+cp .env.example .env
+# Edit .env with your API keys
 
-3. **Create Stripe Products**
-   - Go to Stripe Dashboard → Products
-   - Create product "Full Fix Guide" ($97 one-time)
-   - Create product "Content Engine" ($47/month recurring)
-   - Copy the Price IDs to your `.env` file
+# Run locally
+npm run dev
 
-4. **Run locally**
-   ```bash
-   npm run dev
-   ```
-   
-   Visit `http://localhost:3000`
+# Visit http://localhost:3000
+```
+
+## Environment Variables
+
+```env
+# Required
+ANTHROPIC_API_KEY=       # Claude API (primary AI)
+GROK_API_KEY=            # Grok API (fallback)
+OPENAI_API_KEY=          # OpenAI (fallback)
+SUPABASE_URL=
+SUPABASE_SERVICE_KEY=
+LINKEDIN_CLIENT_ID=
+LINKEDIN_CLIENT_SECRET=
+SESSION_SECRET=
+STRIPE_SECRET_KEY=
+STRIPE_PRICE_PRO_MONTHLY=
+
+# Optional (Phase 2)
+ADZUNA_APP_ID=
+ADZUNA_API_KEY=
+RESEND_API_KEY=
+```
+
+## Project Structure
+
+```
+/
+├── server.js              # Express backend
+├── onboarding.html        # 3-step onboarding flow
+├── content-generator.html # Content creation tool
+├── db/
+│   ├── schema.sql         # Database schema
+│   └── supabase.js        # Database models
+├── api/
+│   └── index.js           # Vercel serverless wrapper
+├── VISION.md              # Product vision
+├── PHASE_1_*.md           # Phase 1 spec
+├── PHASE_2_*.md           # Phase 2 spec
+├── TODO.md                # Task tracking
+└── CLAUDE.md              # AI assistant context
+```
+
+## Documentation
+
+### Product & Planning
+| Document | Description |
+|----------|-------------|
+| [VISION.md](./VISION.md) | Product vision, target audiences, revenue model |
+| [PHASE_1_LINKEDIN_OPTIMIZER.md](./PHASE_1_LINKEDIN_OPTIMIZER.md) | MVP specification (manual input approach) |
+| [PHASE_2_JOB_BOARD.md](./PHASE_2_JOB_BOARD.md) | Job board specification |
+| [TODO.md](./TODO.md) | Current tasks and progress |
+| [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) | Complete implementation overview & status |
+
+### Technical Documentation
+| Document | Description |
+|----------|-------------|
+| [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) | API reference, endpoints, request/response specs |
+| [TESTING_CHECKLIST.md](./TESTING_CHECKLIST.md) | Pre-launch testing guide (5 profile types, mobile, etc) |
+| [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) | Vercel deployment steps, environment setup |
+| [CLAUDE.md](./CLAUDE.md) | AI assistant context & session handoff |
 
 ## Deployment
 
-### Vercel
+### Vercel (Current)
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Run `vercel` and follow prompts
-3. Add environment variables in Vercel dashboard
-4. Deploy: `vercel --prod`
+Live at: https://linkedin-deal-magnet.vercel.app
 
-### Render
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-1. Connect your GitHub repo
-2. Create new Web Service
-3. Add environment variables
-4. Deploy automatically on push
+# Deploy
+vercel --prod
+```
+
+Environment variables are configured in Vercel dashboard.
 
 ## API Endpoints
 
-- `POST /api/audit` - Analyze LinkedIn profile
-  ```json
-  {
-    "url": "https://linkedin.com/in/username"
-  }
-  ```
+### Auth
+- `GET /auth/linkedin` - Initiate OAuth
+- `GET /auth/linkedin/callback` - OAuth callback
 
-- `POST /api/create-checkout-session` - Create Stripe checkout
-  ```json
-  {
-    "priceId": "price_full_fix",
-    "mode": "payment",
-    "successUrl": "...",
-    "cancelUrl": "..."
-  }
-  ```
-
+### Profile Optimizer
+- `POST /api/audit-manual` - Analyze profile with user-provided data (see API_DOCUMENTATION.md)
+- `GET /api/audit/:id` - Retrieve saved audit (coming soon)
 - `GET /api/health` - Health check
 
-## Notes
+### Payments
+- `POST /api/create-checkout-session` - Create Stripe checkout (supports referrer tracking)
+- `POST /api/webhook/stripe` - Handle payments
 
-- LinkedIn scraping uses AllOrigins proxy to bypass CORS
-- If scraping fails, the app falls back to mock data for development
-- Grok API is used for AI analysis - if it fails, default recommendations are provided
-- The app works without login - all data is session-based
+### Affiliate
+- `GET /api/affiliate/stats?ref=` - Get affiliate statistics (requires auth)
+
+### Jobs (Phase 2)
+- `GET /api/jobs/search` - Search jobs
+- `POST /api/jobs/subscribe` - Email alerts
+
+## Partner URLs
+
+- Kumud: `https://linkedin-deal-magnet.vercel.app/onboarding?ref=kumud`
+- Sibel: `https://linkedin-deal-magnet.vercel.app/onboarding?ref=sibel`
+- Olga: `https://linkedin-deal-magnet.vercel.app/onboarding?ref=olga`
+
+## Pricing
+
+- **Free**: Full audit (score + headline + all 15-20 fixes)
+- **Profile Rewrite** ($97 one-time): Done-for-you headline + about + top 3 experiences rewritten
+  - Delivered in 24-48 hours
+  - 1 round of revisions included
 
 ## License
 

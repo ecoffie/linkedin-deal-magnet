@@ -1,112 +1,150 @@
-# TODO
+# TODO - LinkedIn Deal Magnet
 
-## Critical (P0) - Blocking MVP Launch
+## Phase 1: LinkedIn Profile Optimizer (MVP)
 
-### Database Integration
-- [x] Choose database (PostgreSQL via Supabase)
-- [x] Set up database schema (`db/schema.sql`)
-- [x] Migrate user data storage from in-memory Map to database (`db/supabase.js` models)
-- [x] Implement user data persistence across sessions
-- [x] Run `db/schema.sql` in Supabase SQL Editor to create tables
+### ✅ COMPLETED - March 19, 2026
 
-### Onboarding Flow
-- [ ] PDF upload and parsing integration
-- [ ] Frontend form validation and UX polish
-- [ ] Onboarding completion tracking
-- [ ] Progress indicators
-- [ ] Form validation UI feedback
+#### Backend: `/api/audit-manual` Endpoint
+- [x] **Manual input approach** (no scraping - user provides data)
+- [x] AI analysis with **Claude API** (primary, Grok fallback)
+- [x] Score calculation (0-100 with score labels)
+- [x] Headline generation (under 220 chars)
+- [x] Fix generation (15-20 items with priorities)
+- [x] Save audit to Supabase with email capture
 
-### Agency Matching Engine
-- [ ] Complete USASpending API integration
-- [ ] NAICS → Agency matching algorithm
-- [ ] Spending data aggregation
-- [ ] Small business set-aside analysis
-- [ ] Agency matching UI/display
+#### Frontend: Manual Input Form
+- [x] Comprehensive form with email, headline, about, 2-3 experiences
+- [x] Character counters (220 for headline, 2600 for about)
+- [x] Profile completeness checkboxes (photo, banner, connections)
+- [x] Form validation for required fields
+- [x] Email capture gate with "weekly tips" checkbox
+- [x] Loading animation with updated messaging (no "scraping")
 
-### Export Functionality
-- [x] Copy to clipboard (one-click per variant)
-- [x] Download as text (.txt)
-- [x] Save to library (requires database)
-- [x] Content library UI (search/filter saved posts)
+#### Payment Flow
+- [x] Stripe integration with `price_1SedI3K5zyiZ50PBOx0luGnq` ($97)
+- [x] `POST /api/create-checkout-session` working
+- [x] Profile Rewrite CTA on results page ($97 one-time)
+- [x] Checkout flow with success/cancel URLs
 
-### Content Generator Polish
-- [ ] Content quality validation checks
-- [ ] Character count enforcement (LinkedIn limits)
-- [ ] Content preview rendering
-- [ ] Regeneration with different parameters
+### P0 - Still Needed for Launch
 
-## Important (P1) - Not Blocking Launch
+#### Testing & Validation
+- [ ] Test with 5 real LinkedIn profiles (junior, mid, senior, career changer, executive)
+- [ ] Validate Claude API analysis quality
+- [ ] Test mobile responsive layout
+- [ ] Test Stripe checkout end-to-end
 
-### Fine-Tuned Model
-- [ ] Fine-tuned OpenAI model testing in production
-- [ ] A/B testing between Grok and fine-tuned model
-- [ ] Performance evaluation
+#### Database
+- [ ] Verify `audits` table schema in Supabase
+- [ ] Test audit retrieval by email
+- [ ] Add indexes for performance
 
-### GEO Booster
-- [ ] GEO score calculation
-- [ ] GEO optimization checklist validation
-- [ ] Visual GEO indicators in UI
-- [ ] GEO score display to users
-- [ ] Pre/post GEO comparison view
+#### Launch Prep
+- [ ] Update privacy policy (manual input, no scraping)
+- [ ] Update terms of service
+- [ ] Set up Vercel deployment
+- [ ] Configure production environment variables
 
-### Export - Advanced
-- [ ] Download as image (PNG/JPG LinkedIn post mockup)
-- [ ] Download as PDF (formatted with metadata)
+### P1 - Important but Not Blocking
 
-### Scheduling
-- [ ] LinkedIn API posting integration
-- [ ] Schedule queue management
-- [ ] Scheduling UI (set date/time)
-- [ ] Preview/edit scheduled posts
+#### Dashboard
+- [ ] Post-signup dashboard page
+- [ ] Show past audits
+- [ ] Re-audit CTA
 
-### Frontend Polish
-- [ ] Content generator UI improvements
-- [ ] Responsive design refinement
-- [ ] Dashboard/homepage
-- [ ] Spending statistics visualization
-- [ ] Trending analysis (YoY growth)
-- [ ] Certification alignment scoring
+#### Sharing
+- [ ] Shareable audit URL (`/audit/:id`)
+- [ ] Social share buttons (Twitter, LinkedIn)
 
-## Nice to Have (P2) - Post-MVP
+#### Analytics
+- [ ] Track audit completions
+- [ ] Track payment conversions
+- [ ] Track headline copies
 
-- [ ] Content history/versioning
-- [ ] API response caching (Redis)
-- [ ] Background job processing
-- [ ] Email notifications
-- [ ] Analytics tracking
-- [ ] Logging/monitoring setup
-- [ ] Advanced analytics (engagement prediction)
-- [ ] Team collaboration features
-- [ ] Integration with other social platforms
-- [ ] Automated content calendar
+### P2 - Nice to Have
 
-## In Progress
+- [ ] PDF export of full report
+- [ ] Email audit results
+- [ ] A/B test pricing ($97 vs $67 vs $127)
 
-- [ ] Fine-tuning integration (90% - dataset ready, code integrated, waiting on OpenAI API)
-- [ ] Content generation pipeline (85% - core 3-step process working)
-- [ ] Knowledge base (95% - 31 agencies, 24 hooks, 15 templates)
+---
 
-## Done
+## Phase 2: Job Board Lead Magnet
 
+### Backend
+- [ ] Adzuna API integration
+- [ ] `GET /api/jobs/search` - Search with filters
+- [ ] `GET /api/jobs/:id` - Job detail
+- [ ] `POST /api/jobs/save` - Save job (requires auth)
+- [ ] `POST /api/jobs/subscribe` - Email alerts
+
+### Email
+- [ ] Resend integration
+- [ ] Welcome email template
+- [ ] Weekly digest template
+- [ ] Unsubscribe handling
+- [ ] Cron job for weekly sends
+
+### Frontend
+- [ ] `/jobs` - Landing page with search
+- [ ] `/jobs/search` - Results with filters
+- [ ] `/jobs/:id` - Job detail page
+- [ ] `/jobs/saved` - Saved jobs (logged in)
+- [ ] Email capture modal
+- [ ] Upsell CTAs to Profile Optimizer
+
+### Analytics
+- [ ] Track job views
+- [ ] Track apply clicks
+- [ ] Track email signups
+- [ ] Track conversions from job board to optimizer
+
+---
+
+## Completed
+
+### Infrastructure
+- [x] Express.js server setup
+- [x] Vercel deployment config
+- [x] CORS configuration
+- [x] Supabase connection
+
+### Auth
 - [x] LinkedIn OAuth integration (Passport.js)
 - [x] LinkedIn profile data fetching
-- [x] User session management
-- [x] Company information input API
-- [x] NAICS codes, certifications, past agencies storage
-- [x] Capabilities statement text input
-- [x] Agency knowledge base (31 agencies with pain points)
-- [x] Agency lookup API
-- [x] 3-step content generation pipeline (pain points → stats/GEO → voice)
-- [x] Viral hooks integration (24 templates)
-- [x] 15 content templates
-- [x] Multi-variant generation (3-5 variants)
-- [x] GEO optimization toggle (boolean flag)
-- [x] GEO prompt enhancements, stats injection, source citations
-- [x] Grok API integration
-- [x] OpenAI API integration
-- [x] Fine-tuning dataset (26 examples)
-- [x] Stripe payment integration
-- [x] Express.js server setup
-- [x] CORS configuration
-- [x] Vercel deployment config
-- [x] NAICS-based agency lookup endpoint (USASpending)
+- [x] Session management
+
+### Onboarding UI
+- [x] Step 1: LinkedIn OAuth button
+- [x] Step 2: Profile URL input + validation
+- [x] Step 3: Score display with animated ring
+- [x] Fix cards with priority badges
+- [x] Headline copy button
+- [x] Progress indicators
+
+### Payments
+- [x] Stripe integration (basic)
+
+---
+
+## Current Sprint (Week of March 18)
+
+Focus: **Get `/api/audit` working end-to-end**
+
+1. [ ] Profile scraping returning real data
+2. [ ] AI analysis generating quality scores/fixes
+3. [ ] Frontend displaying real results (not mock)
+4. [ ] Test with 5 real LinkedIn profiles
+
+---
+
+## Open Questions
+
+1. **Naming**: Keep "LinkedIn Deal Magnet" or rebrand?
+2. **Pricing**: $97 one-time confirmed, or test other prices?
+3. **Launch partner**: Start with Kumud, Sibel, or Olga?
+4. **Scraping reliability**: Need ScraperAPI/Brightdata for production?
+
+---
+
+*Last Updated: March 18, 2026*

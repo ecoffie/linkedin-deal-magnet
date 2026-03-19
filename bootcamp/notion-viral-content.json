@@ -1,0 +1,282 @@
+{
+  "version": "1.0",
+  "source": "Notion Export - January 2026",
+  "description": "Viral content hooks, post frameworks, and topics for LinkedIn content generation",
+
+  "viral_topics": [
+    {"topic": "Careers", "category": "professional"},
+    {"topic": "Burnout", "category": "wellness"},
+    {"topic": "Compensation", "category": "professional"},
+    {"topic": "Raises", "category": "professional"},
+    {"topic": "Layoffs", "category": "professional"},
+    {"topic": "Promotions", "category": "professional"},
+    {"topic": "Relationships", "category": "personal"},
+    {"topic": "Mental health", "category": "wellness"},
+    {"topic": "Leadership", "category": "professional"},
+    {"topic": "Management", "category": "professional"},
+    {"topic": "Consistency", "category": "personal"},
+    {"topic": "Content creation", "category": "professional"},
+    {"topic": "Storytelling", "category": "professional"}
+  ],
+
+  "govcon_viral_topics": [
+    {"topic": "Winning contracts", "category": "professional"},
+    {"topic": "Proposal writing", "category": "professional"},
+    {"topic": "Teaming agreements", "category": "professional"},
+    {"topic": "Small business set-asides", "category": "professional"},
+    {"topic": "Past performance", "category": "professional"},
+    {"topic": "Security clearances", "category": "professional"},
+    {"topic": "Prime contractor relationships", "category": "professional"},
+    {"topic": "Agency pain points", "category": "professional"},
+    {"topic": "GWAC/IDIQ vehicles", "category": "professional"},
+    {"topic": "Capability statements", "category": "professional"},
+    {"topic": "B2G sales", "category": "professional"},
+    {"topic": "Contract pricing", "category": "professional"},
+    {"topic": "Compliance", "category": "professional"}
+  ],
+
+  "carousel_hooks": [
+    {"hook": "X {tools} to help you {get result} in X days", "tag": "Resourceful"},
+    {"hook": "X {resources} to help you get {result}", "tag": "Resourceful"},
+    {"hook": "X tips to beat X (right now)", "tag": "Insightful"},
+    {"hook": "X hard pills to swallow to see {growth in area}", "tag": "Insightful"},
+    {"hook": "X cheat codes to help you {get result}", "tag": "Educational"},
+    {"hook": "X choices I'm making at {age} so I have no regrets by {age}", "tag": "Insightful"},
+    {"hook": "X lessons from the longest study on {topic}", "tag": "Educational"},
+    {"hook": "X life changing books everyone should read in their 20s", "tag": "Resourceful"},
+    {"hook": "YouTube is free education but X% of people don't know where to learn. Here are the top channels to accelerate your {topic}", "tag": "Resourceful"},
+    {"hook": "7 commencement speeches that will change your life", "tag": "Inspirational"},
+    {"hook": "If you are feeling {emotion}, read this:", "tag": "Insightful"},
+    {"hook": "Storytelling is a superpower. Here are X steps to captivate your audience", "tag": "Educational"},
+    {"hook": "5 mental models to help you develop {topic}", "tag": "Educational"},
+    {"hook": "X soft skills to accelerate your learning", "tag": "Insightful"},
+    {"hook": "How to set better goals (and follow through on them)", "tag": "Educational"},
+    {"hook": "If you want to achieve {topic} in {time frame} watch these videos", "tag": "Resourceful"},
+    {"hook": "X addictions you need to break to be the best version of yourself", "tag": "Insightful"},
+    {"hook": "X sentences that will 10X your {topic}", "tag": "Resourceful"},
+    {"hook": "X people use {tool} every month but X% don't know its best features", "tag": "Resourceful"},
+    {"hook": "X powerful tips to build {topic}", "tag": "Insightful"},
+    {"hook": "Cheat codes I know at {age} that I wish I knew at {age}", "tag": "Insightful"},
+    {"hook": "X free websites you shouldn't live without:", "tag": "Resourceful"},
+    {"hook": "X minimalist habits to help you {topic}", "tag": "Resourceful"},
+    {"hook": "Give me 2 minutes and I'll teach you how to accelerate {topic}", "tag": "Educational"},
+    {"hook": "If you want to achieve {topic} in {time frame} read these books", "tag": "Resourceful"},
+    {"hook": "X tips to master negotiation (in {topic} and in life)", "tag": "Educational"},
+    {"hook": "X TED Talks in X days that will inspire you", "tag": "Inspirational"},
+    {"hook": "How to learn {topic} in X hours", "tag": "Educational"},
+    {"hook": "X Google Chrome extensions that will accelerate {topic}", "tag": "Educational"},
+    {"hook": "Podcasts are free education. Here are the top X podcasts that will accelerate {topic}", "tag": "Resourceful"},
+    {"hook": "How to {achieve goal} (even when you don't feel like it)", "tag": "Insightful"},
+    {"hook": "X speeches in X days that will change your life", "tag": "Inspirational"},
+    {"hook": "The #1 secret for {topic}.", "tag": "Educational"},
+    {"hook": "{topic} is a top-level skill (in business and life). Here's how to develop it:", "tag": "Educational"},
+    {"hook": "Here are X rules to be more {topic}", "tag": "Educational"},
+    {"hook": "How to stop {topic}", "tag": "Resourceful"},
+    {"hook": "7 {adjective} concepts that will change your life:", "tag": "Resourceful"},
+    {"hook": "How to give yourself a {topic}", "tag": "Educational"},
+    {"hook": "X minimalist concepts that will transform your life:", "tag": "Resourceful"},
+    {"hook": "20 harsh truths I wish I had known at {age}", "tag": "Insightful"},
+    {"hook": "7 habits to become {topic}", "tag": "Resourceful"},
+    {"hook": "Hard skills get you the interview. Soft skills get you promoted. Here are X soft skills to help accelerate your career", "tag": "Resourceful"},
+    {"hook": "X habits to take your morning routine to the next level", "tag": "Resourceful"},
+    {"hook": "Here are X websites to accelerate {topic}", "tag": "Resourceful"},
+    {"hook": "How to master {topic} in {time frame}", "tag": "Educational"},
+    {"hook": "X graphs that will change your life", "tag": "Insightful"},
+    {"hook": "X life changing books to help you get X", "tag": "Resourceful"},
+    {"hook": "If you're prone to {topic} read this", "tag": "Insightful"},
+    {"hook": "X things that won't matter in {X} years", "tag": "Insightful"},
+    {"hook": "How to avoid burnout. Get X types of rest", "tag": "Educational"},
+    {"hook": "The 10,000 hour rule. How to become the best at anything:", "tag": "Educational"},
+    {"hook": "X rare habits that will transform your life in X months", "tag": "Insightful"},
+    {"hook": "How to be {topic}. X secrets everyone should know.", "tag": "Insightful"},
+    {"hook": "X things I wish I knew when I was {age}", "tag": "Insightful"},
+    {"hook": "How to overcome imposter syndrome. X steps to achieve {topic}", "tag": "Educational"},
+    {"hook": "X lies you have been told about {topic}", "tag": "Insightful"}
+  ],
+
+  "govcon_carousel_hooks": [
+    {"hook": "X tools to help you win government contracts in X days", "tag": "Resourceful"},
+    {"hook": "X resources every GovCon small business needs", "tag": "Resourceful"},
+    {"hook": "X tips to beat larger competitors (right now)", "tag": "Insightful"},
+    {"hook": "X hard pills to swallow about government contracting", "tag": "Insightful"},
+    {"hook": "X cheat codes to help you land your first contract", "tag": "Educational"},
+    {"hook": "X lessons from contractors who've won $100M+ in contracts", "tag": "Educational"},
+    {"hook": "SAM.gov is free but X% of contractors don't know its best features", "tag": "Resourceful"},
+    {"hook": "X mistakes that kill your proposal before it's read", "tag": "Insightful"},
+    {"hook": "Give me 2 minutes and I'll teach you how to read an RFP", "tag": "Educational"},
+    {"hook": "X websites every government contractor should bookmark", "tag": "Resourceful"},
+    {"hook": "How to master capture management in 90 days", "tag": "Educational"},
+    {"hook": "X harsh truths about government contracting no one tells you", "tag": "Insightful"},
+    {"hook": "Hard skills get you the contract. Relationships get you the re-compete.", "tag": "Insightful"},
+    {"hook": "X things I wish I knew before starting my GovCon business", "tag": "Insightful"},
+    {"hook": "X lies you've been told about winning government contracts", "tag": "Insightful"}
+  ],
+
+  "post_frameworks": [
+    {
+      "name": "Origin Story",
+      "description": "Share your beginning, the challenges you faced, and how you got to where you are",
+      "structure": ["Hook with origin point", "The challenge/struggle", "The turning point", "Where you are now", "Takeaway for audience"],
+      "example_hook": "I came to {place} against my will in {year}..."
+    },
+    {
+      "name": "Personal Transformation",
+      "description": "Show your before and after journey with a specific change",
+      "structure": ["Hook with time reference", "Where you were before", "What changed", "The transformation", "Lesson learned"],
+      "example_hook": "4 years ago, I called my boss on a Saturday..."
+    },
+    {
+      "name": "Hero Story",
+      "description": "Celebrate an achievement while staying humble and relatable",
+      "structure": ["Humble brag hook", "The journey to get there", "Why it matters", "Gratitude", "Encourage others"],
+      "example_hook": "I bought my mom a car last year. It's a..."
+    },
+    {
+      "name": "New Perspective",
+      "description": "Contrast what you used to believe vs what you believe now",
+      "structure": ["Time-based hook", "Old belief/definition", "What changed your mind", "New perspective", "Challenge to audience"],
+      "example_hook": "5 years ago, I defined {topic} as..."
+    },
+    {
+      "name": "Personal Career Story",
+      "description": "Share a pivotal career moment that taught you something valuable",
+      "structure": ["Hook with numbers", "The situation", "What happened", "The lesson", "Relatable takeaway"],
+      "example_hook": "My boss gave me a $10,000 raise. Only one problem..."
+    },
+    {
+      "name": "Family Story",
+      "description": "Connect personal/family moments to professional lessons",
+      "structure": ["Personal hook", "The story/situation", "The emotion", "The lesson", "Universal takeaway"],
+      "example_hook": "My wife and I got married at 24. We had..."
+    },
+    {
+      "name": "Trending with a Twist",
+      "description": "Take a trending topic and add your unique perspective",
+      "structure": ["Reference trending topic", "State the common view", "Add your twist", "Support with facts", "Contrarian takeaway"],
+      "example_hook": "Most CEOs: 'I'm sorry, we have to lay off thousands...'"
+    },
+    {
+      "name": "Validated Content + Personal Perspective",
+      "description": "Share proven wisdom with your personal spin",
+      "structure": ["Bold statement hook", "The established truth", "Your experience with it", "How it applies", "Actionable advice"],
+      "example_hook": "There's one major secret to building a great..."
+    },
+    {
+      "name": "Anonymous Stories",
+      "description": "Share someone else's story (anonymized) with lessons",
+      "structure": ["Hook about 'a friend'", "Their situation", "Rising action", "The climax/result", "Takeaway"],
+      "example_hook": "My friend just put in her 2-week notice. This is why..."
+    },
+    {
+      "name": "Numbers Don't Lie",
+      "description": "Use contrasting numbers to make a powerful point",
+      "structure": ["Number hook", "Then vs now comparison", "What the numbers mean", "Bold statement", "Takeaway"],
+      "example_hook": "In 2019: $50K. In 2024: $500K. Here's what changed..."
+    },
+    {
+      "name": "Real Conversations",
+      "description": "Recreate an actual conversation that taught you something",
+      "structure": ["Dialogue format", "Character 1 says", "Character 2 responds", "The exchange", "Lesson at end"],
+      "example_hook": "Recruiter: 'Is that short for Tobias?' Me: 'No, it's...'"
+    },
+    {
+      "name": "One-Liners",
+      "description": "Make a bold statement with no context to spark debate",
+      "structure": ["Bold statement only", "Optional sign-off"],
+      "example_hook": "Stop applying to jobs. Start building relationships."
+    },
+    {
+      "name": "Hypothetical Conversations",
+      "description": "Create a fictional but relatable dialogue",
+      "structure": ["Set up the scenario", "Character 1 position", "Character 2 counter", "Resolution", "Takeaway"],
+      "example_hook": "Company: 'We're going back to the office.' Employee: '...'"
+    },
+    {
+      "name": "Praise the Prospect",
+      "description": "Celebrate your target audience while sharing value",
+      "structure": ["Hook mentioning audience", "Personal story with them", "Their value", "Appreciation", "Takeaway"],
+      "example_hook": "When I met the recruiter that helped me land..."
+    },
+    {
+      "name": "Chronological Events",
+      "description": "List events in time order to show progression or decline",
+      "structure": ["Company/person name", "Time point 1 + event", "Time point 2 + event", "Time point 3 + event", "Takeaway"],
+      "example_hook": "Coinbase - 6 months ago: 'We're hiring 2000...' Today: '...'"
+    },
+    {
+      "name": "Before & After",
+      "description": "Simple contrast of past vs present mindset",
+      "structure": ["Me before X", "List of old beliefs", "Me after X", "List of new beliefs", "Takeaway"],
+      "example_hook": "Me before the pandemic: 'I will do everything...' Me now: '...'"
+    },
+    {
+      "name": "Customer Testimonials",
+      "description": "Share a client success story",
+      "structure": ["Hook about the result", "Their starting point", "The challenge", "What you did", "The outcome", "Encouragement"],
+      "example_hook": "She went from $0 to $500K in government contracts in 18 months..."
+    },
+    {
+      "name": "Brag About Someone",
+      "description": "Celebrate someone else's achievement",
+      "structure": ["Announcement hook", "Their story", "The achievement", "Why it matters", "Tag them/encourage others"],
+      "example_hook": "My little sister bought her first car this week..."
+    },
+    {
+      "name": "Compare (Average vs Amazing)",
+      "description": "Contrast mediocre vs excellent behavior/thinking",
+      "structure": ["Average X says...", "Amazing X says...", "The difference", "Takeaway"],
+      "example_hook": "Average employers: 'You have no experience.' Great employers: '...'"
+    },
+    {
+      "name": "Teach Something New",
+      "description": "Educational content broken into steps",
+      "structure": ["Topic hook", "Step 1", "Step 2", "Step 3", "Resource/CTA"],
+      "example_hook": "Here's how to write a winning proposal in 5 steps..."
+    },
+    {
+      "name": "Personal Life Story",
+      "description": "Share a vulnerable personal story with lessons",
+      "structure": ["Vulnerable hook", "The situation", "The impact", "How you dealt with it", "Universal lesson"],
+      "example_hook": "My sense of smell disappeared 6 years ago..."
+    },
+    {
+      "name": "The Life List",
+      "description": "List of wisdom/lessons that resonates broadly",
+      "structure": ["Hook: X things you won't regret", "List items 1-10", "Sign-off"],
+      "example_hook": "10 things you won't regret doing: 1. Quitting..."
+    }
+  ],
+
+  "govcon_post_frameworks": [
+    {
+      "name": "Contract Win Story",
+      "description": "Share how you won a specific contract",
+      "structure": ["Result hook with dollar amount", "The opportunity", "Your approach", "What made you win", "Advice for others"],
+      "example_hook": "We just won a $2.5M contract with the Army. Here's the truth about how..."
+    },
+    {
+      "name": "Rejection to Win",
+      "description": "Turn a loss into a learning moment",
+      "structure": ["The rejection hook", "What you bid on", "Why you lost", "What you learned", "How it led to a win"],
+      "example_hook": "We got rejected 7 times before winning our first contract..."
+    },
+    {
+      "name": "Agency Pain Point Insight",
+      "description": "Share insider knowledge about what agencies need",
+      "structure": ["Agency hook", "The problem they face", "Why it matters", "How contractors can help", "Call to action"],
+      "example_hook": "The Department of Energy has a $50M problem. Here's what they need..."
+    },
+    {
+      "name": "Prime Contractor Reality",
+      "description": "Share truths about working with primes",
+      "structure": ["Contrarian hook", "Common belief", "The reality", "What to do instead", "Takeaway"],
+      "example_hook": "Stop chasing prime contractors. Here's what actually works..."
+    },
+    {
+      "name": "Proposal Debrief",
+      "description": "Share lessons from a proposal win or loss",
+      "structure": ["The outcome hook", "What you submitted", "The feedback", "Key lessons", "Advice"],
+      "example_hook": "We scored 100 on technical and still lost. Here's why..."
+    }
+  ]
+}

@@ -1,57 +1,61 @@
-# LinkedIn Deal Magnet - Claude Project Context
-
-## IMPORTANT: Deployment Note
-**This project's Vercel deployment (`govcon-content-generator.vercel.app`) is NOT active.**
-The content generator is actually deployed via the **market-assassin** project at `tools.govcongiants.org`.
-
----
-
-## Related GovCon Projects (Quick Reference)
-
-| Project | Location | Deploys To | Purpose |
-|---------|----------|------------|---------|
-| **LinkedIn Deal Magnet** | This project | N/A (not actively deployed) | Original Express backend for content generator |
-| **Market Assassin** | `/Users/ericcoffie/Projects/market-assassin` | `tools.govcongiants.org` | Next.js app with content generator + other tools |
-| **GovCon Funnels** | `/Users/ericcoffie/govcon-funnels` | `govcongiants.org` | Marketing funnel |
-| **GovCon Shop** | `/Users/ericcoffie/govcon-shop` | `shop.govcongiants.org` | Live shop (production) |
-
-### Where to make changes:
-- **Content Generator frontend** (HTML/JS): Edit in `market-assassin/public/content-generator/`
-- **Content Generator API routes**: Edit in `market-assassin/src/app/api/`
-- **Knowledge base / agency data**: Can be maintained here in `bootcamp/agencies/`
-
----
+# LinkedIn Deal Magnet - Project Context
 
 ## Project Overview
-**Name:** LinkedIn Deal Magnet
-**Purpose:** AI-powered LinkedIn content generator for government contractors
-**Framework:** Node.js + Express.js (monolithic server.js)
-**Database:** Supabase
-**AI Models:** Grok API (default) + OpenAI fine-tuned model
 
-## Tech Stack
-- **Backend:** Express.js (5,500+ lines in server.js)
-- **Frontend:** Vanilla HTML + Tailwind CSS + JavaScript
-- **AI:** Grok API (`grok-2-1212`) + OpenAI fine-tuned (`ft:gpt-4o-mini`)
-- **Database:** Supabase (PostgreSQL)
-- **Payments:** Stripe
-- **Auth:** LinkedIn OAuth 2.0 (Passport.js)
+**Name**: LinkedIn Deal Magnet
+**Purpose**: AI-powered LinkedIn optimization tools for professionals seeking career growth
+**Target**: Job seekers, career changers, professionals building personal brands
+**Partners**: Influencer-driven distribution (Kumud 183K, Sibel 302K, Olga)
 
 ---
 
-## Content Generation Pipeline (3-Step Process)
+## Key Documents
 
-### Step 1: Agency Pain Point Extraction
-- Pulls from 31 agency knowledge base files in `bootcamp/agencies/`
-- Each file has pain points, strategic priorities, market insights
+| Document | Purpose |
+|----------|---------|
+| `VISION.md` | Product vision, target audiences, revenue model |
+| `PHASE_1_LINKEDIN_OPTIMIZER.md` | MVP spec for profile audit tool |
+| `PHASE_2_JOB_BOARD.md` | Job board lead magnet spec |
+| `TODO.md` | Current task tracking |
 
-### Step 2: Stats Injection + GEO Optimization
-- Injects authoritative sources (GAO, DoD Strategic Plans)
-- GEO Boost: Optimizes for AI search engines (ChatGPT, Perplexity)
+**Read these before making changes.**
 
-### Step 3: Voice Analysis + Template Application
-- Analyzes user's past LinkedIn posts for voice matching
-- Applies 1 of 15 content templates
+---
+
+## Tech Stack
+
+- **Backend**: Node.js + Express.js (`server.js`)
+- **Frontend**: Vanilla HTML + Tailwind CSS + JavaScript
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: LinkedIn OAuth 2.0 (Passport.js)
+- **Payments**: Stripe
+- **AI**: Claude API (Anthropic)
+- **Deployment**: Vercel
+
+---
+
+## Current State (March 2026)
+
+### What's Built
+- [x] LinkedIn OAuth integration
+- [x] Onboarding flow UI (3 steps)
+- [x] Profile URL input + validation
+- [x] Score display with animated ring
+- [x] Fix cards with priority badges
+- [x] Headline copy button
+- [x] Stripe integration (basic)
+
+### What's Missing (Phase 1)
+- [ ] `/api/audit` endpoint (profile scraping + AI analysis)
+- [ ] Database persistence for audits
+- [ ] Payment gating (free vs paid fixes)
+- [ ] Dashboard page
+- [ ] Mobile polish
+
+### Phase 2 (Not Started)
+- [ ] Job board with Adzuna API
+- [ ] Email capture + Resend integration
+- [ ] Upsell CTAs from job board to optimizer
 
 ---
 
@@ -59,131 +63,130 @@ The content generator is actually deployed via the **market-assassin** project a
 
 | File | Purpose |
 |------|---------|
-| `server.js` | Main Express backend (all API endpoints) |
-| `api/index.js` | Vercel serverless function wrapper |
-| `vercel.json` | Vercel deployment config |
-| `content-generator.html` | Content generator UI |
-| `db/supabase.js` | Database client & models |
-| `bootcamp/agencies/*.json` | 31 agency knowledge base files |
-| `bootcamp/viral-hooks.json` | 24 viral hook templates |
-| `bootcamp/notion-viral-content.json` | Viral content frameworks |
-| `data-collection/fine_tune_instruction_format.jsonl` | Fine-tuning training data |
+| `server.js` | Express backend (API endpoints) |
+| `onboarding.html` | 3-step onboarding flow |
+| `content-generator.html` | Content creation tool (needs update) |
+| `db/schema.sql` | Database schema |
+| `api/index.js` | Vercel serverless wrapper |
 
 ---
 
 ## API Endpoints
 
-### Content Generation
-- `POST /api/content-generator/generate` - Main generation pipeline
-- `GET /api/content-generator/templates` - List templates
-- `GET /api/content-generator/viral-content` - Hooks & frameworks
-- `POST /api/agencies/lookup` - NAICS-based agency matching (USASpending)
+### Implemented
+- `GET /auth/linkedin` - Initiate OAuth
+- `GET /auth/linkedin/callback` - OAuth callback
+- `GET /api/linkedin/profile` - Get authenticated user
+- `POST /api/onboarding/save` - Save user data
 
-### Agency Data
-- `GET /api/agencies` - All agencies (categorized)
-- `GET /api/agency-knowledge-base/:name` - Specific agency details
+### Needed for Phase 1
+- `POST /api/audit` - Profile scraping + AI analysis
+- `GET /api/audit/:id` - Retrieve saved audit
+- `POST /api/checkout` - Stripe payment
+- `POST /api/webhook/stripe` - Payment confirmation
 
-### USASpending Integration
-- `POST /api/government-contracts/search` - Contract search
-
----
-
-## 15 Content Templates
-
-story-driven, data-driven, question-based, case-study, thought-leadership,
-list-tips, contrarian, actionable-how-to, motivational-story,
-analytical-teardown, observation-insight, x-vs-y-comparison,
-present-vs-future, listicle, contrarian-v2
-
----
-
-## Agency Knowledge Base (31 Agencies)
-
-**DoD:** dod, navy, navfac, army, air-force, usace
-**Civilian:** va, hhs, dhs, nasa, gsa, epa, dot, state, usda, usaid, doe, doj, commerce, labor, education, hud, treasury, nrc, nsf, fcc, opm, sba, ssa, doi
+### Needed for Phase 2
+- `GET /api/jobs/search` - Search jobs (Adzuna)
+- `GET /api/jobs/:id` - Job detail
+- `POST /api/jobs/subscribe` - Email alerts
 
 ---
 
 ## Environment Variables
 
 ```env
-GROK_API_KEY=...
-GROK_MODEL=grok-2-1212
-OPENAI_API_KEY=...
-FINE_TUNED_MODEL=ft:gpt-4o-mini-2024-07-18:gcg:govcon-linkedin:CtWXEc0l
-STRIPE_SECRET_KEY=...
-SUPABASE_URL=...
-SUPABASE_SERVICE_KEY=...
-LINKEDIN_CLIENT_ID=...
-LINKEDIN_CLIENT_SECRET=...
-SESSION_SECRET=...
+# AI
+ANTHROPIC_API_KEY=
+
+# Database
+SUPABASE_URL=
+SUPABASE_SERVICE_KEY=
+
+# Auth
+LINKEDIN_CLIENT_ID=
+LINKEDIN_CLIENT_SECRET=
+SESSION_SECRET=
+
+# Payments
+STRIPE_SECRET_KEY=
+STRIPE_PRICE_FULL_REPORT=  # $97 one-time
+
+# Phase 2
+ADZUNA_APP_ID=
+ADZUNA_API_KEY=
+RESEND_API_KEY=
 ```
 
 ---
 
-## Notes for Claude
+## Development Notes
 
-1. **Don't deploy here** - The active content generator lives in `market-assassin`. Push frontend/API changes there.
-2. **This repo is the knowledge base source** - Agency data, viral hooks, and content templates originate here.
-3. **API_BASE must be relative** - The `market-assassin` frontend uses same-origin API calls (not cross-origin to a Vercel app).
-4. **No Node.js on this machine** - `npm`, `node` are not installed. Can't run locally or use Vercel CLI.
-5. **USASpending API** - Used for NAICS-based agency lookup. Can be slow; always have a fallback.
+### Profile Scraping
+- Current: AllOrigins proxy (works but unreliable)
+- Production: Consider ScraperAPI or Brightdata
+- Fallback: Manual text input if scraping fails
 
----
+### AI Prompts
+- Score calculation: 0-100 based on 5 categories (20 pts each)
+- Headline generation: Under 220 chars, includes role + value prop + audience
+- Fix generation: 15-20 fixes with priority levels
 
-## Workflow Orchestration
-
-### 1. Plan Node Default
-- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately - don't keep pushing
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
-
-### 2. Subagent Strategy
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- For complex problems, throw more compute at it via subagents
-- One task per subagent for focused execution
-
-### 3. Self-Improvement Loop
-- After ANY correction from the user: update `tasks/lessons.md` with the pattern
-- Write rules for yourself that prevent the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
-- Review lessons at session start for relevant project
-
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
-
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
-- Challenge your own work before presenting it
-
-### 6. Autonomous Bug Fixing
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests - then resolve them
-- Zero context switching required from the user
-- Go fix failing CI tests without being told how
-
-## Task Management
-
-1. **Plan First**: Write plan to `tasks/todo.md` with checkable items
-2. **Verify Plan**: Check in before starting implementation
-3. **Track Progress**: Mark items complete as you go
-4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `tasks/todo.md`
-6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
-
-## Core Principles
-
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
-- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
-- **Minimize Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+### Stripe Products Needed
+- "Full Report" - $97 one-time
+- "Pro Subscription" - $29/month (optional for MVP)
 
 ---
 
-*Last Updated: February 24, 2026*
+## Workflow Rules
+
+1. **Check docs first**: Read VISION.md, PHASE_1, PHASE_2 before starting work
+2. **Phase 1 priority**: Complete LinkedIn Optimizer MVP before starting job board
+3. **No GovCon references**: This is a general professional audience, not government contractors
+4. **Test with real profiles**: Use actual LinkedIn URLs during development
+5. **Mobile-first**: All UI must work on mobile
+
+---
+
+## DO NOT
+
+- Reference GovCon, government contractors, or agencies
+- Use agency knowledge base files (`bootcamp/agencies/`)
+- Deploy to `tools.govcongiants.org` (that's a different project)
+- Add features not in the phase specs without discussion
+
+---
+
+## Quick Commands
+
+```bash
+# Run locally
+npm run dev
+
+# Deploy to Vercel
+vercel --prod
+
+# Check Supabase
+# Go to supabase.com/dashboard
+```
+
+---
+
+## Session Handoff
+
+When resuming work on this project:
+
+1. **Read Context**: Review `IMPLEMENTATION_SUMMARY.md` for current state
+2. **Check Tasks**: See `TODO.md` for remaining work
+3. **Quick Start**: `cd ~/Linkedin\ App && npm start`
+4. **Test URL**: http://localhost:3000/onboarding
+
+### Current Status (March 19, 2026)
+✅ Manual input form complete
+✅ `/api/audit-manual` endpoint built
+✅ Claude API integration working
+✅ $97 profile rewrite CTA added
+⏳ Testing with real profiles (next task)
+
+---
+
+*Last Updated: March 19, 2026*

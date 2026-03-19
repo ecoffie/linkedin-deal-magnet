@@ -1,0 +1,4 @@
+job_id=ftjob-YwvunzIgwgPt0pPtobvvIWGd
+file_id=file-UxVR1MvBptjHWzCvU1bQHb
+status=validating_files
+model=gpt-4o-mini-2024-07-18
