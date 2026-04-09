@@ -1,0 +1,18 @@
+{
+  "name": "stripe-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Stripe payment processing",
+  "main": "index.js",
+  "bin": {
+    "stripe-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "stripe": "^14.14.0"
+  },
+  "keywords": ["mcp", "stripe", "payments"],
+  "author": "LinkedIn Deal Magnet",
+  "license": "MIT"
+}

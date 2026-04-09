@@ -1,0 +1,16 @@
+{
+  "name": "resend-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Resend email service",
+  "main": "index.js",
+  "bin": {
+    "resend-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {},
+  "keywords": ["mcp", "resend", "email"],
+  "author": "LinkedIn Deal Magnet",
+  "license": "MIT"
+}
