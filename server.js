@@ -7,6 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { sendAuditEmail, sendWelcomeEmail } = require('./utils/email');
 const session = require('express-session');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
@@ -150,6 +151,10 @@ app.post('/api/linkedin/disconnect', (req, res) => {
 // Serve the Onboarding page
 app.get('/onboarding', (req, res) => {
     res.sendFile(path.join(__dirname, 'onboarding.html'));
+});
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
 // Serve the Opportunity Hunter page
@@ -1169,6 +1174,13 @@ if (ANTHROPIC_API_KEY) {
     console.warn('Warning: ANTHROPIC_API_KEY not set - Claude unavailable');
 }
 
+// AI Model Priority Configuration
+// Set PRIMARY_AI_MODEL to control which AI runs first (others become fallbacks)
+// Options: 'claude' | 'grok' | 'openai'
+// Default: 'grok' (preserves Anthropic credits for CLI use)
+const PRIMARY_AI_MODEL = (process.env.PRIMARY_AI_MODEL || 'grok').toLowerCase();
+console.log(`🤖 Primary AI Model: ${PRIMARY_AI_MODEL}`);
+
 // Helper function to call Grok API
 async function callGrokAPI(prompt, systemPrompt = null) {
     try {
@@ -1661,34 +1673,10 @@ Be specific and actionable. Every fix should be something the user can implement
         }
     }
 
-    // Try Claude first (primary)
-    if (ANTHROPIC_API_KEY && Anthropic) {
-        try {
-            console.log('Using Claude for analysis...');
-            const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
-
-            const response = await anthropic.messages.create({
-                model: CLAUDE_MODEL,
-                max_tokens: 4000,
-                system: systemPrompt,
-                messages: [{ role: 'user', content: prompt }]
-            });
-
-            const content = response.content[0].text;
-            const jsonData = parseAIResponse(content);
-
-            if (jsonData && jsonData.score && jsonData.fixes) {
-                console.log('Claude analysis successful');
-                return jsonData;
-            }
-        } catch (claudeError) {
-            console.error('Claude API error:', claudeError.message);
-        }
-    }
-
-    // Try Grok second
-    try {
-        console.log('Trying Grok for analysis...');
+    // Helper functions for each AI provider
+    async function tryGrok() {
+        if (!GROK_API_KEY) return null;
+        console.log('🤖 Trying Grok...');
         const response = await axios.post(
             GROK_API_URL,
             {
@@ -1708,75 +1696,95 @@ Be specific and actionable. Every fix should be something the user can implement
                 timeout: 60000
             }
         );
-
         const content = response.data.choices[0].message.content;
         const jsonData = parseAIResponse(content);
-
         if (jsonData && jsonData.score && jsonData.fixes) {
-            console.log('Grok analysis successful');
+            console.log('✅ Grok analysis successful');
             return jsonData;
         }
-    } catch (grokError) {
-        console.error('Grok API error:', grokError.response?.data || grokError.message);
-
-        // Fallback to OpenAI if Grok fails
-        if (OPENAI_API_KEY) {
-            console.log('Falling back to OpenAI...');
-            try {
-                const openaiResponse = await axios.post(
-                    'https://api.openai.com/v1/chat/completions',
-                    {
-                        model: 'gpt-4o-mini',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'You are a LinkedIn optimization expert who helps professionals attract clients, grow their network, and build their personal brand. Provide detailed, actionable recommendations. Always respond with valid JSON.'
-                            },
-                            {
-                                role: 'user',
-                                content: prompt
-                            }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 4000
-                    },
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                            'Content-Type': 'application/json'
-                        },
-                        timeout: 60000
-                    }
-                );
-
-                const content = openaiResponse.data.choices[0].message.content;
-
-                // Try to parse JSON from the response
-                let jsonData;
-                try {
-                    const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
-                    jsonData = JSON.parse(jsonMatch ? jsonMatch[1] || jsonMatch[0] : content);
-                } catch (e) {
-                    jsonData = {
-                        score: 55,
-                        aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
-                        fixes: generateDefaultFixes(profileData)
-                    };
-                }
-
-                return jsonData;
-            } catch (openaiError) {
-                console.error('OpenAI fallback error:', openaiError.response?.data || openaiError.message);
-            }
-        }
-
-        // Return default analysis if both APIs fail
-        return {
-            score: 55,
-            aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
-            fixes: generateDefaultFixes(profileData)
-        };
+        return null;
     }
+
+    async function tryClaude() {
+        if (!ANTHROPIC_API_KEY || !Anthropic) return null;
+        console.log('🤖 Trying Claude...');
+        const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+        const response = await anthropic.messages.create({
+            model: CLAUDE_MODEL,
+            max_tokens: 4000,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: prompt }]
+        });
+        const content = response.content[0].text;
+        const jsonData = parseAIResponse(content);
+        if (jsonData && jsonData.score && jsonData.fixes) {
+            console.log('✅ Claude analysis successful');
+            return jsonData;
+        }
+        return null;
+    }
+
+    async function tryOpenAI() {
+        if (!OPENAI_API_KEY) return null;
+        console.log('🤖 Trying OpenAI...');
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: 'gpt-4o-mini',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7,
+                max_tokens: 4000
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                timeout: 60000
+            }
+        );
+        const content = response.data.choices[0].message.content;
+        const jsonData = parseAIResponse(content);
+        if (jsonData && jsonData.score && jsonData.fixes) {
+            console.log('✅ OpenAI analysis successful');
+            return jsonData;
+        }
+        return null;
+    }
+
+    // Build provider order based on PRIMARY_AI_MODEL
+    const providers = {
+        claude: tryClaude,
+        grok: tryGrok,
+        openai: tryOpenAI
+    };
+
+    // Try primary model first, then fallbacks
+    const modelOrder = [PRIMARY_AI_MODEL];
+    ['claude', 'grok', 'openai'].forEach(model => {
+        if (model !== PRIMARY_AI_MODEL) modelOrder.push(model);
+    });
+
+    // Attempt each provider in order
+    for (const modelName of modelOrder) {
+        try {
+            const result = await providers[modelName]();
+            if (result) return result;
+        } catch (error) {
+            console.error(`${modelName} error:`, error.message);
+        }
+    }
+
+    // Return default if all fail
+    console.warn('⚠️ All AI providers failed - returning default analysis');
+    return {
+        score: 55,
+        aiHeadline: profileData.headline || 'Strategic Professional | [Your Value Proposition]',
+        fixes: generateDefaultFixes(profileData)
+    };
 }
 
 // Generate default fixes if API fails
@@ -2006,6 +2014,23 @@ app.post('/api/audit-manual', async (req, res) => {
             return res.status(400).json({ success: false, error: 'At least 2 work experiences are required' });
         }
 
+        // Rate limiting: max 5 audits per email per day
+        if (supabase) {
+            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+            const { count, error: countError } = await supabase
+                .from('audits')
+                .select('*', { count: 'exact', head: true })
+                .eq('email', email)
+                .gte('created_at', oneDayAgo);
+
+            if (!countError && count >= 5) {
+                return res.status(429).json({
+                    success: false,
+                    error: 'Rate limit exceeded. You can run up to 5 audits per day. Please try again tomorrow.'
+                });
+            }
+        }
+
         // Build profile data object
         const profileData = {
             name: email.split('@')[0], // Extract name from email as fallback
@@ -2096,11 +2121,11 @@ app.post('/api/audit-manual', async (req, res) => {
 // Stripe checkout session
 app.post('/api/create-checkout-session', async (req, res) => {
     try {
-        const { priceId, mode, successUrl, cancelUrl, referrer, email } = req.body;
+        const { priceId, mode, successUrl, cancelUrl, referrer, email, auditId } = req.body;
 
-        // Map price IDs (replace with your actual Stripe price IDs)
+        // Map price IDs to actual Stripe price IDs
         const priceMap = {
-            'price_full_fix': process.env.STRIPE_PRICE_FULL_FIX || 'price_full_fix',
+            'price_full_fix': 'price_1SedI3K5zyiZ50PBOx0luGnq', // Full Fix Guide $97
             'price_content_engine': process.env.STRIPE_PRICE_CONTENT_ENGINE || 'price_content_engine',
             'price_pro_monthly': process.env.STRIPE_PRICE_PRO_MONTHLY || 'price_pro_monthly'
         };
@@ -2118,10 +2143,12 @@ app.post('/api/create-checkout-session', async (req, res) => {
             ],
             success_url: successUrl || `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: cancelUrl || `${req.headers.origin}?canceled=true`,
-            // Track referrer/affiliate in metadata for revenue share
+            // Track referrer/affiliate and audit ID in metadata
             metadata: {
                 referrer: referrer || 'direct',
-                source: 'deal_magnet_onboarding'
+                source: 'deal_magnet_onboarding',
+                auditId: auditId || null, // Store audit ID for webhook
+                email: email || null // Store email for webhook
             }
         };
 
@@ -2146,6 +2173,88 @@ app.post('/api/create-checkout-session', async (req, res) => {
     } catch (error) {
         console.error('Stripe error:', error);
         res.status(500).json({ error: 'Failed to create checkout session', message: error.message });
+    }
+});
+
+// Get audits by email (for dashboard)
+app.get('/api/audits-by-email', async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        if (!email || !email.includes('@')) {
+            return res.status(400).json({ success: false, error: 'Valid email is required' });
+        }
+
+        if (!supabase) {
+            return res.status(503).json({ success: false, error: 'Database not available' });
+        }
+
+        // Fetch all audits for this email
+        const { data: audits, error } = await supabase
+            .from('audits')
+            .select('id, score, score_label, is_paid, created_at')
+            .eq('email', email)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Fetch audits error:', error);
+            return res.status(500).json({ success: false, error: 'Failed to fetch audits' });
+        }
+
+        res.json({
+            success: true,
+            audits: audits || []
+        });
+    } catch (error) {
+        console.error('Get audits by email error:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve audits' });
+    }
+});
+
+// Get audit by ID
+app.get('/api/audit/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { email } = req.query; // Optional email verification
+
+        if (!supabase) {
+            return res.status(503).json({ success: false, error: 'Database not available' });
+        }
+
+        // Fetch audit from database
+        const { data: audit, error } = await supabase
+            .from('audits')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error || !audit) {
+            return res.status(404).json({ success: false, error: 'Audit not found' });
+        }
+
+        // Optional: Verify email matches (simple auth)
+        if (email && audit.email !== email) {
+            return res.status(403).json({ success: false, error: 'Unauthorized' });
+        }
+
+        // Return audit data
+        res.json({
+            success: true,
+            audit: {
+                id: audit.id,
+                score: audit.score,
+                scoreLabel: audit.score_label,
+                currentHeadline: audit.profile_data?.headline,
+                aiHeadline: audit.ai_headline,
+                fixes: audit.fixes,
+                profileData: audit.profile_data,
+                isPaid: audit.is_paid,
+                createdAt: audit.created_at
+            }
+        });
+    } catch (error) {
+        console.error('Get audit error:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve audit' });
     }
 });
 
@@ -2677,16 +2786,21 @@ Format as JSON:
     }
 });
 
-// Stripe Webhook Handler for new subscriptions
+// Stripe Webhook Handler
 app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
     const sig = req.headers['stripe-signature'];
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
     let event;
 
     try {
-        // In production, verify webhook signature
-        // For now, just parse the event
-        event = req.body;
+        // Verify webhook signature in production
+        if (endpointSecret) {
+            event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        } else {
+            // Development: skip signature verification
+            event = JSON.parse(req.body.toString());
+        }
 
         console.log('Webhook received:', event.type);
 
@@ -2694,27 +2808,71 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
         switch (event.type) {
             case 'checkout.session.completed':
                 const session = event.data.object;
-                console.log('New subscription:', {
+                const auditId = session.metadata?.auditId;
+                const email = session.metadata?.email || session.customer_details?.email;
+
+                console.log('Payment completed:', {
                     customer: session.customer,
-                    email: session.customer_details?.email,
+                    email: email,
                     amount: session.amount_total / 100,
-                    mode: session.mode
+                    mode: session.mode,
+                    auditId: auditId
                 });
 
-                // TODO: Send welcome email
-                // TODO: Generate first month's content
-                // TODO: Add to subscriber database
+                // Mark audit as paid and send email
+                if (auditId && supabase) {
+                    try {
+                        // Mark as paid
+                        const { error: updateError } = await supabase
+                            .from('audits')
+                            .update({ is_paid: true })
+                            .eq('id', auditId);
+
+                        if (updateError) {
+                            console.error('Failed to mark audit as paid:', updateError.message);
+                        } else {
+                            console.log(`✅ Audit ${auditId} marked as paid`);
+
+                            // Fetch full audit data and send email
+                            const { data: audit, error: fetchError } = await supabase
+                                .from('audits')
+                                .select('*')
+                                .eq('id', auditId)
+                                .single();
+
+                            if (!fetchError && audit) {
+                                await sendAuditEmail({
+                                    id: audit.id,
+                                    email: audit.email,
+                                    score: audit.score,
+                                    scoreLabel: audit.score_label,
+                                    aiHeadline: audit.ai_headline,
+                                    fixes: audit.fixes
+                                });
+                            }
+                        }
+                    } catch (dbError) {
+                        console.error('Database error marking audit as paid:', dbError.message);
+                    }
+                }
+
+                // If subscription, send welcome email
+                if (session.mode === 'subscription' && email) {
+                    await sendWelcomeEmail(email, { customerId: session.customer });
+                }
 
                 break;
 
             case 'customer.subscription.created':
                 const subscription = event.data.object;
                 console.log('Subscription created:', subscription.id);
+                // TODO: Add to subscribers table, send welcome email
                 break;
 
             case 'customer.subscription.deleted':
                 const canceledSub = event.data.object;
                 console.log('Subscription canceled:', canceledSub.id);
+                // TODO: Remove from subscribers table, send cancellation email
                 break;
 
             default:
