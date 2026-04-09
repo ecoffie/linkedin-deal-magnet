@@ -834,6 +834,7 @@
         // State management
         let currentStep = 1;
         let userData = { linkedin: null, audit: null };
+        let currentAuditId = null; // Store audit ID for Stripe checkout
         let inputMethod = 'manual'; // 'manual' or 'url'
         let referrer = null; // Affiliate tracking
 
@@ -1087,6 +1088,7 @@
                 const result = await response.json();
                 userData.audit = result;
                 userData.email = requestBody.email;
+                currentAuditId = result.auditId; // Store audit ID for checkout
 
                 finishLoadingSteps(() => {
                     goToStep(3);
@@ -1244,16 +1246,23 @@
         // Purchase Profile Rewrite ($97 one-time)
         async function purchaseProfileRewrite() {
             try {
+                // Show loading state
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = '<span class="animate-pulse">Processing...</span>';
+
                 const response = await fetch('/api/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        priceId: process.env.STRIPE_PRICE_FULL_FIX || 'price_1SedI3K5zyiZ50PBOx0luGnq',
+                        priceId: 'price_full_fix', // Backend will map to actual price ID
                         mode: 'payment',
                         successUrl: window.location.origin + '/success?session_id={CHECKOUT_SESSION_ID}&rewrite=true',
                         cancelUrl: window.location.origin + '/onboarding?canceled=true',
                         referrer: referrer,
-                        email: userData.email
+                        email: userData.email,
+                        auditId: currentAuditId // Pass audit ID for webhook
                     })
                 });
 
@@ -1261,10 +1270,14 @@
                 if (data.url) {
                     window.location.href = data.url;
                 } else {
+                    button.disabled = false;
+                    button.innerHTML = originalText;
                     alert('Failed to start checkout. Please try again.');
                 }
             } catch (error) {
                 console.error('Checkout error:', error);
+                button.disabled = false;
+                button.innerHTML = originalText;
                 alert('Failed to start checkout. Please try again.');
             }
         }
